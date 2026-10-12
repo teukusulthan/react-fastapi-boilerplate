@@ -1,0 +1,142 @@
+# Local full-stack environment: MongoDB + Redis + backend (FastAPI) + web (nginx SPA).
+#
+#   npm run docker:up              # = docker compose up -d --build
+#   open http://localhost:8080     # web; API is proxied at /api/v1/apps/
+#   npm run docker:down            # stop (add -v to also drop the data volumes)
+#
+# Infra only (run backend/web on the host with `npm run dev`):
+#   npm run docker:infra           # = docker compose up -d mongo redis
+#   -> set BE_MONGO_URI=mongodb://localhost:27017 and BE_REDIS_PASSWORD=<REDIS_PASSWORD>
+#      in apps/backend/.env
+#
+# Supabase/Postgres provider without a full Supabase stack (plain postgres:16 plus a small
+# compatibility layer, then apps/backend/migrations/supabase/*.sql on first start):
+#   DB_PROVIDER=supabase docker compose --profile postgres up -d --build
+#
+# Configuration
+# - The backend reads apps/backend/.env (create it with `npm run setup:backend` or copy
+#   .env.example; BE_JWT_SECRET must be set there). In Docker the
+#   database/Redis connection settings below override whatever that file says, so the
+#   same .env works for host and container runs.
+# - Compose-level knobs (shell env or a root-level .env file, never committed):
+#     WEB_PORT=8080  BACKEND_PORT=8020  MONGO_PORT=27017  REDIS_PORT=6379  POSTGRES_PORT=5432
+#     REDIS_PASSWORD=redis-dev-password   MONGO_DB=app
+#     DB_PROVIDER=mongo|supabase   SUPABASE_DB_URL=<external Postgres URL, optional>
+#     POSTGRES_USER=postgres  POSTGRES_PASSWORD=postgres  POSTGRES_DB=app
+#     PUBLIC_WEB_URL=http://localhost:8080
+# - Datastore and backend ports are published on 127.0.0.1 only; the web port is published
+#   on all interfaces so the app is reachable from the LAN.
+
+name: react-fastapi-boilerplate
+
+x-restart: &restart
+  restart: unless-stopped
+
+services:
+  mongo:
+    <<: *restart
+    image: mongo:7
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - "127.0.0.1:${MONGO_PORT:-27017}:27017"
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 20s
+
+  redis:
+    <<: *restart
+    image: redis:7-alpine
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-redis-dev-password}
+      REDISCLI_AUTH: ${REDIS_PASSWORD:-redis-dev-password}
+    # The password is read from the environment so it does not appear in `ps` output.
+    command: ["sh", "-c", 'exec redis-server --appendonly yes --requirepass "$$REDIS_PASSWORD"']
+    volumes:
+      - redis-data:/data
+    ports:
+      - "127.0.0.1:${REDIS_PORT:-6379}:6379"
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep -q PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 5s
+
+  postgres:
+    <<: *restart
+    image: postgres:16-alpine
+    profiles: ["postgres"]
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-app}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./scripts/docker/postgres/init.sh:/docker-entrypoint-initdb.d/10-init.sh:ro
+      - ./scripts/docker/postgres/00-supabase-compat.sql:/compat/00-supabase-compat.sql:ro
+      - ./apps/backend/migrations/supabase:/migrations:ro
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  backend:
+    <<: *restart
+    build:
+      context: ./apps/backend
+    image: react-fastapi-boilerplate/backend:local
+    env_file:
+      - path: ./apps/backend/.env
+        required: false
+    environment:
+      BE_PUBLIC_WEB_URL: ${PUBLIC_WEB_URL:-http://localhost:8080}
+      BE_CORS_ORIGINS: ${PUBLIC_WEB_URL:-http://localhost:8080}
+      # Requests arrive through the web container's nginx (one trusted proxy hop).
+      BE_TRUST_PROXY_HEADERS: "true"
+      BE_PROXY_TRUSTED_HOPS: "1"
+      # Datastores = the compose services.
+      BE_DB_PROVIDER: ${DB_PROVIDER:-mongo}
+      BE_MONGO_URI: mongodb://mongo:27017
+      BE_MONGO_DB: ${MONGO_DB:-app}
+      BE_SUPABASE_DB_URL: ${SUPABASE_DB_URL:-postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-app}}
+      BE_REDIS_URL: ""
+      BE_REDIS_HOST: redis
+      BE_REDIS_PORT: "6379"
+      BE_REDIS_PASSWORD: ${REDIS_PASSWORD:-redis-dev-password}
+      BE_REDIS_SSL: "false"
+    ports:
+      - "127.0.0.1:${BACKEND_PORT:-8020}:8020"
+    depends_on:
+      mongo:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+        required: false
+
+  web:
+    <<: *restart
+    build:
+      context: ./apps/web
+    image: react-fastapi-boilerplate/web:local
+    environment:
+      BACKEND_URL: http://backend:8020
+    ports:
+      - "${WEB_PORT:-8080}:8080"
+    depends_on:
+      backend:
+        condition: service_started
+
+volumes:
+  mongo-data:
+  redis-data:
+  postgres-data:

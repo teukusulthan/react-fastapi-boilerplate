@@ -1,0 +1,448 @@
+base_palette:
+  neutral:
+    50:  "#FFFFFF"
+    100: "#F5F7FA"
+    200: "#E6E9F0"
+    300: "#B7BABD"
+    400: "#989B9F"
+    500: "#7A7C81"
+    600: "#5B5D63"
+    700: "#2D2E33"
+    800: "#101014"
+    900: "#050505"
+  primary:
+    50:  "#inta"
+    100: "#B4CDEB"
+    200: "#90B5DF"
+    300: "#5D93D1"
+    400: "#3D7EC8"
+    500: "#0D5EB9"
+    600: "#0C56A9"
+    700: "#094384"
+    800: "#073466"
+    900: "#05274E"
+  secondary:
+    50:  "#FFF1E6"
+    100: "#FFD2B0"
+    200: "#FFBD8A"
+    300: "#FF9F54"
+    400: "#FF8C33"
+    500: "#FF6F00"
+    600: "#E86500"
+    700: "#B54F00"
+    800: "#8C3D00"
+    900: "#6B2F00"
+  tertiary:
+    50:  "#E8F6F3"
+    100: "#B7E2D9"
+    200: "#94D3C7"
+    300: "#63BFAE"
+    400: "#45B39D"
+    500: "#16A086"
+    600: "#149279"
+    700: "#10725E"
+    800: "#0C5849"
+    900: "#094338"
+  quaternary:
+    50:  "#F9E6EB"
+    100: "#EEB0C2"
+    200: "#E58AA4"
+    300: "#DA5C84"
+    400: "#D63D6E"
+    500: "#CC003B"
+    600: "#B00033"
+    700: "#8B0028"
+    800: "#6D001F"
+    900: "#540018"
+  quinary:
+    50:  "#F4ECF7"
+    100: "#DCC5E6"
+    200: "#CBA9D9"
+    300: "#B382C8"
+    400: "#A569BD"
+    500: "#8E44AD"
+    600: "#813E9D"
+    700: "#65307B"
+    800: "#4E255F"
+    900: "#3C1D49"
+  success:
+    50:  "#E8F6F3"
+    100: "#B7E2D9"
+    200: "#94D3C7"
+    300: "#63BFAE"
+    400: "#45B39D"
+    500: "#16A086"
+    600: "#149279"
+    700: "#10725E"
+    800: "#0C5849"
+    900: "#094338"
+  warning:
+    50:  "#FFF7E6"
+    100: "#FFE6B2"
+    200: "#FFD98C"
+    300: "#FFC959"
+    400: "#FFBF37"
+    500: "#FFAF05"
+    600: "#E89F05"
+    700: "#B57C04"
+    800: "#8C6003"
+    900: "#6B4A02"
+  error:
+    50:  "#FAE9E9"
+    100: "#F1BCBC"
+    200: "#EA9C9C"
+    300: "#E06E6E"
+    400: "#DA5252"
+    500: "#D12727"
+    600: "#BE2323"
+    700: "#941C1C"
+    800: "#731515"
+    900: "#581010"
+  info:
+    50:  "#E6F1F7"
+    100: "#B0D5E6"
+    200: "#8AC0D9"
+    300: "#55A4C8"
+    400: "#3492BD"
+    500: "#0177AD"
+    600: "#016C9D"
+    700: "#01547B"
+    800: "#01415F"
+    900: "#003249"
+
+semantic:
+  light:
+    surface:
+      bg-primary:   base-neutral-50
+      bg-secondary: base-neutral-100
+    border:
+      primary:   base-neutral-200
+      secondary: base-neutral-300
+    text:
+      primary:     base-neutral-900
+      secondary:   base-neutral-700
+      placeholder: base-neutral-500
+      disabled:    base-neutral-400
+      on-accent:   base-neutral-50
+    brand:
+      primary:   { light: 50, soft: 200, base: 500, bold: 700, deep: 900 }
+      secondary: { light: 50, soft: 200, base: 400, bold: 600, deep: 900 }
+      tertiary:  { light: 50, soft: 200, base: 500, bold: 700, deep: 900 }
+      quaternary: { light: 50, soft: 200, base: 500, bold: 700, deep: 900 }
+      quinary:   { light: 50, soft: 200, base: 400, bold: 700, deep: 900 }
+    neutral:     { light: 100, soft: 300, base: 500, bold: 700, deep: 900 }
+    state:
+      success: { light: 50, soft: 200, base: 500, bold: 700, deep: 900 }
+      warning: { light: 50, soft: 200, base: 400, bold: 600, deep: 900 }
+      error:   { light: 50, soft: 200, base: 500, bold: 700, deep: 900 }
+      info:    { light: 50, soft: 200, base: 400, bold: 700, deep: 900 }
+    shadcn:
+      background:            neutral-light
+      foreground:            neutral-deep
+      card:                  base-neutral-50
+      card-foreground:       neutral-deep
+      popover:               base-neutral-50
+      popover-foreground:    neutral-deep
+      primary:               primary-base
+      primary-foreground:    base-neutral-50
+      secondary:             neutral-light
+      secondary-foreground:  neutral-deep
+      tertiary:              tertiary-base
+      tertiary-foreground:   base-neutral-50
+      quaternary:            quaternary-base
+      quaternary-foreground: neutral-deep
+      quinary:               quinary-base
+      quinary-foreground:    base-neutral-50
+      muted:                 neutral-light
+      muted-foreground:      neutral-bold
+      accent:                primary-light
+      accent-foreground:     primary-bold
+      destructive:           base-error-400
+      destructive-foreground: base-neutral-50
+      border:                border-primary
+      input:                 border-primary
+      ring:                  primary-base
+    sidebar:
+      bg:               base-neutral-50
+      foreground:       neutral-deep
+      primary:          primary-base
+      primary-fg:       base-neutral-50
+      accent:           primary-light
+      accent-fg:        primary-bold
+      border:           border-primary
+      ring:             primary-base
+    chart:
+      1: primary-base
+      2: secondary-base
+      3: tertiary-base
+      4: quaternary-base
+      5: quinary-base
+
+  dark:
+    palette_overrides:
+      neutral:
+        50:  "#121314"
+        100: "#17181A"
+        200: "#222324"
+        300: "#616262"
+        400: "#7B7C7C"
+        500: "#969697"
+        600: "#B0B0B1"
+        700: "#CACBCB"
+        800: "#E5E5E5"
+        900: "#FFFFFF"
+      primary:
+        50:  "#15181F"
+        100: "#224C7A"
+        200: "#1B5EA9"
+        300: "#0F5FBA"
+        400: "#3D7EC8"
+        500: "#5D93D1"
+        600: "#90B5DF"
+        700: "#B4CDEB"
+        800: "#E7EFF8"
+        900: "#FAFCFF"
+      secondary:
+        50:  "#6B2F00"
+        100: "#8C3D00"
+        200: "#B54F00"
+        300: "#E86500"
+        400: "#FF6F00"
+        500: "#FF8C33"
+        600: "#FF9F54"
+        700: "#FFBD8A"
+        800: "#FFD2B0"
+        900: "#FFF1E6"
+      tertiary:
+        50:  "#094338"
+        100: "#0C5849"
+        200: "#10725E"
+        300: "#149279"
+        400: "#16A086"
+        500: "#45B39D"
+        600: "#63BFAE"
+        700: "#94D3C7"
+        800: "#B7E2D9"
+        900: "#E8F6F3"
+      quaternary:
+        50:  "#540018"
+        100: "#6D001F"
+        200: "#8B0028"
+        300: "#B00033"
+        400: "#CC003B"
+        500: "#D63D6E"
+        600: "#DA5C84"
+        700: "#E58AA4"
+        800: "#EEB0C2"
+        900: "#F9E6EB"
+      quinary:
+        50:  "#3C1D49"
+        100: "#4E255F"
+        200: "#65307B"
+        300: "#813E9D"
+        400: "#8E44AD"
+        500: "#A569BD"
+        600: "#B382C8"
+        700: "#CBA9D9"
+        800: "#DCC5E6"
+        900: "#F4ECF7"
+      success:
+        50:  "#094338"
+        100: "#0C5849"
+        200: "#10725E"
+        300: "#149279"
+        400: "#16A086"
+        500: "#45B39D"
+        600: "#63BFAE"
+        700: "#94D3C7"
+        800: "#B7E2D9"
+        900: "#E8F6F3"
+      warning:
+        50:  "#6B4A02"
+        100: "#8C6003"
+        200: "#B57C04"
+        300: "#E89F05"
+        400: "#FFAF05"
+        500: "#FFBF37"
+        600: "#FFC959"
+        700: "#FFD98C"
+        800: "#FFE6B2"
+        900: "#FFF7E6"
+      error:
+        50:  "#581010"
+        100: "#731515"
+        200: "#941C1C"
+        300: "#BE2323"
+        400: "#D12727"
+        500: "#DA5252"
+        600: "#E06E6E"
+        700: "#EA9C9C"
+        800: "#F1BCBC"
+        900: "#FAE9E9"
+      info:
+        50:  "#003249"
+        100: "#01415F"
+        200: "#01547B"
+        300: "#016C9D"
+        400: "#0177AD"
+        500: "#3492BD"
+        600: "#55A4C8"
+        700: "#8AC0D9"
+        800: "#B0D5E6"
+        900: "#E6F1F7"
+    surface:
+      bg-primary:   base-neutral-50
+      bg-secondary: base-neutral-100
+    border:
+      primary:   base-neutral-200
+      secondary: base-neutral-300
+    brand:
+      primary:    { light: 50, soft: 200, base: 500, bold: 700, deep: 900 }
+      secondary:  { light: 50, soft: 200, base: 400, bold: 600, deep: 900 }
+      tertiary:   { light: 50, soft: 200, base: 500, bold: 700, deep: 900 }
+      quaternary: { light: 50, soft: 200, base: 500, bold: 700, deep: 900 }
+      quinary:    { light: 50, soft: 200, base: 400, bold: 700, deep: 900 }
+    neutral:     { light: 100, soft: 300, base: 500, bold: 700, deep: 900 }
+    state:
+      success: { light: 50, soft: 200, base: 500, bold: 700, deep: 900 }
+      warning: { light: 50, soft: 200, base: 400, bold: 600, deep: 900 }
+      error:   { light: 50, soft: 200, base: 500, bold: 700, deep: 900 }
+      info:    { light: 50, soft: 200, base: 400, bold: 700, deep: 900 }
+    shadcn:
+      background:            base-neutral-50
+      foreground:            neutral-deep
+      card:                  neutral-light
+      card-foreground:       neutral-deep
+      popover:               neutral-light
+      popover-foreground:    neutral-deep
+      primary:               primary-base
+      primary-foreground:    base-neutral-50
+      secondary:             neutral-soft
+      secondary-foreground:  neutral-deep
+      tertiary:              tertiary-base
+      tertiary-foreground:   base-neutral-50
+      quaternary:            quaternary-base
+      quaternary-foreground: base-neutral-50
+      quinary:               base-quinary-500
+      quinary-foreground:    base-neutral-50
+      muted:                 neutral-soft
+      muted-foreground:      base-neutral-600
+      accent:                primary-light
+      accent-foreground:     primary-bold
+      destructive:           base-error-500
+      destructive-foreground: base-neutral-50
+      border:                border-primary
+      input:                 border-secondary
+      ring:                  primary-base
+    sidebar:
+      bg:               base-neutral-50
+      foreground:       neutral-deep
+      primary:          primary-base
+      primary-fg:       base-neutral-50
+      accent:           primary-light
+      accent-fg:        primary-bold
+      border:           border-primary
+      ring:             primary-base
+    chart:
+      1: primary-base
+      2: secondary-bold
+      3: tertiary-base
+      4: quaternary-base
+      5: base-quinary-500
+    shadow_color: "250 250 250"
+
+contrast_fg:
+  white: "#FFFFFF"
+  black: "#000000"
+
+spacing:
+  1:   "0.25rem"   # 4px
+  1-5: "0.375rem"  # 6px
+  2:   "0.5rem"    # 8px
+  2-5: "0.625rem"  # 10px
+  3:   "0.75rem"   # 12px
+  3-5: "0.875rem"  # 14px
+  4:   "1rem"      # 16px
+  5:   "1.25rem"   # 20px
+  6:   "1.5rem"    # 24px
+  8:   "2rem"      # 32px
+  10:  "2.5rem"    # 40px
+
+# Default shape language = modern, minimal, slightly rounded (.claude/rules/web/ui-design.md):
+#   rounded-md (8px) controls · rounded-lg (10px) inner panels · rounded-xl (12px) cards/dialogs/popovers.
+# Change only when the brief explicitly asks for another shape language (e.g. square-cornered command UI).
+# `--radius` (base, = md) is emitted by variable.py for shadcn compatibility.
+border_radius:
+  none: "0px"
+  sm:   "6px"
+  md:   "8px"
+  lg:   "10px"
+  xl:   "12px"
+  2xl:  "16px"
+  3xl:  "20px"
+  full: "9999px"
+
+border_width:
+  thin:  "1px"
+  md:    "2px"
+  thick: "3px"
+  heavy: "4px"
+
+shadow:
+  color_light: "10 10 10"
+  color_dark:  "250 250 250"
+  2xs: "0 1px 1px 0 rgb({color}/0.04)"
+  xs:  "0 1px 2px 0 rgb({color}/0.05)"
+  sm:  "0 1px 3px 0 rgb({color}/0.07), 0 1px 2px -1px rgb({color}/0.04)"
+  md:  "0 4px 8px -1px rgb({color}/0.08), 0 2px 4px -2px rgb({color}/0.05)"
+  lg:  "0 8px 16px 0 rgb({color}/0.10), 0 4px 6px -2px rgb({color}/0.05)"
+  xl:  "0 8px 36px 0 rgb({color}/0.16)"
+  2xl: "0 24px 48px -12px rgb({color}/0.20)"
+  inset:
+    2xs: "inset 0 1px 0 0 rgb({color}/0.05)"
+    xs:  "inset 0 1px 1px 0 rgb({color}/0.06)"
+    sm:  "inset 0 2px 4px 0 rgb({color}/0.06)"
+
+typography:
+  font_family:
+    main:
+      sans: "Inter"
+      serif: "Georgia"
+      mono: "JetBrains Mono"
+    stacks:
+      sans: "var(--font-main-sans), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji'"
+      serif: "var(--font-main-serif), ui-serif, Georgia, Cambria, serif"
+      mono: "var(--font-main-mono), 'Fira Code', 'Cascadia Code', ui-monospace, monospace"
+  font_weight:
+    regular:  400
+    medium:   500
+    semibold: 600
+    bold:     700
+  font_size:
+    display:  "3.5rem"    # 56px
+    h1:       "2.5rem"    # 40px
+    h2:       "2rem"      # 32px
+    h3:       "1.5rem"    # 24px
+    h4:       "1.25rem"   # 20px
+    h5:       "1.125rem"  # 18px
+    h6:       "1rem"      # 16px
+    body-lg:  "1rem"      # 16px
+    body-md:  "0.9375rem" # 15px
+    body-sm:  "0.875rem"  # 14px
+    label-lg: "0.875rem"  # 14px
+    label-md: "0.8125rem" # 13px
+    label-sm: "0.75rem"   # 12px
+  line_height:
+    none:    1
+    tight:   1.15
+    snug:    1.3
+    normal:  1.5
+    relaxed: 1.625
+    loose:   2
+  letter_spacing:
+    tighter: "-0.05em"
+    tight:   "-0.025em"
+    normal:  "0em"
+    wide:    "0.025em"
+    wider:   "0.05em"
+    widest:  "0.12em"

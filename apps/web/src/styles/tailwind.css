@@ -1,0 +1,179 @@
+/* TAILWIND v4 THEME — maps the tokens in variable.css to utilities. Base: 1rem = 16px.
+   `inline` makes utilities reference the runtime variables, so `.dark` remaps apply everywhere and
+   opacity modifiers work on every color (`bg-success/10`, `border-primary/30`, …). */
+
+@theme inline {
+  /* ─── Font family — font-sans / font-mono ─────────────────────────────── */
+  --font-sans: var(--font-family-sans);
+  --font-mono: var(--font-family-mono);
+
+  /* ─── Legacy type scale (do not use in new code: use text-xs … text-4xl) ── */
+  --text-display: var(--text-display);
+  --text-h1: var(--text-h1);
+  --text-h2: var(--text-h2);
+  --text-h3: var(--text-h3);
+  --text-h4: var(--text-h4);
+  --text-h5: var(--text-h5);
+  --text-h6: var(--text-h6);
+  --text-body-lg: var(--text-body-lg);
+  --text-body-md: var(--text-body-md);
+  --text-body-sm: var(--text-body-sm);
+  --text-label-lg: var(--text-label-lg);
+  --text-label-md: var(--text-label-md);
+  --text-label-sm: var(--text-label-sm);
+  --font-weight-regular: 400;
+
+  /* ─── Colors: shadcn semantic (USE THESE) ─────────────────────────────── */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* status — tint with opacity: bg-success/10 text-success */
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+
+  /* sidebar */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* charts */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* ─── Colors: data-viz palettes (charts/maps only) ────────────────────── */
+  --color-secondary-light: var(--secondary-light);
+  --color-secondary-soft: var(--secondary-soft);
+  --color-secondary-base: var(--secondary-base);
+  --color-secondary-bold: var(--secondary-bold);
+  --color-secondary-deep: var(--secondary-deep);
+  --color-tertiary: var(--tertiary-base);
+  --color-tertiary-light: var(--tertiary-light);
+  --color-tertiary-soft: var(--tertiary-soft);
+  --color-tertiary-base: var(--tertiary-base);
+  --color-tertiary-bold: var(--tertiary-bold);
+  --color-tertiary-deep: var(--tertiary-deep);
+  --color-quaternary: var(--quaternary-base);
+  --color-quaternary-light: var(--quaternary-light);
+  --color-quaternary-soft: var(--quaternary-soft);
+  --color-quaternary-base: var(--quaternary-base);
+  --color-quaternary-bold: var(--quaternary-bold);
+  --color-quaternary-deep: var(--quaternary-deep);
+  --color-quinary: var(--quinary-base);
+  --color-quinary-light: var(--quinary-light);
+  --color-quinary-soft: var(--quinary-soft);
+  --color-quinary-base: var(--quinary-base);
+  --color-quinary-bold: var(--quinary-bold);
+  --color-quinary-deep: var(--quinary-deep);
+
+  /* ─── Colors: LEGACY aliases (still resolve; do not use in new code) ───── */
+  --color-background-primary: var(--bg-primary);
+  --color-background-secondary: var(--bg-secondary);
+  --color-border-primary: var(--border-primary);
+  --color-border-secondary: var(--border-secondary);
+  --color-font-primary: var(--text-color-primary);
+  --color-font-secondary: var(--text-color-secondary);
+  --color-font-placeholder: var(--text-color-placeholder);
+  --color-font-disabled: var(--text-color-disabled);
+  --color-font-on-accent: var(--text-color-on-accent);
+  --color-primary-light: var(--primary-light);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-base: var(--primary-base);
+  --color-primary-bold: var(--primary-bold);
+  --color-primary-deep: var(--primary-deep);
+  --color-neutral-light: var(--neutral-light);
+  --color-neutral-soft: var(--neutral-soft);
+  --color-neutral-base: var(--neutral-base);
+  --color-neutral-bold: var(--neutral-bold);
+  --color-neutral-deep: var(--neutral-deep);
+  --color-success-light: var(--success-light);
+  --color-success-soft: var(--success-soft);
+  --color-success-base: var(--success-base);
+  --color-success-bold: var(--success-bold);
+  --color-success-deep: var(--success-deep);
+  --color-error: var(--error-base);
+  --color-error-light: var(--error-light);
+  --color-error-soft: var(--error-soft);
+  --color-error-base: var(--error-base);
+  --color-error-bold: var(--error-bold);
+  --color-error-deep: var(--error-deep);
+  --color-warning-light: var(--warning-light);
+  --color-warning-soft: var(--warning-soft);
+  --color-warning-base: var(--warning-base);
+  --color-warning-bold: var(--warning-bold);
+  --color-warning-deep: var(--warning-deep);
+  --color-info-light: var(--info-light);
+  --color-info-soft: var(--info-soft);
+  --color-info-base: var(--info-base);
+  --color-info-bold: var(--info-bold);
+  --color-info-deep: var(--info-deep);
+
+  /* ─── Radius — derived from --radius (10px) ───────────────────────────── */
+  --radius-xs: calc(var(--radius) - 6px); /* 4px  */
+  --radius-sm: calc(var(--radius) - 4px); /* 6px  */
+  --radius-md: calc(var(--radius) - 2px); /* 8px  controls */
+  --radius-lg: var(--radius); /* 10px inner panels */
+  --radius-xl: calc(var(--radius) + 2px); /* 12px surfaces */
+  --radius-2xl: calc(var(--radius) + 6px); /* 16px */
+  --radius-3xl: calc(var(--radius) + 14px); /* 24px */
+
+  /* ─── Shadows — subtle, theme-aware ───────────────────────────────────── */
+  --shadow-2xs: var(--elevation-2xs);
+  --shadow-xs: var(--elevation-xs);
+  --shadow-sm: var(--elevation-sm);
+  --shadow-md: var(--elevation-md);
+  --shadow-lg: var(--elevation-lg);
+  --shadow-xl: var(--elevation-xl);
+
+  /* ─── Animation ───────────────────────────────────────────────────────── */
+  --animate-fade-in: fade-in 0.3s ease-out;
+  --animate-slide-up: slide-up 0.4s ease-out;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-up {
+    from {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+}

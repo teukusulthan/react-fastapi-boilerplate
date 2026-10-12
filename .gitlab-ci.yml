@@ -1,0 +1,174 @@
+# GitLab CI: lint -> test -> build for apps/backend (FastAPI) and apps/web (Vite/React).
+#
+# Pipelines run for merge requests, the default branch and tags (no duplicate branch+MR
+# pipelines). Docker images are built on the default branch and on tags; they are pushed
+# only when registry credentials are available (GitLab's built-in registry provides
+# CI_REGISTRY / CI_REGISTRY_USER / CI_REGISTRY_PASSWORD automatically; for another registry
+# set REGISTRY, REGISTRY_USER, REGISTRY_PASSWORD as masked CI/CD variables).
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_TAG
+    - if: $CI_PIPELINE_SOURCE == "web"
+
+stages:
+  - lint
+  - test
+  - build
+
+default:
+  interruptible: true
+
+variables:
+  PYTHON_IMAGE: python:3.12-slim
+  NODE_IMAGE: node:24-alpine
+  UV_CACHE_DIR: $CI_PROJECT_DIR/.cache/uv
+  UV_LINK_MODE: copy
+  npm_config_cache: $CI_PROJECT_DIR/.cache/npm
+  npm_config_audit: "false"
+  npm_config_fund: "false"
+
+# ----------------------------------------------------------------------------- backend
+.backend:
+  image: $PYTHON_IMAGE
+  variables:
+    BE_ENVIRONMENT: test
+    # Tests must not depend on a real .env; provide the one mandatory secret.
+    BE_JWT_SECRET: ci-only-jwt-secret-not-used-anywhere-else-0123456789
+  cache:
+    key:
+      files:
+        - apps/backend/requirements.txt
+        - apps/backend/requirements-dev.txt
+      prefix: backend
+    paths:
+      - .cache/uv
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq --no-install-recommends libmagic1 > /dev/null
+    - pip install --quiet --disable-pip-version-check uv
+    - cd apps/backend
+    - uv venv .venv
+    - uv pip install --python .venv/bin/python -r requirements-dev.txt
+    - export PATH="$PWD/.venv/bin:$PATH"
+
+backend:lint:
+  extends: .backend
+  stage: lint
+  script:
+    - ruff check .
+    - ruff format --check .
+
+backend:test:
+  extends: .backend
+  stage: test
+  needs: []
+  script:
+    - pytest --junitxml=report.xml
+  artifacts:
+    when: always
+    reports:
+      junit: apps/backend/report.xml
+
+# Same repository/module tests against a real Postgres (the Supabase provider). The tests
+# apply apps/backend/migrations/supabase/*.sql themselves and truncate tables per test.
+backend:test-postgres:
+  extends: .backend
+  stage: test
+  needs: []
+  services:
+    - name: postgres:16-alpine
+      alias: postgres
+  variables:
+    POSTGRES_DB: app_test
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres
+    TEST_POSTGRES_DSN: postgresql://postgres:postgres@postgres:5432/app_test
+  script:
+    - pytest -m integration --junitxml=report-postgres.xml
+  artifacts:
+    when: always
+    reports:
+      junit: apps/backend/report-postgres.xml
+
+# --------------------------------------------------------------------------------- web
+.web:
+  image: $NODE_IMAGE
+  cache:
+    key:
+      files:
+        - apps/web/package-lock.json
+      prefix: web
+    paths:
+      - .cache/npm
+  before_script:
+    - cd apps/web
+    - npm ci --prefer-offline
+
+web:lint:
+  extends: .web
+  stage: lint
+  script:
+    - npm run typecheck
+    - npm run lint
+    - npm run format:check
+
+web:test:
+  extends: .web
+  stage: test
+  needs: []
+  script:
+    - npm run test:ci
+
+web:build:
+  extends: .web
+  stage: build
+  needs: ["web:lint", "web:test"]
+  script:
+    - npm run build
+  artifacts:
+    name: web-build-$CI_COMMIT_SHORT_SHA
+    paths:
+      - apps/web/build/
+    expire_in: 1 week
+
+# ------------------------------------------------------------------------------ docker
+docker:build:
+  stage: build
+  image: docker:28
+  services:
+    - name: docker:28-dind
+      alias: docker
+  needs: ["backend:lint", "backend:test", "backend:test-postgres", "web:lint", "web:test"]
+  variables:
+    DOCKER_HOST: tcp://docker:2376
+    DOCKER_TLS_CERTDIR: /certs
+    DOCKER_TLS_VERIFY: "1"
+    DOCKER_CERT_PATH: /certs/client
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_TAG
+  script:
+    - REGISTRY="${REGISTRY:-$CI_REGISTRY}"
+    - REGISTRY_USER="${REGISTRY_USER:-$CI_REGISTRY_USER}"
+    - REGISTRY_PASSWORD="${REGISTRY_PASSWORD:-$CI_REGISTRY_PASSWORD}"
+    - IMAGE_BASE="${IMAGE_BASE:-${CI_REGISTRY_IMAGE:-local/$CI_PROJECT_NAME}}"
+    - TAG="${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}"
+    - docker build --pull -t "$IMAGE_BASE/backend:$TAG" apps/backend
+    - docker build --pull -t "$IMAGE_BASE/web:$TAG" apps/web
+    - |
+      if [ -n "$REGISTRY" ] && [ -n "$REGISTRY_USER" ] && [ -n "$REGISTRY_PASSWORD" ]; then
+        echo "$REGISTRY_PASSWORD" | docker login -u "$REGISTRY_USER" --password-stdin "$REGISTRY"
+        for svc in backend web; do
+          docker push "$IMAGE_BASE/$svc:$TAG"
+          if [ "$CI_COMMIT_BRANCH" = "$CI_DEFAULT_BRANCH" ]; then
+            docker tag "$IMAGE_BASE/$svc:$TAG" "$IMAGE_BASE/$svc:latest"
+            docker push "$IMAGE_BASE/$svc:latest"
+          fi
+        done
+      else
+        echo "No registry credentials available - images were built but not pushed."
+      fi

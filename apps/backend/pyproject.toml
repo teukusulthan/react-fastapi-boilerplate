@@ -1,0 +1,62 @@
+[project]
+name = "backend"
+version = "1.0.0"
+description = "FastAPI backend (MongoDB or Supabase Postgres)"
+requires-python = ">=3.10"
+
+# Dependencies live in requirements.txt / requirements-dev.txt (installed with `uv pip install -r`).
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+extend-exclude = [".venv", "migrations"]
+
+[tool.ruff.lint]
+select = [
+  "E", "W",   # pycodestyle
+  "F",        # pyflakes
+  "I",        # isort
+  "B",        # bugbear
+  "UP",       # pyupgrade
+  "S",        # bandit (security)
+  "T20",      # no print()
+  "SIM",      # simplify
+  "C4",       # comprehensions
+  "BLE",      # blind except
+  "RUF",      # ruff-specific
+  "PTH",      # pathlib
+  "N",        # naming
+]
+ignore = [
+  "E501",     # line length handled by the formatter
+  "B008",     # FastAPI Depends()/Query() in defaults is idiomatic
+  "RUF012",   # mutable class attrs (pydantic/dataclass patterns)
+  "N818",     # exception names: AppError hierarchy predates the -Error suffix rule
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "S105", "S106", "S108", "S311", "N802"]
+"tests/conftest.py" = ["S101", "E402"]  # env must be isolated before app imports
+
+[tool.ruff.lint.isort]
+known-first-party = ["api", "core", "db", "dto", "router", "service", "util", "scripts", "tests"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers --import-mode=importlib"
+pythonpath = ["."]
+markers = [
+  "integration: needs real services (set TEST_POSTGRES_DSN); skipped otherwise",
+]
+filterwarnings = [
+  "error::pytest.PytestUnraisableExceptionWarning",
+  # starlette.testclient prefers the httpx2 fork; plain httpx still works
+  "ignore:Using `httpx` with `starlette.testclient` is deprecated:UserWarning",
+]
+
+[tool.coverage.run]
+source = ["core", "db", "dto", "router", "service", "util"]
+omit = ["tests/*"]

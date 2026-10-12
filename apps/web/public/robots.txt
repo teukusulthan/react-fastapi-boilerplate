@@ -1,0 +1,3 @@
+# Internal application — disallow crawling. Adjust for public deployments.
+User-agent: *
+Disallow: /

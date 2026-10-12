@@ -1,0 +1,31 @@
+# Keep the build context small and free of local artefacts/secrets.
+.venv
+venv
+__pycache__
+**/__pycache__
+*.py[cod]
+.pytest_cache
+.ruff_cache
+.mypy_cache
+.coverage
+coverage.xml
+htmlcov
+*.log
+logs
+
+# Secrets / local config (configuration is injected at runtime via env)
+.env
+.env.*
+!.env.example
+
+# Not needed at runtime
+tests
+Dockerfile
+.dockerignore
+project.json
+*.md
+.git
+.gitignore
+.vscode
+.idea
+.DS_Store

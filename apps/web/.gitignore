@@ -1,0 +1,20 @@
+# dependencies
+/node_modules
+
+# build / test output
+/build
+/dist
+/coverage
+
+# env files (only the example is committed)
+/env/.env
+/env/.env.*
+!/env/.env.example
+
+# misc
+*.log
+.DS_Store
+*.tsbuildinfo
+
+# UI snapshots (npm run ui:snapshot)
+/.ui-snapshots

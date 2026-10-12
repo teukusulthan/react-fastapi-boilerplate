@@ -1,0 +1,226 @@
+# Tailwind v4 @theme mapping — all values reference CSS vars from variable.yml
+# Usage: --color-{key} → bg-{key} / text-{key} / border-{key} / ring-{key}
+
+font_family:
+  sans:  var(--font-sans)
+  serif: var(--font-serif)
+  mono:  var(--font-mono)
+
+font_size:
+  display:  var(--text-display)
+  h1:       var(--text-h1)
+  h2:       var(--text-h2)
+  h3:       var(--text-h3)
+  h4:       var(--text-h4)
+  h5:       var(--text-h5)
+  h6:       var(--text-h6)
+  body-lg:  var(--text-body-lg)
+  body-md:  var(--text-body-md)
+  body-sm:  var(--text-body-sm)
+  label-lg: var(--text-label-lg)
+  label-md: var(--text-label-md)
+  label-sm: var(--text-label-sm)
+
+font_weight:
+  regular:  var(--font-weight-regular)
+  medium:   var(--font-weight-medium)
+  semibold: var(--font-weight-semibold)
+  bold:     var(--font-weight-bold)
+
+line_height:
+  none:    var(--leading-none)
+  tight:   var(--leading-tight)
+  snug:    var(--leading-snug)
+  normal:  var(--leading-normal)
+  relaxed: var(--leading-relaxed)
+  loose:   var(--leading-loose)
+
+letter_spacing:
+  tighter: var(--tracking-tighter)
+  tight:   var(--tracking-tight)
+  normal:  var(--tracking-normal)
+  wide:    var(--tracking-wide)
+  wider:   var(--tracking-wider)
+  widest:  var(--tracking-widest)
+
+colors:
+  # shadcn semantic
+  background:            var(--background)
+  foreground:            var(--foreground)
+  card:                  var(--card)
+  card-foreground:       var(--card-foreground)
+  popover:               var(--popover)
+  popover-foreground:    var(--popover-foreground)
+  primary:               var(--primary)
+  primary-foreground:    var(--primary-foreground)
+  secondary:             var(--secondary)
+  secondary-foreground:  var(--secondary-foreground)
+  tertiary:              var(--tertiary)
+  tertiary-foreground:   var(--tertiary-foreground)
+  quaternary:            var(--quaternary)
+  quaternary-foreground: var(--quaternary-foreground)
+  quinary:               var(--quinary)
+  quinary-foreground:    var(--quinary-foreground)
+  muted:                 var(--muted)
+  muted-foreground:      var(--muted-foreground)
+  accent:                var(--accent)
+  accent-foreground:     var(--accent-foreground)
+  destructive:           var(--destructive)
+  destructive-foreground: var(--destructive-foreground)
+  border:                var(--border)
+  input:                 var(--input)
+  ring:                  var(--ring)
+
+  # surface
+  background-primary:   var(--bg-primary)
+  background-secondary: var(--bg-secondary)
+
+  # border
+  border-primary:   var(--border-primary)
+  border-secondary: var(--border-secondary)
+
+  # typography
+  font-primary:     var(--text-color-primary)
+  font-secondary:   var(--text-color-secondary)
+  font-placeholder: var(--text-color-placeholder)
+  font-disabled:    var(--text-color-disabled)
+  font-on-accent:   var(--text-color-on-accent)
+
+  # brand — primary
+  primary-light: var(--primary-light)
+  primary-soft:  var(--primary-soft)
+  primary-base:  var(--primary-base)
+  primary-bold:  var(--primary-bold)
+  primary-deep:  var(--primary-deep)
+
+  # brand — secondary
+  secondary-light: var(--secondary-light)
+  secondary-soft:  var(--secondary-soft)
+  secondary-base:  var(--secondary-base)
+  secondary-bold:  var(--secondary-bold)
+  secondary-deep:  var(--secondary-deep)
+
+  # brand — tertiary
+  tertiary-light: var(--tertiary-light)
+  tertiary-soft:  var(--tertiary-soft)
+  tertiary-base:  var(--tertiary-base)
+  tertiary-bold:  var(--tertiary-bold)
+  tertiary-deep:  var(--tertiary-deep)
+
+  # brand — quaternary
+  quaternary-light: var(--quaternary-light)
+  quaternary-soft:  var(--quaternary-soft)
+  quaternary-base:  var(--quaternary-base)
+  quaternary-bold:  var(--quaternary-bold)
+  quaternary-deep:  var(--quaternary-deep)
+
+  # brand — quinary
+  quinary-light: var(--quinary-light)
+  quinary-soft:  var(--quinary-soft)
+  quinary-base:  var(--quinary-base)
+  quinary-bold:  var(--quinary-bold)
+  quinary-deep:  var(--quinary-deep)
+
+  # neutral
+  neutral:       var(--neutral-base)
+  neutral-light: var(--neutral-light)
+  neutral-soft:  var(--neutral-soft)
+  neutral-base:  var(--neutral-base)
+  neutral-bold:  var(--neutral-bold)
+  neutral-deep:  var(--neutral-deep)
+
+  # state — success
+  success:       var(--success-base)
+  success-light: var(--success-light)
+  success-soft:  var(--success-soft)
+  success-base:  var(--success-base)
+  success-bold:  var(--success-bold)
+  success-deep:  var(--success-deep)
+
+  # state — error
+  error:       var(--error-base)
+  error-light: var(--error-light)
+  error-soft:  var(--error-soft)
+  error-base:  var(--error-base)
+  error-bold:  var(--error-bold)
+  error-deep:  var(--error-deep)
+
+  # state — warning
+  warning:       var(--warning-base)
+  warning-light: var(--warning-light)
+  warning-soft:  var(--warning-soft)
+  warning-base:  var(--warning-base)
+  warning-bold:  var(--warning-bold)
+  warning-deep:  var(--warning-deep)
+
+  # state — info
+  info:       var(--info-base)
+  info-light: var(--info-light)
+  info-soft:  var(--info-soft)
+  info-base:  var(--info-base)
+  info-bold:  var(--info-bold)
+  info-deep:  var(--info-deep)
+
+  # chart
+  chart-1: var(--chart-1)
+  chart-2: var(--chart-2)
+  chart-3: var(--chart-3)
+  chart-4: var(--chart-4)
+  chart-5: var(--chart-5)
+
+  # sidebar
+  sidebar:                    var(--sidebar)
+  sidebar-foreground:         var(--sidebar-foreground)
+  sidebar-primary:            var(--sidebar-primary)
+  sidebar-primary-foreground: var(--sidebar-primary-foreground)
+  sidebar-accent:             var(--sidebar-accent)
+  sidebar-accent-foreground:  var(--sidebar-accent-foreground)
+  sidebar-border:             var(--sidebar-border)
+  sidebar-ring:               var(--sidebar-ring)
+
+spacing:
+  1:   var(--spacing-1)
+  1-5: var(--spacing-1-5)
+  2:   var(--spacing-2)
+  2-5: var(--spacing-2-5)
+  3:   var(--spacing-3)
+  3-5: var(--spacing-3-5)
+  4:   var(--spacing-4)
+  5:   var(--spacing-5)
+  6:   var(--spacing-6)
+  8:   var(--spacing-8)
+  10:  var(--spacing-10)
+
+border_radius:
+  sm:   var(--radius-sm)
+  md:   var(--radius-md)
+  lg:   var(--radius-lg)
+  xl:   var(--radius-xl)
+  2xl:  var(--radius-2xl)
+  3xl:  var(--radius-3xl)
+  full: var(--radius-full)
+
+shadow:
+  2xs: var(--shadow-2xs)
+  xs:  var(--shadow-xs)
+  sm:  var(--shadow-sm)
+  md:  var(--shadow-md)
+  lg:  var(--shadow-lg)
+  xl:  var(--shadow-xl)
+  2xl: var(--shadow-2xl)
+  inset:
+    2xs: var(--inset-shadow-2xs)
+    xs:  var(--inset-shadow-xs)
+    sm:  var(--inset-shadow-sm)
+
+animation:
+  fade-in:
+    value: "fade-in 0.3s ease-out"
+    keyframes:
+      from: { opacity: 0 }
+      to:   { opacity: 1 }
+  slide-up:
+    value: "slide-up 0.4s ease-out"
+    keyframes:
+      from: { transform: "translateY(10px)", opacity: 0 }
+      to:   { transform: "translateY(0)",    opacity: 1 }

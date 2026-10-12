@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cargo:*)",
+      "Bash(npm:*)",
+      "Bash(flutter:*)",
+      "Bash(dart:*)",
+      "Bash(sqlx:*)",
+      "Bash(git:*)",
+      "Bash(docker:*)",
+      "Bash(docker compose:*)",
+      "Bash(sed -i 's/^name: data-display$/name: reactjs-data-display/' \"/d/File Kantor/VIBE CODE/fs-vibe-base/.ai/brains/reactjs/skills/reactjs-data-display/SKILL.md\")",
+      "Bash(sed -i 's/^name: dynamic-filter$/name: reactjs-dynamic-filter/' \"/d/File Kantor/VIBE CODE/fs-vibe-base/.ai/brains/reactjs/skills/reactjs-dynamic-filter/SKILL.md\")",
+      "Bash(sed -i 's/^name: error-handling$/name: reactjs-error-handling/' \"/d/File Kantor/VIBE CODE/fs-vibe-base/.ai/brains/reactjs/skills/reactjs-error-handling/SKILL.md\")",
+      "Bash(sed -i '1s/^/---\\\\n/' \"/d/File Kantor/VIBE CODE/fs-vibe-base/.ai/brains/reactjs/skills/reactjs-dynamic-widget/SKILL.md\")",
+      "Bash(sed -i 's/^name: dynamic-widget$/name: reactjs-dynamic-widget/' \"/d/File Kantor/VIBE CODE/fs-vibe-base/.ai/brains/reactjs/skills/reactjs-dynamic-widget/SKILL.md\")"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(git push --force:*)"
+    ]
+  }
+}

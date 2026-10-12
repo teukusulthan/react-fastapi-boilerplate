@@ -1,0 +1,101 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'react-perfect-scrollbar/dist/css/styles.css';
+
+/* Class-based dark mode: the `.dark` class on <html> is managed by stores/useThemeStore.ts */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Core design tokens and variables */
+@import './styles/variable.css';
+
+/* Tailwind theme configuration */
+@import './styles/tailwind.css';
+
+/* Components & utilities (incl. perfect-scrollbar theming) */
+@import './styles/components.css';
+
+/* ============================================
+  BASE LAYER
+  html font-size: 100% → 1rem = 16px (browser default), so the user's zoom settings are respected.
+  App body text is 14px (`text-sm`).
+   ============================================ */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    font-size: 100%;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-background font-sans text-sm text-foreground antialiased;
+    /* Inter: single-storey a (cv11), open digits (ss01), disambiguated l/I (cv05). */
+    font-feature-settings:
+      'cv05' 1,
+      'cv11' 1,
+      'ss01' 1;
+    line-height: 1.5;
+  }
+
+  /* Phosphor font icons (<i class="ph ph-x">): 16px by default, and `size-*` sets the glyph size too
+     (size-3 … size-12), so `<i className="ph ph-user size-5" />` just works. Zero specificity:
+     an explicit `text-*` size on the icon still wins. */
+  :where(i.ph, i.ph-fill, i.ph-bold, i.ph-light, i.ph-thin, i.ph-duotone) {
+    display: inline-block;
+    flex-shrink: 0;
+    font-size: 1rem;
+    line-height: 1;
+    text-align: center;
+  }
+  :where(i[class*='ph'][class~='size-3']) {
+    font-size: 0.75rem;
+  }
+  :where(i[class*='ph'][class~='size-3.5']) {
+    font-size: 0.875rem;
+  }
+  :where(i[class*='ph'][class~='size-4']) {
+    font-size: 1rem;
+  }
+  :where(i[class*='ph'][class~='size-4.5']) {
+    font-size: 1.125rem;
+  }
+  :where(i[class*='ph'][class~='size-5']) {
+    font-size: 1.25rem;
+  }
+  :where(i[class*='ph'][class~='size-6']) {
+    font-size: 1.5rem;
+  }
+  :where(i[class*='ph'][class~='size-8']) {
+    font-size: 2rem;
+  }
+  :where(i[class*='ph'][class~='size-10']) {
+    font-size: 2.5rem;
+  }
+  :where(i[class*='ph'][class~='size-12']) {
+    font-size: 3rem;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, var(--primary) 22%, transparent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

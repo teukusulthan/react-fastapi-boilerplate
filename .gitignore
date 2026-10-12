@@ -1,0 +1,100 @@
+# ---------------------------------------------------------------- dependencies
+node_modules/
+.venv/
+venv/
+
+# ------------------------------------------------------------------ build output
+build/
+dist/
+*.tsbuildinfo
+.vite/
+
+# ----------------------------------------------------------------- environment
+# Real env files hold secrets; only the examples are committed.
+.env
+.env.*
+!.env.example
+!**/.env.example
+!.env.*.example
+
+# --------------------------------------------------------------- tests/coverage
+coverage/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+report.xml
+junit*.xml
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.hypothesis/
+.tox/
+.nyc_output/
+playwright-report/
+test-results/
+
+# ----------------------------------------------------------------------- python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+
+# --------------------------------------------------------------------- caches
+.nx/cache/
+.nx/workspace-data/
+.cache/
+.eslintcache
+.npm/
+
+# ------------------------------------------------------------------------- logs
+*.log
+logs/
+npm-debug.log*
+
+# ---------------------------------------------------------------------- secrets
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+id_rsa*
+id_ed25519*
+*.secret
+secrets/
+credentials*.env
+credentials.json
+service-account*.json
+# supabase-init writes generated credentials here
+.supabase/
+# local compose overrides usually carry real credentials/ports
+docker-compose.override.yml
+compose.override.yml
+# /deploy writes machine-specific URLs/IPs here
+deployment.json
+
+# ----------------------------------------------------------- local artifacts
+.ui-snapshots/
+*.sqlite
+*.sqlite3
+
+# ----------------------------------------------------------------- OS / editors
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
+*~
+
+# -------------------------------------------------------------- tooling/agents
+.claude/settings.local.json
+.claude/logs/*
+CLAUDE.local.md
+.ai-session.json
+.ai-sessions.json
+.ai-config.json
+.playwright-mcp

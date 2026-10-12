@@ -1,0 +1,53 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "backend",
+  "projectType": "application",
+  "sourceRoot": "apps/backend",
+  "tags": ["type:app", "lang:python"],
+  "targets": {
+    "serve": {
+      "executor": "nx:run-commands",
+      "continuous": true,
+      "options": {
+        "command": "node ../../scripts/py.mjs api.py",
+        "cwd": "apps/backend"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node ../../scripts/py.mjs -m ruff check .",
+        "cwd": "apps/backend"
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node ../../scripts/py.mjs -m ruff format .",
+        "cwd": "apps/backend"
+      }
+    },
+    "format-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node ../../scripts/py.mjs -m ruff format --check .",
+        "cwd": "apps/backend"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node ../../scripts/py.mjs -m pytest",
+        "cwd": "apps/backend"
+      }
+    },
+    "seed": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "node ../../scripts/py.mjs -m scripts.seed",
+        "cwd": "apps/backend"
+      }
+    }
+  }
+}

@@ -1,0 +1,2381 @@
+<!DOCTYPE html>
+<html lang="en" style="font-size:14px;">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ DESIGN_SYSTEM_NAME }} Brand Guideline</title>
+  <link rel="stylesheet" href="variable.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="{{FONT_FAMILY}}" rel="stylesheet" />
+
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <style>
+  /* ═══════════════════════════════════════════════════════════════════════════
+      DESIGN SYSTEM OVERRIDES — rem base 16px
+      ═══════════════════════════════════════════════════════════════════════════ */
+  :root {
+    /* Typography — rem per DESIGN.md scale (base 16px) */
+    --text-display: 4rem;
+    --text-h1:       3rem;
+    --text-h2:       2.5rem;
+    --text-h3:       2rem;
+    --text-h4:       1.75rem;
+    --text-h5:       1.375rem;
+    --text-h6:       1.125rem;
+    --text-body-lg:  1rem;
+    --text-body-md:  0.9375rem;
+    --text-body-sm:  0.875rem;
+    --text-label-lg: 0.875rem;
+    --text-label-md: 0.8125rem;
+    --text-label-sm: 0.6875rem;
+    /* Spacing — rem base 16px */
+    --spacing-1:    0.25rem;
+    --spacing-1-5:  0.375rem;
+    --spacing-2:    0.5rem;
+    --spacing-2-5:  0.625rem;
+    --spacing-3:    0.75rem;
+    --spacing-3-5:  0.875rem;
+    --spacing-4:    1rem;
+    --spacing-5:    1.25rem;
+    --spacing-6:    1.5rem;
+    --spacing-8:    2rem;
+    --spacing-10:   2.5rem;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+      PAGE STYLES
+      ═══════════════════════════════════════════════════════════════════════════ */
+
+    * { box-sizing: border-box; }
+    html { font-size: 16px; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      font-family: var(--font-sans);
+      color: var(--text-color-primary);
+      background: var(--base-neutral-900);
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image: radial-gradient(color-mix(in srgb, var(--base-neutral-50) 18%, transparent) 1px, transparent 1px);
+      background-size: 20px 20px;
+      opacity: .28;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 15% 10%, color-mix(in srgb, var(--primary-base) 14%, transparent) 0, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 85% 20%, color-mix(in srgb, var(--secondary-base) 8%, transparent) 0, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* ── Board ─────────────────────────────────────── */
+    .board {
+      position: relative;
+      z-index: 1;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-3xl);
+      box-shadow: var(--shadow-2xl);
+    }
+
+    /* ── Bento Tile (Token tab) ────────────────────── */
+    .bento-tile {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-3xl);
+      overflow: hidden;
+    }
+    .bento-tile:hover { border-color: var(--border-secondary); }
+
+    .tile-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--spacing-4) var(--spacing-5) 0;
+    }
+
+    .tile-label {
+      color: var(--text-color-secondary);
+      font-size: var(--text-label-sm);
+      font-weight: var(--font-weight-semibold);
+      line-height: var(--leading-snug);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-wide);
+    }
+
+    .tile-body { padding: var(--spacing-4) var(--spacing-5) var(--spacing-5); }
+
+    /* ── Color Swatch Cards ────────────────────────── */
+    .palette-swatch {
+      padding: var(--spacing-4) var(--spacing-5);
+      color: var(--text-color-on-accent);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 50px;
+    }
+
+    .palette-strip {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      min-height: 2.25rem;
+    }
+
+    .palette-strip-5 {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      min-height: 1.875rem;
+    }
+
+    /* ── Semantic swatch hover tooltip ─────────────── */
+    .sem-swatch {
+      position: relative;
+      cursor: default;
+      overflow: hidden;
+    }
+    .sem-swatch .sem-hex {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: none;
+      color: #fff;
+      text-shadow: 0 1px 4px rgba(0,0,0,.9), 0 0 6px rgba(0,0,0,.7);
+      font-size: var(--text-label-sm);
+      font-weight: 700;
+      line-height: 1.4;
+      text-align: center;
+      white-space: pre;
+      opacity: 0;
+      transition: opacity .15s ease;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .sem-swatch { cursor: pointer; transition: background 0s !important; }
+    .sem-swatch:hover { filter: none !important; opacity: 1 !important; }
+    .sem-swatch:hover .sem-hex { opacity: 1; }
+    .sem-swatch.copied .sem-hex::after {
+      content: 'Copied!';
+      font-size: var(--text-label-sm);
+      font-weight: 700;
+      display: block;
+    }
+
+    /* ── Typography Preview ────────────────────────── */
+    .type-aa {
+      font-weight: var(--font-weight-semibold);
+      line-height: var(--leading-none);
+    }
+
+    .type-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-1) var(--spacing-4);
+      color: var(--text-color-secondary);
+      font-size: var(--text-label-sm);
+      margin-top: var(--spacing-3);
+    }
+
+    .type-meta span {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-1-5);
+    }
+
+    .type-meta strong {
+      color: var(--text-color-primary);
+      font-weight: var(--font-weight-medium);
+    }
+
+    /* ── Components ────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-2);
+      border-radius: var(--radius-full);
+      padding: var(--spacing-3) var(--spacing-6);
+      font-weight: var(--font-weight-medium);
+      font-size: var(--text-body-md);
+      font-family: inherit;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: transform .18s ease, box-shadow .18s ease;
+      white-space: nowrap;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+    .btn-primary { background: var(--primary-base); color: var(--primary-base-fg); }
+    .btn-secondary { background: var(--card); color: var(--text-color-primary); border-color: var(--border-primary); }
+    .btn-outline { background: transparent; color: var(--text-color-primary); border-color: var(--border-primary); }
+    .btn-ghost { background: transparent; color: var(--text-color-secondary); border-color: transparent; }
+    .btn-ghost:hover { background: var(--bg-secondary); color: var(--text-color-primary); }
+
+    .field {
+      width: 100%;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-primary);
+      background: var(--card);
+      color: var(--text-color-primary);
+      padding: var(--spacing-3) var(--spacing-5);
+      font: inherit;
+      font-size: var(--text-body-md);
+      outline: none;
+    }
+    .field:focus { border-color: var(--primary-base); box-shadow: 0 0 0 3px var(--primary-light); }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-2);
+      border-radius: var(--radius-full);
+      padding: var(--spacing-2) var(--spacing-5);
+      font-size: var(--text-label-md);
+      font-weight: var(--font-weight-medium);
+    }
+    .pill-active { background: var(--primary-base); color: var(--primary-base-fg); }
+    .pill-inactive { background: var(--card); color: var(--text-color-primary); border: 1px solid var(--border-primary); }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-2);
+      border-radius: var(--radius-full);
+      padding: var(--spacing-1-5) var(--spacing-3);
+      font-size: var(--text-label-sm);
+      font-weight: var(--font-weight-medium);
+      border: 1px solid;
+    }
+
+    .icon-btn {
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-primary);
+      background: var(--card);
+      color: var(--text-color-secondary);
+      cursor: pointer;
+      transition: transform .18s ease;
+      font-size: var(--text-h5);
+    }
+    .icon-btn:hover { transform: translateY(-2px); }
+
+    .icon-cell {
+      display: grid;
+      place-items: center;
+      min-height: 3.5rem;
+      border-radius: var(--radius-2xl);
+      background: var(--bg-secondary);
+      color: var(--text-color-secondary);
+      font-size: var(--text-h5);
+      border: 1px solid var(--border-primary);
+      transition: color .2s, background .2s;
+    }
+    .icon-cell:hover { color: var(--primary-base); background: var(--primary-light); }
+
+    /* ── Mode Switcher ─────────────────────────────── */
+    .mode-switch {
+      display: inline-flex;
+      gap: var(--spacing-1);
+      padding: var(--spacing-1);
+      border-radius: var(--radius-full);
+      background: var(--card);
+      border: 1px solid var(--border-primary);
+      box-shadow: var(--shadow-xs);
+    }
+    .mode-btn {
+      border: 0;
+      border-radius: var(--radius-full);
+      background: transparent;
+      color: var(--text-color-secondary);
+      padding: var(--spacing-2) var(--spacing-4);
+      font: inherit;
+      font-size: var(--text-label-md);
+      font-weight: var(--font-weight-medium);
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+    .mode-btn.active {
+      background: var(--primary-base);
+      color: var(--primary-base-fg);
+      box-shadow: var(--shadow-xs);
+    }
+
+    /* ── Tab Switcher ──────────────────────────────── */
+    .tab-switch {
+      display: inline-flex;
+      gap: var(--spacing-1);
+      padding: var(--spacing-1);
+      border-radius: var(--radius-full);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-primary);
+      box-shadow: var(--shadow-xs);
+    }
+    .tab-btn {
+      border: 0;
+      border-radius: var(--radius-full);
+      background: transparent;
+      color: var(--text-color-secondary);
+      padding: var(--spacing-2) var(--spacing-5);
+      font: inherit;
+      font-size: var(--text-label-md);
+      font-weight: var(--font-weight-medium);
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+    .tab-btn.active {
+      background: var(--primary-base);
+      color: var(--primary-base-fg);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ── KPI Card ──────────────────────────────────── */
+    .kpi-card {
+      background: var(--card);
+      border: 1px solid var(--border-primary);
+      border-radius: var(--radius-2xl);
+      padding: var(--spacing-4);
+    }
+
+    .kpi-value {
+      font-size: var(--text-h3);
+      font-weight: var(--font-weight-regular);
+      line-height: var(--leading-tight);
+      color: var(--text-color-primary);
+    }
+
+    .bar-track {
+      height: 0.375rem;
+      border-radius: var(--radius-full);
+      background: var(--quinary-base);
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: var(--radius-full);
+    }
+
+    /* ── Radius Preview ────────────────────────────── */
+    .radius-sample {
+      aspect-ratio: 1;
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-label-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--primary-bold);
+    }
+
+    /* ── Shadow Preview ────────────────────────────── */
+    .shadow-sample {
+      aspect-ratio: 1;
+      background: var(--card);
+      border-radius: var(--radius-2xl);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-label-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--text-color-secondary);
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Spacing Preview ───────────────────────────── */
+    .space-bar {
+      height: 8px;
+      border-radius: var(--radius-full);
+      background: var(--quinary-base);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════════
+       DASHBOARD PREVIEW STYLES
+       ═══════════════════════════════════════════════════════════════════════════ */
+
+    .dashboard-canvas {
+      background: var(--bg-primary);
+      border-radius: var(--radius-3xl);
+      padding: var(--spacing-6);
+    }
+
+    .dash-card {
+      background: var(--card);
+      border: 1px solid var(--border-primary);
+      border-radius: var(--radius-2xl);
+      box-shadow: var(--shadow-sm);
+      padding: var(--spacing-5);
+    }
+
+    /* ── Donut Chart ───────────────────────────────── */
+    .donut-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      width: 140px;
+      height: 140px;
+      margin: 0 auto;
+    }
+    .donut-ring {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: conic-gradient(
+        var(--chart-1) 0deg 220deg,
+        var(--chart-2) 220deg 310deg,
+        var(--chart-5) 310deg 360deg
+      );
+    }
+    .donut-hole {
+      position: absolute;
+      width: 64%;
+      height: 64%;
+      border-radius: 50%;
+      background: var(--card);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .donut-value {
+      font-size: var(--text-h3);
+      font-weight: var(--font-weight-regular);
+      line-height: var(--leading-tight);
+      color: var(--text-color-primary);
+    }
+    .donut-label {
+      font-size: var(--text-label-sm);
+      color: var(--text-color-secondary);
+    }
+
+    /* ── Legend Dots ───────────────────────────────── */
+    .legend-dot {
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: var(--radius-full);
+      flex-shrink: 0;
+    }
+
+    /* ── Bar Chart ─────────────────────────────────── */
+    .bar-chart-bar {
+      flex: 1;
+      border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+      min-width: 1.5rem;
+    }
+
+    /* ── Chat Bubble ───────────────────────────────── */
+    .chat-bubble {
+      max-width: 80%;
+      padding: var(--spacing-3) var(--spacing-4);
+      border-radius: var(--radius-2xl);
+      font-size: var(--text-body-sm);
+      line-height: var(--leading-normal);
+    }
+    .chat-bubble-in {
+      background: var(--bg-secondary);
+      color: var(--text-color-primary);
+      border-top-left-radius: var(--radius-sm);
+      align-self: flex-start;
+    }
+    .chat-bubble-out {
+      background: var(--quaternary-base);
+      color: var(--quaternary-base-fg);
+      border-top-right-radius: var(--radius-sm);
+      align-self: flex-end;
+    }
+
+    .chat-avatar {
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: var(--radius-full);
+      display: grid;
+      place-items: center;
+      font-weight: var(--font-weight-semibold);
+      font-size: var(--text-label-md);
+      flex-shrink: 0;
+    }
+
+    /* ── Profile Avatar ────────────────────────────── */
+    .profile-avatar {
+      width: 3.25rem;
+      height: 3.25rem;
+      border-radius: var(--radius-full);
+      display: grid;
+      place-items: center;
+      font-weight: var(--font-weight-bold);
+      font-size: var(--text-h5);
+      flex-shrink: 0;
+    }
+
+    /* ── Metric Icon Box ───────────────────────────── */
+    .metric-icon-box {
+      width: 3rem;
+      height: 3rem;
+      border-radius: var(--radius-xl);
+      display: grid;
+      place-items: center;
+      font-size: var(--text-h5);
+    }
+
+    /* ── Scrollbar ─────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-secondary); border-radius: var(--radius-full); }
+  </style>
+</head>
+<body>
+  <main class="mx-auto max-w-[1520px] px-3 py-6 md:px-6 md:py-10" style="position:relative;z-index:1">
+    <section class="board p-4 md:p-6">
+
+      <!-- ══════════════════════════════════ HEADER ══════════════════════════════════ -->
+      <header style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--spacing-4);margin-bottom:var(--spacing-6)">
+        <div style="display:flex;align-items:center;gap:var(--spacing-3)">
+          <div style="display:grid;place-items:center;width:44px;height:44px;border-radius:var(--radius-full);background:white;box-shadow:var(--shadow-sm);overflow:hidden;padding:4px">
+            <img src="{{ BRAND_FAVICON_URL }}" alt="{{ DESIGN_SYSTEM_NAME }}" style="width:100%;height:100%;object-fit:contain" onerror="this.parentElement.style.background='var(--primary-base)';this.outerHTML='<span style=\'color:white;font-size:var(--text-label-sm);font-weight:var(--font-weight-bold);letter-spacing:0.05em\'>{{ BRAND_ABBR }}</span>'" />
+          </div>
+          <div>
+            <h1 style="font-size:var(--text-h5);font-weight:var(--font-weight-bold);line-height:var(--leading-tight);margin:0">{{ DESIGN_SYSTEM_NAME }}</h1>
+            <p style="font-size:var(--text-body-sm);color:var(--text-color-secondary);margin:0">{{ BRAND_TAGLINE }}</p>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:var(--spacing-3);flex-wrap:wrap">
+          <div class="tab-switch" aria-label="View mode">
+            <button class="tab-btn active" data-tab="tokens" type="button"><i class="ph ph-palette"></i> Design Tokens</button>
+            <button class="tab-btn" data-tab="dashboard" type="button"><i class="ph ph-squares-four"></i> Dashboard Preview</button>
+          </div>
+          <div class="mode-switch" aria-label="Color mode">
+            <button class="mode-btn" data-mode="light" type="button"><i class="ph ph-sun"></i> Light</button>
+            <button class="mode-btn" data-mode="dark" type="button"><i class="ph ph-moon"></i> Dark</button>
+          </div>
+          <div id="export-dropdown" style="position:relative">
+            <button id="btn-export-json" type="button" onclick="toggleExportMenu(event)" style="display:flex;align-items:center;gap:6px;padding:12px 14px;border-radius:var(--radius-full);background:var(--primary-base);color:var(--primary-base-fg);border:none;cursor:pointer;font-size:var(--text-label-md);font-weight:var(--font-weight-semibold);transition:opacity .15s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+              <i class="ph ph-download-simple"></i>
+              <i class="ph ph-caret-down" style="font-size:12px"></i>
+            </button>
+            <div id="export-menu" style="display:none;position:absolute;right:0;top:calc(100% + 6px);background:var(--card);border:1px solid var(--border-primary);border-radius:var(--radius-lg);box-shadow:0 4px 16px rgba(0,0,0,.12);min-width:140px;overflow:hidden;z-index:999">
+              <button type="button" onclick="exportJSON('semantic')" style="display:flex;align-items:center;gap:8px;width:100%;padding:10px 14px;background:none;border:none;cursor:pointer;font-size:var(--text-body-md);color:var(--text-color-primary);text-align:left;transition:background .1s" onmouseover="this.style.background='var(--bg-secondary)'" onmouseout="this.style.background='none'">
+                <i class="ph ph-palette"></i> Semantic
+              </button>
+              <button type="button" onclick="exportJSON('full')" style="display:flex;align-items:center;gap:8px;width:100%;padding:10px 14px;background:none;border:none;cursor:pointer;font-size:var(--text-body-md);color:var(--text-color-primary);text-align:left;transition:background .1s" onmouseover="this.style.background='var(--bg-secondary)'" onmouseout="this.style.background='none'">
+                <i class="ph ph-stack"></i> Full
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- ════════════════════════ TAB 1: DESIGN TOKENS ════════════════════════ -->
+      <div id="tab-tokens"> 
+
+      <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:var(--spacing-4);align-items:start">
+
+        <!-- ─── LEFT TOKEN SIDEBAR (col-span-3) ─── -->
+        <aside style="grid-column:span 3;display:flex;flex-direction:column;gap:var(--spacing-3)">
+
+          <!-- ── Color Palette Strip ── -->
+          <div style="display:flex;gap:0;border-radius:var(--radius-2xl);overflow:hidden;height:90px;box-shadow:var(--shadow-md)">
+            <div style="flex:1;background:var(--primary-base)" title="Primary"></div>
+            <div style="flex:1;background:var(--secondary-base)" title="Secondary"></div>
+            <div style="flex:1;background:var(--tertiary-base)" title="Tertiary"></div>
+            <div style="flex:1;background:var(--quaternary-base)" title="Quaternary"></div>
+            <div style="flex:1;background:var(--quinary-base)" title="Quinary"></div>
+          </div>
+
+          <!-- ── Color Harmony Info ── -->
+          <div style="display:flex;align-items:center;gap:var(--spacing-2);padding:var(--spacing-2) var(--spacing-3);border-radius:var(--radius-lg);background:var(--info-soft);border:1px solid var(--info-base)">
+            <i class="ph ph-info" style="color:var(--info-base);font-size:14px;flex-shrink:0"></i>
+            <span style="font-size:var(--text-label-sm);color:var(--text-color-secondary);line-height:1.4;display:flex;flex-direction:column;gap:4px"><span><strong style="color:var(--info-bold)">{{ COLOR_HARMONY_TYPE }}</strong> — {{ COLOR_HARMONY_SHORT }}. <button id="color-harmony-btn" type="button" onclick="var r=document.getElementById('color-harmony-reason');var open=r.style.display!=='none';r.style.display=open?'none':'inline';document.getElementById('color-harmony-btn').style.display=open?'inline':'none';document.getElementById('color-harmony-less').style.display=open?'none':'inline';" style="background:none;border:none;padding:0;cursor:pointer;font-size:var(--text-label-sm);color:var(--info-bold);font-weight:600;text-decoration:underline">more</button></span><span id="color-harmony-reason" style="display:none"><em>{{ COLOR_HARMONY_REASON }}</em> <button id="color-harmony-less" type="button" onclick="document.getElementById('color-harmony-reason').style.display='none';document.getElementById('color-harmony-btn').style.display='inline';" style="background:none;border:none;padding:0;cursor:pointer;font-size:var(--text-label-sm);color:var(--info-bold);font-weight:600;text-decoration:underline">less</button></span></span>
+          </div>
+
+          <!-- ── Color Sub-Tabs ── -->
+          <div class="tab-switch" style="align-self:flex-start" aria-label="Color view">
+            <button class="tab-btn active" data-color-tab="semantic" type="button">Semantic</button>
+            <button class="tab-btn" data-color-tab="base" type="button">Base color</button>
+          </div>
+
+          <!-- ── SEMANTIC: light/soft/base/bold/deep ── -->
+          <div id="color-panel-semantic" style="display:flex;flex-direction:column;gap:var(--spacing-3)">
+
+            <!-- semantic strip legend -->
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-bottom:calc(var(--spacing-1)*-1)">
+              <span style="font-size:var(--text-label-sm);text-align:center;color:var(--text-color-tertiary)">light</span>
+              <span style="font-size:var(--text-label-sm);text-align:center;color:var(--text-color-tertiary)">soft</span>
+              <span style="font-size:var(--text-label-sm);text-align:center;color:var(--text-color-tertiary)">base</span>
+              <span style="font-size:var(--text-label-sm);text-align:center;color:var(--text-color-tertiary)">bold</span>
+              <span style="font-size:var(--text-label-sm);text-align:center;color:var(--text-color-tertiary)">deep</span>
+            </div>
+
+            <!-- Primary -->
+            <div class="bento-tile">
+              <div class="palette-swatch" style="background:var(--primary-base)">
+                <div style="display:flex;justify-content:space-between;align-items:start">
+                  <strong style="font-size:var(--text-body-lg)">Primary</strong>
+                  <span style="font-size:var(--text-label-sm);opacity:.85" data-token-hex="--primary-base"></span>
+                </div>
+                <span style="font-size:var(--text-label-sm);opacity:.75">{{ COLOR_PRIMARY_NAME }} · --primary-base</span>
+              </div>
+              <div class="palette-strip" style="grid-template-columns:repeat(5,1fr)" data-sem="1">
+                <span style="background:var(--primary-light)" title="--primary-light"></span>
+                <span style="background:var(--primary-soft)" title="--primary-soft"></span>
+                <span style="background:var(--primary-base)" title="--primary-base"></span>
+                <span style="background:var(--primary-bold)" title="--primary-bold"></span>
+                <span style="background:var(--primary-deep)" title="--primary-deep"></span>
+              </div>
+            </div>
+
+            <!-- Secondary -->
+            <div class="bento-tile">
+              <div class="palette-swatch" style="background:var(--secondary-base)">
+                <div style="display:flex;justify-content:space-between;align-items:start">
+                  <strong style="font-size:var(--text-body-lg)">Secondary</strong>
+                  <span style="font-size:var(--text-label-sm);opacity:.85" data-token-hex="--secondary-base"></span>
+                </div>
+                <span style="font-size:var(--text-label-sm);opacity:.75">{{ COLOR_SECONDARY_NAME }} · --secondary-base</span>
+              </div>
+              <div class="palette-strip" style="grid-template-columns:repeat(5,1fr)" data-sem="1">
+                <span style="background:var(--secondary-light)" title="--secondary-light"></span>
+                <span style="background:var(--secondary-soft)" title="--secondary-soft"></span>
+                <span style="background:var(--secondary-base)" title="--secondary-base"></span>
+                <span style="background:var(--secondary-bold)" title="--secondary-bold"></span>
+                <span style="background:var(--secondary-deep)" title="--secondary-deep"></span>
+              </div>
+            </div>
+
+            <!-- Tertiary -->
+            <div class="bento-tile">
+              <div class="palette-swatch" style="background:var(--tertiary-base)">
+                <div style="display:flex;justify-content:space-between;align-items:start">
+                  <strong style="font-size:var(--text-body-lg)">Tertiary</strong>
+                  <span style="font-size:var(--text-label-sm);opacity:.85" data-token-hex="--tertiary-base"></span>
+                </div>
+                <span style="font-size:var(--text-label-sm);opacity:.75">{{ COLOR_TERTIARY_NAME }} · --tertiary-base</span>
+              </div>
+              <div class="palette-strip" style="grid-template-columns:repeat(5,1fr)" data-sem="1">
+                <span style="background:var(--tertiary-light)" title="--tertiary-light"></span>
+                <span style="background:var(--tertiary-soft)" title="--tertiary-soft"></span>
+                <span style="background:var(--tertiary-base)" title="--tertiary-base"></span>
+                <span style="background:var(--tertiary-bold)" title="--tertiary-bold"></span>
+                <span style="background:var(--tertiary-deep)" title="--tertiary-deep"></span>
+              </div>
+            </div>
+
+            <!-- Quaternary -->
+            <div class="bento-tile">
+              <div class="palette-swatch" style="background:var(--quaternary-base);min-height:64px">
+                <div style="display:flex;justify-content:space-between;align-items:start">
+                  <strong style="font-size:var(--text-body-lg)">Quaternary</strong>
+                  <span style="font-size:var(--text-label-sm);opacity:.85" data-token-hex="--quaternary-base"></span>
+                </div>
+                <span style="font-size:var(--text-label-sm);opacity:.75">Amber Heat · --quaternary-base</span>
+              </div>
+              <div class="palette-strip" style="grid-template-columns:repeat(5,1fr)" data-sem="1">
+                <span style="background:var(--quaternary-light)" title="--quaternary-light"></span>
+                <span style="background:var(--quaternary-soft)" title="--quaternary-soft"></span>
+                <span style="background:var(--quaternary-base)" title="--quaternary-base"></span>
+                <span style="background:var(--quaternary-bold)" title="--quaternary-bold"></span>
+                <span style="background:var(--quaternary-deep)" title="--quaternary-deep"></span>
+              </div>
+            </div>
+
+            <!-- Quinary -->
+            <div class="bento-tile">
+              <div class="palette-swatch" style="background:var(--quinary-base);min-height:56px">
+                <div style="display:flex;justify-content:space-between;align-items:start">
+                  <strong style="font-size:var(--text-body-lg)">Quinary</strong>
+                  <span style="font-size:var(--text-label-sm);opacity:.85" data-token-hex="--quinary-base"></span>
+                </div>
+                <span style="font-size:var(--text-label-sm);opacity:.75">Stadium Teal · --quinary-base</span>
+              </div>
+              <div class="palette-strip" style="grid-template-columns:repeat(5,1fr)" data-sem="1">
+                <span style="background:var(--quinary-light)" title="--quinary-light"></span>
+                <span style="background:var(--quinary-soft)" title="--quinary-soft"></span>
+                <span style="background:var(--quinary-base)" title="--quinary-base"></span>
+                <span style="background:var(--quinary-bold)" title="--quinary-bold"></span>
+                <span style="background:var(--quinary-deep)" title="--quinary-deep"></span>
+              </div>
+            </div>
+
+            <!-- Neutral -->
+            <div class="bento-tile">
+              <div class="palette-swatch" style="background:var(--neutral-base);min-height:50px">
+                <div style="display:flex;justify-content:space-between;align-items:start">
+                  <strong style="font-size:var(--text-body-lg)">Neutral</strong>
+                  <span style="font-size:var(--text-label-sm);opacity:.85">Structural</span>
+                </div>
+              </div>
+              <div class="palette-strip" style="grid-template-columns:repeat(5,1fr)" data-sem="1">
+                <span style="background:var(--neutral-light)" title="--neutral-light"></span>
+                <span style="background:var(--neutral-soft)" title="--neutral-soft"></span>
+                <span style="background:var(--neutral-base)" title="--neutral-base"></span>
+                <span style="background:var(--neutral-bold)" title="--neutral-bold"></span>
+                <span style="background:var(--neutral-deep)" title="--neutral-deep"></span>
+              </div>
+            </div>
+
+            <!-- State Colors Separator -->
+            <p class="tile-label" style="padding:0;margin:var(--spacing-1) 0 0;font-size:var(--text-label-sm);letter-spacing:var(--tracking-wide);color:var(--text-color-secondary)">STATE COLORS</p>
+
+            <!-- Success -->
+            <div class="bento-tile">
+              <div class="palette-swatch" style="background:var(--success-base)">
+                <div style="display:flex;justify-content:space-between;align-items:start">
+                  <strong style="font-size:var(--text-body-lg)">Success</strong>
+                  <span style="font-size:var(--text-label-sm);opacity:.85" data-token-hex="--success-base"></span>
+                </div>
+                <span style="font-size:var(--text-label-sm);opacity:.75">--success-base</span>
+              </div>
+              <div class="palette-strip" style="grid-template-columns:repeat(5,1fr)" data-sem="1">
+                <span style="background:var(--success-light)" title="--success-light"></span>
+                <span style="background:var(--success-soft)" title="--success-soft"></span>
+                <span style="background:var(--success-base)" title="--success-base"></span>
+                <span style="background:var(--success-bold)" title="--success-bold"></span>
+                <span style="background:var(--success-deep)" title="--success-deep"></span>
+              </div>
+            </div>
+
+            <!-- Warning -->
+            <div class="bento-tile">
+              <div class="palette-swatch" style="background:var(--warning-base)">
+                <div style="display:flex;justify-content:space-between;align-items:start">
+                  <strong style="font-size:var(--text-body-lg)">Warning</strong>
+                  <span style="font-size:var(--text-label-sm);opacity:.85" data-token-hex="--warning-base"></span>
+                </div>
+                <span style="font-size:var(--text-label-sm);opacity:.75">--warning-base</span>
+              </div>
+              <div class="palette-strip" style="grid-template-columns:repeat(5,1fr)" data-sem="1">
+                <span style="background:var(--warning-light)" title="--warning-light"></span>
+                <span style="background:var(--warning-soft)" title="--warning-soft"></span>
+                <span style="background:var(--warning-base)" title="--warning-base"></span>
+                <span style="background:var(--warning-bold)" title="--warning-bold"></span>
+                <span style="background:var(--warning-deep)" title="--warning-deep"></span>
+              </div>
+            </div>
+
+            <!-- Error -->
+            <div class="bento-tile">
+              <div class="palette-swatch" style="background:var(--error-base)">
+                <div style="display:flex;justify-content:space-between;align-items:start">
+                  <strong style="font-size:var(--text-body-lg)">Error</strong>
+                  <span style="font-size:var(--text-label-sm);opacity:.85" data-token-hex="--error-base"></span>
+                </div>
+                <span style="font-size:var(--text-label-sm);opacity:.75">--error-base</span>
+              </div>
+              <div class="palette-strip" style="grid-template-columns:repeat(5,1fr)" data-sem="1">
+                <span style="background:var(--error-light)" title="--error-light"></span>
+                <span style="background:var(--error-soft)" title="--error-soft"></span>
+                <span style="background:var(--error-base)" title="--error-base"></span>
+                <span style="background:var(--error-bold)" title="--error-bold"></span>
+                <span style="background:var(--error-deep)" title="--error-deep"></span>
+              </div>
+            </div>
+
+            <!-- Info -->
+            <div class="bento-tile">
+              <div class="palette-swatch" style="background:var(--info-base)">
+                <div style="display:flex;justify-content:space-between;align-items:start">
+                  <strong style="font-size:var(--text-body-lg)">Info</strong>
+                  <span style="font-size:var(--text-label-sm);opacity:.85" data-token-hex="--info-base"></span>
+                </div>
+                <span style="font-size:var(--text-label-sm);opacity:.75">--info-base</span>
+              </div>
+              <div class="palette-strip" style="grid-template-columns:repeat(5,1fr)" data-sem="1">
+                <span style="background:var(--info-light)" title="--info-light"></span>
+                <span style="background:var(--info-soft)" title="--info-soft"></span>
+                <span style="background:var(--info-base)" title="--info-base"></span>
+                <span style="background:var(--info-bold)" title="--info-bold"></span>
+                <span style="background:var(--info-deep)" title="--info-deep"></span>
+              </div>
+            </div>
+
+          </div><!-- /#color-panel-semantic -->
+
+          <!-- ── BASE COLOR: 50–900 scale ── -->
+          <div id="color-panel-base" style="display:none;flex-direction:column;gap:var(--spacing-3)">
+
+            <!-- Primary -->
+            <div class="bento-tile">
+              <div class="palette-swatch" style="background:var(--primary-base)">
+                <div style="display:flex;justify-content:space-between;align-items:start">
+                  <strong style="font-size:var(--text-body-lg)">Primary</strong>
+                  <span style="font-size:var(--text-label-sm);opacity:.85" data-token-hex="--primary-base"></span>
+                </div>
+                <span style="font-size:var(--text-label-sm);opacity:.75">{{ COLOR_PRIMARY_NAME }} · --primary-base</span>
+              </div>
+              <div class="palette-strip">
+                <span style="background:var(--base-primary-50)"></span><span style="background:var(--base-primary-100)"></span><span style="background:var(--base-primary-200)"></span><span style="background:var(--base-primary-300)"></span><span style="background:var(--base-primary-400)"></span><span style="background:var(--base-primary-500)"></span><span style="background:var(--base-primary-600)"></span><span style="background:var(--base-primary-700)"></span><span style="background:var(--base-primary-800)"></span><span style="background:var(--base-primary-900)"></span>
+              </div>
+            </div>
+
+            <!-- Secondary -->
+            <div class="bento-tile">
+              <div class="palette-swatch" style="background:var(--secondary-base)">
+                <div style="display:flex;justify-content:space-between;align-items:start">
+                  <strong style="font-size:var(--text-body-lg)">Secondary</strong>
+                  <span style="font-size:var(--text-label-sm);opacity:.85" data-token-hex="--secondary-base"></span>
+                </div>
+                <span style="font-size:var(--text-label-sm);opacity:.75">{{ COLOR_SECONDARY_NAME }} · --secondary-base</span>
+              </div>
+              <div class="palette-strip">
+                <span style="background:var(--base-secondary-50)"></span><span style="background:var(--base-secondary-100)"></span><span style="background:var(--base-secondary-200)"></span><span style="background:var(--base-secondary-300)"></span><span style="background:var(--base-secondary-400)"></span><span style="background:var(--base-secondary-500)"></span><span style="background:var(--base-secondary-600)"></span><span style="background:var(--base-secondary-700)"></span><span style="background:var(--base-secondary-800)"></span><span style="background:var(--base-secondary-900)"></span>
+              </div>
+            </div>
+
+            <!-- Tertiary -->
+            <div class="bento-tile">
+              <div class="palette-swatch" style="background:var(--tertiary-base)">
+                <div style="display:flex;justify-content:space-between;align-items:start">
+                  <strong style="font-size:var(--text-body-lg)">Tertiary</strong>
+                  <span style="font-size:var(--text-label-sm);opacity:.85" data-token-hex="--tertiary-base"></span>
+                </div>
+                <span style="font-size:var(--text-label-sm);opacity:.75">{{ COLOR_TERTIARY_NAME }} · --tertiary-base</span>
+              </div>
+              <div class="palette-strip">
+                <span style="background:var(--base-tertiary-50)"></span><span style="background:var(--base-tertiary-100)"></span><span style="background:var(--base-tertiary-200)"></span><span style="background:var(--base-tertiary-300)"></span><span style="background:var(--base-tertiary-400)"></span><span style="background:var(--base-tertiary-500)"></span><span style="background:var(--base-tertiary-600)"></span><span style="background:var(--base-tertiary-700)"></span><span style="background:var(--base-tertiary-800)"></span><span style="background:var(--base-tertiary-900)"></span>
+              </div>
+            </div>
+
+            <!-- Quaternary -->
+            <div class="bento-tile">
+              <div class="palette-swatch" style="background:var(--quaternary-base);min-height:64px">
+                <div style="display:flex;justify-content:space-between;align-items:start">
+                  <strong style="font-size:var(--text-body-lg)">Quaternary</strong>
+                  <span style="font-size:var(--text-label-sm);opacity:.85" data-token-hex="--quaternary-base"></span>
+                </div>
+                <span style="font-size:var(--text-label-sm);opacity:.75">Amber Heat · --quaternary-base</span>
+              </div>
+              <div class="palette-strip">
+                <span style="background:var(--base-quaternary-50)"></span><span style="background:var(--base-quaternary-100)"></span><span style="background:var(--base-quaternary-200)"></span><span style="background:var(--base-quaternary-300)"></span><span style="background:var(--base-quaternary-400)"></span><span style="background:var(--base-quaternary-500)"></span><span style="background:var(--base-quaternary-600)"></span><span style="background:var(--base-quaternary-700)"></span><span style="background:var(--base-quaternary-800)"></span><span style="background:var(--base-quaternary-900)"></span>
+              </div>
+            </div>
+
+            <!-- Quinary -->
+            <div class="bento-tile">
+              <div class="palette-swatch" style="background:var(--quinary-base);min-height:56px">
+                <div style="display:flex;justify-content:space-between;align-items:start">
+                  <strong style="font-size:var(--text-body-lg)">Quinary</strong>
+                  <span style="font-size:var(--text-label-sm);opacity:.85" data-token-hex="--quinary-base"></span>
+                </div>
+                <span style="font-size:var(--text-label-sm);opacity:.75">Stadium Teal · --quinary-base</span>
+              </div>
+              <div class="palette-strip">
+                <span style="background:var(--base-quinary-50)"></span><span style="background:var(--base-quinary-100)"></span><span style="background:var(--base-quinary-200)"></span><span style="background:var(--base-quinary-300)"></span><span style="background:var(--base-quinary-400)"></span><span style="background:var(--base-quinary-500)"></span><span style="background:var(--base-quinary-600)"></span><span style="background:var(--base-quinary-700)"></span><span style="background:var(--base-quinary-800)"></span><span style="background:var(--base-quinary-900)"></span>
+              </div>
+            </div>
+
+            <!-- Neutral -->
+            <div class="bento-tile">
+              <div class="palette-swatch" style="background:var(--neutral-base);min-height:50px">
+                <div style="display:flex;justify-content:space-between;align-items:start">
+                  <strong style="font-size:var(--text-body-lg)">Neutral</strong>
+                  <span style="font-size:var(--text-label-sm);opacity:.85">Structural</span>
+                </div>
+              </div>
+              <div class="palette-strip">
+                <span style="background:var(--base-neutral-50)"></span><span style="background:var(--base-neutral-100)"></span><span style="background:var(--base-neutral-200)"></span><span style="background:var(--base-neutral-300)"></span><span style="background:var(--base-neutral-400)"></span><span style="background:var(--base-neutral-500)"></span><span style="background:var(--base-neutral-600)"></span><span style="background:var(--base-neutral-700)"></span><span style="background:var(--base-neutral-800)"></span><span style="background:var(--base-neutral-900)"></span>
+              </div>
+            </div>
+
+            <!-- State Colors Separator -->
+            <p class="tile-label" style="padding:0;margin:var(--spacing-1) 0 0;font-size:var(--text-label-sm);letter-spacing:var(--tracking-wide);color:var(--text-color-secondary)">STATE COLORS</p>
+
+            <!-- Success -->
+            <div class="bento-tile">
+              <div class="palette-swatch" style="background:var(--success-base)">
+                <div style="display:flex;justify-content:space-between;align-items:start">
+                  <strong style="font-size:var(--text-body-lg)">Success</strong>
+                  <span style="font-size:var(--text-label-sm);opacity:.85" data-token-hex="--success-base"></span>
+                </div>
+                <span style="font-size:var(--text-label-sm);opacity:.75">--success-base</span>
+              </div>
+              <div class="palette-strip">
+                <span style="background:var(--base-success-50)"></span><span style="background:var(--base-success-100)"></span><span style="background:var(--base-success-200)"></span><span style="background:var(--base-success-300)"></span><span style="background:var(--base-success-400)"></span><span style="background:var(--base-success-500)"></span><span style="background:var(--base-success-600)"></span><span style="background:var(--base-success-700)"></span><span style="background:var(--base-success-800)"></span><span style="background:var(--base-success-900)"></span>
+              </div>
+            </div>
+
+            <!-- Warning -->
+            <div class="bento-tile">
+              <div class="palette-swatch" style="background:var(--warning-base)">
+                <div style="display:flex;justify-content:space-between;align-items:start">
+                  <strong style="font-size:var(--text-body-lg)">Warning</strong>
+                  <span style="font-size:var(--text-label-sm);opacity:.85" data-token-hex="--warning-base"></span>
+                </div>
+                <span style="font-size:var(--text-label-sm);opacity:.75">--warning-base</span>
+              </div>
+              <div class="palette-strip">
+                <span style="background:var(--base-warning-50)"></span><span style="background:var(--base-warning-100)"></span><span style="background:var(--base-warning-200)"></span><span style="background:var(--base-warning-300)"></span><span style="background:var(--base-warning-400)"></span><span style="background:var(--base-warning-500)"></span><span style="background:var(--base-warning-600)"></span><span style="background:var(--base-warning-700)"></span><span style="background:var(--base-warning-800)"></span><span style="background:var(--base-warning-900)"></span>
+              </div>
+            </div>
+
+            <!-- Error -->
+            <div class="bento-tile">
+              <div class="palette-swatch" style="background:var(--error-base)">
+                <div style="display:flex;justify-content:space-between;align-items:start">
+                  <strong style="font-size:var(--text-body-lg)">Error</strong>
+                  <span style="font-size:var(--text-label-sm);opacity:.85" data-token-hex="--error-base"></span>
+                </div>
+                <span style="font-size:var(--text-label-sm);opacity:.75">--error-base</span>
+              </div>
+              <div class="palette-strip">
+                <span style="background:var(--base-error-50)"></span><span style="background:var(--base-error-100)"></span><span style="background:var(--base-error-200)"></span><span style="background:var(--base-error-300)"></span><span style="background:var(--base-error-400)"></span><span style="background:var(--base-error-500)"></span><span style="background:var(--base-error-600)"></span><span style="background:var(--base-error-700)"></span><span style="background:var(--base-error-800)"></span><span style="background:var(--base-error-900)"></span>
+              </div>
+            </div>
+
+            <!-- Info -->
+            <div class="bento-tile">
+              <div class="palette-swatch" style="background:var(--info-base)">
+                <div style="display:flex;justify-content:space-between;align-items:start">
+                  <strong style="font-size:var(--text-body-lg)">Info</strong>
+                  <span style="font-size:var(--text-label-sm);opacity:.85" data-token-hex="--info-base"></span>
+                </div>
+                <span style="font-size:var(--text-label-sm);opacity:.75">--info-base</span>
+              </div>
+              <div class="palette-strip">
+                <span style="background:var(--base-info-50)"></span><span style="background:var(--base-info-100)"></span><span style="background:var(--base-info-200)"></span><span style="background:var(--base-info-300)"></span><span style="background:var(--base-info-400)"></span><span style="background:var(--base-info-500)"></span><span style="background:var(--base-info-600)"></span><span style="background:var(--base-info-700)"></span><span style="background:var(--base-info-800)"></span><span style="background:var(--base-info-900)"></span>
+              </div>
+            </div>
+
+          </div><!-- /#color-panel-base -->
+
+        </aside>
+
+        <!-- ─── MAIN CONTENT (col-span-9) ─── -->
+        <div style="grid-column:span 9;display:flex;flex-direction:column;gap:var(--spacing-4)">
+
+          <!-- Inner tab switcher: Typography / Components -->
+          <div class="tab-switch" style="align-self:flex-start" aria-label="Content view">
+            <button class="tab-btn active" data-content-tab="typography" type="button"><i class="ph ph-text-aa"></i> Typography</button>
+            <button class="tab-btn" data-content-tab="components" type="button"><i class="ph ph-squares-four"></i> Components</button>
+          </div>
+
+          <!-- ── CONTENT TAB: TYPOGRAPHY ── -->
+          <div id="content-tab-typography">
+
+          <!-- ROW A: Typography Showcase -->
+          <div style="display:grid;grid-template-columns:repeat(9,1fr);gap:var(--spacing-4)">
+            <div class="bento-tile" style="grid-column:span 3;padding:var(--spacing-5)">
+              <div class="tile-header" style="padding:0 0 var(--spacing-1) 0">
+                <p class="tile-label">Body</p>
+                <span style="font-size:var(--text-label-sm);color:var(--text-color-secondary)">Regular</span>
+              </div>
+              <div class="type-aa" style="font-size:var(--text-h2);font-weight:var(--font-weight-regular);line-height:var(--leading-normal);color:var(--text-color-secondary);margin-top:var(--spacing-5)">Aa</div>
+              <div class="type-meta">
+                <span>Size <strong>16px</strong></span>
+                <span>Weight <strong>Regular</strong></span>
+                <span>Leading <strong>Normal</strong></span>
+                <span>Role <strong>Body text, descriptions</strong></span>
+              </div>
+              <p style="font-size:var(--text-body-lg);font-weight:var(--font-weight-regular);line-height:var(--leading-normal);color:var(--text-color-secondary);margin-top:var(--spacing-4)">{{ BRAND_DESCRIPTION | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. }}</p>
+            </div>
+            <div class="bento-tile" style="grid-column:span 4;padding:var(--spacing-5)">
+              <div class="tile-header" style="padding:0 0 var(--spacing-1) 0">
+                <p class="tile-label">Display / Headline</p>
+                <span style="font-size:var(--text-label-sm);color:var(--text-color-secondary)">Semibold</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:var(--spacing-2);margin-top:var(--spacing-4)">
+                <div style="display:flex;align-items:baseline;gap:var(--spacing-3)">
+                  <span style="font-size:var(--text-label-sm);color:var(--text-color-secondary);min-width:24px">H1</span>
+                  <span style="font-size:var(--text-h1);font-weight:var(--font-weight-semibold);line-height:var(--leading-tight);color:var(--text-color-primary)">Heading 1</span>
+                </div>
+                <div style="display:flex;align-items:baseline;gap:var(--spacing-3)">
+                  <span style="font-size:var(--text-label-sm);color:var(--text-color-secondary);min-width:24px">H2</span>
+                  <span style="font-size:var(--text-h2);font-weight:var(--font-weight-semibold);line-height:var(--leading-tight);color:var(--text-color-primary)">Heading 2</span>
+                </div>
+                <div style="display:flex;align-items:baseline;gap:var(--spacing-3)">
+                  <span style="font-size:var(--text-label-sm);color:var(--text-color-secondary);min-width:24px">H3</span>
+                  <span style="font-size:var(--text-h3);font-weight:var(--font-weight-semibold);line-height:var(--leading-tight);color:var(--text-color-primary)">Heading 3</span>
+                </div>
+                <div style="display:flex;align-items:baseline;gap:var(--spacing-3)">
+                  <span style="font-size:var(--text-label-sm);color:var(--text-color-secondary);min-width:24px">H4</span>
+                  <span style="font-size:var(--text-h4);font-weight:var(--font-weight-semibold);line-height:var(--leading-snug);color:var(--text-color-primary)">Heading 4</span>
+                </div>
+                <div style="display:flex;align-items:baseline;gap:var(--spacing-3)">
+                  <span style="font-size:var(--text-label-sm);color:var(--text-color-secondary);min-width:24px">H5</span>
+                  <span style="font-size:var(--text-h5);font-weight:var(--font-weight-semibold);line-height:var(--leading-snug);color:var(--text-color-primary)">Heading 5</span>
+                </div>
+                <div style="display:flex;align-items:baseline;gap:var(--spacing-3)">
+                  <span style="font-size:var(--text-label-sm);color:var(--text-color-secondary);min-width:24px">H6</span>
+                  <span style="font-size:var(--text-h6);font-weight:var(--font-weight-semibold);line-height:var(--leading-snug);color:var(--text-color-primary)">Heading 6</span>
+                </div>
+              </div>
+              <div class="type-meta" style="margin-top:var(--spacing-4)">
+                <span>Size <strong>64px → 14px</strong></span>
+                <span>Weight <strong>Semibold</strong></span>
+                <span>Leading <strong>Tight</strong></span>
+                <span>Role <strong>Hero metrics, page titles</strong></span>
+              </div>
+            </div>
+            <div class="bento-tile" style="grid-column:span 2;padding:var(--spacing-5);display:flex;flex-direction:column;gap:var(--spacing-4)">
+              <!-- Label -->
+              <div>
+                <p class="tile-label" style="margin-bottom:var(--spacing-2)">Label</p>
+                <div style="font-size:var(--text-h5);font-weight:var(--font-weight-medium);line-height:var(--leading-snug);color:var(--text-color-primary)">Form label, nav item</div>
+                <div class="type-meta" style="margin-top:var(--spacing-1)"><span>Size <strong>14px</strong></span><span>Weight <strong>Medium</strong></span></div>
+              </div>
+              <!-- Caption -->
+              <div>
+                <p class="tile-label" style="margin-bottom:var(--spacing-2)">Caption</p>
+                <div style="font-size:var(--text-label-sm);font-weight:var(--font-weight-medium);line-height:var(--leading-snug);color:var(--text-color-secondary)">Helper text, timestamp, hint</div>
+                <div class="type-meta" style="margin-top:var(--spacing-1)"><span>Size <strong>12px</strong></span><span>Weight <strong>Medium</strong></span></div>
+              </div>
+              <!-- Muted -->
+              <div>
+                <p class="tile-label" style="margin-bottom:var(--spacing-2)">Muted</p>
+                <div style="font-size:var(--text-body);font-weight:var(--font-weight-regular);line-height:var(--leading-normal);color:var(--text-color-tertiary,var(--text-color-secondary));opacity:.55">Placeholder, disabled state text</div>
+                <div class="type-meta" style="margin-top:var(--spacing-1)"><span>Size <strong>16px</strong></span><span>Color <strong>Tertiary / 55%</strong></span></div>
+              </div>
+<!-- Inline Link -->
+              <div>
+                <p class="tile-label" style="margin-bottom:var(--spacing-2)">Link</p>
+                <div style="font-size:var(--text-body);font-weight:var(--font-weight-medium);line-height:var(--leading-normal);color:var(--color-primary,#DA291C);text-decoration:underline;text-underline-offset:3px">View match history →</div>
+                <div class="type-meta" style="margin-top:var(--spacing-1)"><span>Size <strong>16px</strong></span><span>Color <strong>Brand Primary</strong></span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ROW A2b: Font Family Stack -->
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--spacing-4)">
+
+            <!-- SANS family -->
+            <div class="bento-tile" style="padding:var(--spacing-5)">
+              <div class="tile-header" style="padding:0 0 var(--spacing-3) 0">
+                <p class="tile-label">Sans-Serif</p>
+                <span style="font-size:var(--text-label-sm);color:var(--text-color-secondary)">--font-sans</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:var(--spacing-2);margin-bottom:var(--spacing-3)">
+                <span id="ff-sans-name" style="font-family:var(--font-sans);font-size:var(--text-h4);font-weight:var(--font-weight-bold);color:var(--text-color-primary);line-height:1"></span>
+                <span style="font-size:var(--text-label-sm);color:var(--text-color-tertiary,var(--text-color-secondary));opacity:.6;font-family:var(--font-mono)">--font-main-sans</span>
+              </div>
+              <div style="background:var(--bg-tertiary);border-radius:var(--radius-lg);padding:var(--spacing-3) var(--spacing-4)">
+                <p id="ff-sans-stack" style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary);margin:0;line-height:1.6;word-break:break-all"></p>
+              </div>
+              <div class="type-meta" style="margin-top:var(--spacing-3)">
+                <span>Role <strong>UI, body, labels</strong></span>
+                <span>Var <strong>var(--font-sans)</strong></span>
+              </div>
+            </div>
+
+            <!-- SERIF / display family -->
+            <div class="bento-tile" style="padding:var(--spacing-5)">
+              <div class="tile-header" style="padding:0 0 var(--spacing-3) 0">
+                <p class="tile-label">Serif / Display</p>
+                <span style="font-size:var(--text-label-sm);color:var(--text-color-secondary)">--font-serif</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:var(--spacing-2);margin-bottom:var(--spacing-3)">
+                <span id="ff-serif-name" style="font-family:var(--font-serif);font-size:var(--text-h4);font-weight:var(--font-weight-bold);color:var(--text-color-primary);line-height:1"></span>
+                <span style="font-size:var(--text-label-sm);color:var(--text-color-tertiary,var(--text-color-secondary));opacity:.6;font-family:var(--font-mono)">--font-main-serif</span>
+              </div>
+              <div style="background:var(--bg-tertiary);border-radius:var(--radius-lg);padding:var(--spacing-3) var(--spacing-4)">
+                <p id="ff-serif-stack" style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary);margin:0;line-height:1.6;word-break:break-all"></p>
+              </div>
+              <div class="type-meta" style="margin-top:var(--spacing-3)">
+                <span>Role <strong>Hero, headline, display</strong></span>
+                <span>Var <strong>var(--font-serif)</strong></span>
+              </div>
+            </div>
+
+            <!-- MONO family -->
+            <div class="bento-tile" style="padding:var(--spacing-5)">
+              <div class="tile-header" style="padding:0 0 var(--spacing-3) 0">
+                <p class="tile-label">Monospace</p>
+                <span style="font-size:var(--text-label-sm);color:var(--text-color-secondary)">--font-mono</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:var(--spacing-2);margin-bottom:var(--spacing-3)">
+                <span id="ff-mono-name" style="font-family:var(--font-mono);font-size:var(--text-h4);font-weight:var(--font-weight-bold);color:var(--text-color-primary);line-height:1"></span>
+                <span style="font-size:var(--text-label-sm);color:var(--text-color-tertiary,var(--text-color-secondary));opacity:.6;font-family:var(--font-mono)">--font-main-mono</span>
+              </div>
+              <div style="background:var(--bg-tertiary);border-radius:var(--radius-lg);padding:var(--spacing-3) var(--spacing-4)">
+                <p id="ff-mono-stack" style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary);margin:0;line-height:1.6;word-break:break-all"></p>
+              </div>
+              <div class="type-meta" style="margin-top:var(--spacing-3)">
+                <span>Role <strong>Stats, tokens, code</strong></span>
+                <span>Var <strong>var(--font-mono)</strong></span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ROW A2: Font Application Examples -->
+          <div style="display:grid;grid-template-columns:repeat(9,1fr);gap:var(--spacing-4)">
+
+            <!-- SANS -->
+            <div class="bento-tile" style="grid-column:span 3;padding:var(--spacing-5)">
+              <div class="tile-header" style="padding:0 0 var(--spacing-3) 0">
+                <p class="tile-label">Sans-Serif · Source Sans 3</p>
+                <span style="font-size:var(--text-label-sm);color:var(--text-color-secondary)">UI, body, labels</span>
+              </div>
+              <!-- Nav tab example -->
+              <div style="display:flex;gap:var(--spacing-3);margin-bottom:var(--spacing-4);border-bottom:1px solid var(--border);padding-bottom:var(--spacing-3)">
+                <span style="font-family:var(--font-sans);font-size:var(--text-label-md);font-weight:var(--font-weight-semibold);color:var(--primary-base);border-bottom:2px solid var(--primary-base);padding-bottom:2px">Tab Active</span>
+                <span style="font-family:var(--font-sans);font-size:var(--text-label-md);font-weight:var(--font-weight-medium);color:var(--text-color-secondary)">Tab Item</span>
+                <span style="font-family:var(--font-sans);font-size:var(--text-label-md);font-weight:var(--font-weight-medium);color:var(--text-color-secondary)">Tab Item</span>
+              </div>
+              <!-- Card example -->
+              <div style="background:var(--bg-tertiary);border-radius:var(--radius-xl);padding:var(--spacing-4)">
+                <p style="font-family:var(--font-sans);font-size:var(--text-label-sm);font-weight:var(--font-weight-semibold);color:var(--text-color-secondary);text-transform:uppercase;letter-spacing:.06em;margin:0 0 var(--spacing-1) 0">SECTION LABEL</p>
+                <p style="font-family:var(--font-sans);font-size:var(--text-h5);font-weight:var(--font-weight-bold);color:var(--text-color-primary);margin:0 0 var(--spacing-2) 0">Card Title Goes Here</p>
+                <p style="font-family:var(--font-sans);font-size:var(--text-body-sm);color:var(--text-color-secondary);margin:0">Supporting description text · metadata</p>
+              </div>
+              <div class="type-meta" style="margin-top:var(--spacing-3)">
+                <span>Use for <strong>Nav, cards, labels</strong></span>
+                <span>Weight <strong>400 · 500 · 600 · 700</strong></span>
+              </div>
+            </div>
+
+            <!-- DISPLAY -->
+            <div class="bento-tile" style="grid-column:span 3;padding:var(--spacing-5)">
+              <div class="tile-header" style="padding:0 0 var(--spacing-3) 0">
+                <p class="tile-label">Display · Bebas Neue</p>
+                <span style="font-size:var(--text-label-sm);color:var(--text-color-secondary)">Hero, headline, display</span>
+              </div>
+              <!-- Big display number -->
+              <div style="text-align:center;margin-bottom:var(--spacing-4)">
+                <div style="font-family:var(--font-serif);font-size:5rem;line-height:1;color:var(--text-color-primary);letter-spacing:.02em">Display</div>
+                <p style="font-family:var(--font-sans);font-size:var(--text-label-sm);color:var(--text-color-secondary);margin:var(--spacing-1) 0 0 0">Hero size — large display text</p>
+              </div>
+              <!-- Banner example -->
+              <div style="background:var(--primary-base);border-radius:var(--radius-xl);padding:var(--spacing-4) var(--spacing-5)">
+                <p style="font-family:var(--font-serif);font-size:var(--text-h2);letter-spacing:.05em;color:var(--primary-base-fg);margin:0;line-height:1.1">Section Headline</p>
+                <p style="font-family:var(--font-sans);font-size:var(--text-label-sm);color:rgba(255,255,255,.7);margin:var(--spacing-1) 0 0 0">Campaign headline — hero banner</p>
+              </div>
+              <div class="type-meta" style="margin-top:var(--spacing-3)">
+                <span>Use for <strong>Hero, banner, headline</strong></span>
+                <span>Weight <strong>400 (single)</strong></span>
+              </div>
+            </div>
+
+            <!-- MONO -->
+            <div class="bento-tile" style="grid-column:span 3;padding:var(--spacing-5)">
+              <div class="tile-header" style="padding:0 0 var(--spacing-3) 0">
+                <p class="tile-label">Monospace · JetBrains Mono</p>
+                <span style="font-size:var(--text-label-sm);color:var(--text-color-secondary)">Stats, code, data tables</span>
+              </div>
+              <!-- Stats row -->
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--spacing-2);margin-bottom:var(--spacing-4)">
+                <div style="text-align:center;background:var(--bg-tertiary);border-radius:var(--radius-lg);padding:var(--spacing-3)">
+                  <div style="font-family:var(--font-mono);font-size:var(--text-h4);font-weight:700;color:var(--text-color-primary);line-height:1">128</div>
+                  <div style="font-family:var(--font-sans);font-size:var(--text-label-sm);color:var(--text-color-secondary);margin-top:2px">Metric A</div>
+                </div>
+                <div style="text-align:center;background:var(--bg-tertiary);border-radius:var(--radius-lg);padding:var(--spacing-3)">
+                  <div style="font-family:var(--font-mono);font-size:var(--text-h4);font-weight:700;color:var(--text-color-primary);line-height:1">64</div>
+                  <div style="font-family:var(--font-sans);font-size:var(--text-label-sm);color:var(--text-color-secondary);margin-top:2px">Metric B</div>
+                </div>
+                <div style="text-align:center;background:var(--bg-tertiary);border-radius:var(--radius-lg);padding:var(--spacing-3)">
+                  <div style="font-family:var(--font-mono);font-size:var(--text-h4);font-weight:700;color:var(--primary-base);line-height:1">94%</div>
+                  <div style="font-family:var(--font-sans);font-size:var(--text-label-sm);color:var(--text-color-secondary);margin-top:2px">Rate</div>
+                </div>
+              </div>
+              <!-- Code snippet -->
+              <div style="background:var(--base-neutral-950,#0a0a0a);border-radius:var(--radius-lg);padding:var(--spacing-3) var(--spacing-4)">
+                <p style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:#a5f3a0;margin:0;line-height:1.7">--font-mono: '...';<br><span style="color:#93c5fd">--text-h4</span>: <span style="color:#fde68a">1.75rem</span>;<br><span style="color:#93c5fd">font-weight</span>: <span style="color:#fde68a">700</span>;</p>
+              </div>
+              <div class="type-meta" style="margin-top:var(--spacing-3)">
+                <span>Use for <strong>Stats, tokens, code</strong></span>
+                <span>Weight <strong>400 · 500</strong></span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ROW A3: Type Scale Ramp + Weight Specimens + Text Color Tokens -->
+          <div style="display:grid;grid-template-columns:repeat(9,1fr);gap:var(--spacing-4)">
+
+            <!-- Type Scale Ramp -->
+            <div class="bento-tile" style="grid-column:span 3;padding:var(--spacing-5)">
+              <div class="tile-header" style="padding:0 0 var(--spacing-4) 0">
+                <p class="tile-label">Type Scale Ramp</p>
+                <span style="font-size:var(--text-label-sm);color:var(--text-color-secondary)">Display → Label SM</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:var(--spacing-2)">
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:var(--spacing-3);border-bottom:1px solid var(--border);padding-bottom:var(--spacing-2)">
+                  <span style="font-family:var(--font-serif);font-size:var(--text-display);line-height:1;color:var(--text-color-primary);letter-spacing:.02em">Ag</span>
+                  <span style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary);white-space:nowrap">display · 64px</span>
+                </div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:var(--spacing-3)">
+                  <span style="font-size:var(--text-h1);font-weight:var(--font-weight-semibold);line-height:1;color:var(--text-color-primary)">Ag</span>
+                  <span style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary);white-space:nowrap">h1 · 48px</span>
+                </div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:var(--spacing-3)">
+                  <span style="font-size:var(--text-h2);font-weight:var(--font-weight-semibold);line-height:1;color:var(--text-color-primary)">Ag</span>
+                  <span style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary);white-space:nowrap">h2 · 40px</span>
+                </div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:var(--spacing-3)">
+                  <span style="font-size:var(--text-h3);font-weight:var(--font-weight-semibold);line-height:1;color:var(--text-color-primary)">Ag</span>
+                  <span style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary);white-space:nowrap">h3 · 32px</span>
+                </div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:var(--spacing-3)">
+                  <span style="font-size:var(--text-h4);font-weight:var(--font-weight-semibold);line-height:1;color:var(--text-color-primary)">Ag</span>
+                  <span style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary);white-space:nowrap">h4 · 28px</span>
+                </div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:var(--spacing-3)">
+                  <span style="font-size:var(--text-h5);font-weight:var(--font-weight-semibold);line-height:1;color:var(--text-color-primary)">Ag</span>
+                  <span style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary);white-space:nowrap">h5 · 22px</span>
+                </div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:var(--spacing-3)">
+                  <span style="font-size:var(--text-h6);font-weight:var(--font-weight-semibold);line-height:1;color:var(--text-color-primary)">Ag</span>
+                  <span style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary);white-space:nowrap">h6 · 18px</span>
+                </div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:var(--spacing-3)">
+                  <span style="font-size:var(--text-body-lg);font-weight:var(--font-weight-regular);color:var(--text-color-primary)">Ag</span>
+                  <span style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary);white-space:nowrap">body-lg · 16px</span>
+                </div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:var(--spacing-3)">
+                  <span style="font-size:var(--text-body-sm);font-weight:var(--font-weight-regular);color:var(--text-color-primary)">Ag</span>
+                  <span style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary);white-space:nowrap">body-sm · 14px</span>
+                </div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:var(--spacing-3)">
+                  <span style="font-size:var(--text-label-lg);font-weight:var(--font-weight-medium);color:var(--text-color-secondary)">Ag</span>
+                  <span style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary);white-space:nowrap">label-lg · 14px</span>
+                </div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:var(--spacing-3)">
+                  <span style="font-size:var(--text-label-md);font-weight:var(--font-weight-medium);color:var(--text-color-secondary)">Ag</span>
+                  <span style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary);white-space:nowrap">label-md · 13px</span>
+                </div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:var(--spacing-3)">
+                  <span style="font-size:var(--text-label-sm);font-weight:var(--font-weight-medium);color:var(--text-color-secondary)">Ag</span>
+                  <span style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary);white-space:nowrap">label-sm · 11px</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Weight Specimens -->
+            <div class="bento-tile" style="grid-column:span 3;padding:var(--spacing-5)">
+              <div class="tile-header" style="padding:0 0 var(--spacing-4) 0">
+                <p class="tile-label">Weight Specimens</p>
+                <span style="font-size:var(--text-label-sm);color:var(--text-color-secondary)">Source Sans 3 · 300–700</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:var(--spacing-3)">
+                <div style="display:flex;align-items:baseline;justify-content:space-between">
+                  <span style="font-family:var(--font-sans);font-size:var(--text-h4);font-weight:300;color:var(--text-color-primary)">Light</span>
+                  <span style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary)">300 Light</span>
+                </div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between">
+                  <span style="font-family:var(--font-sans);font-size:var(--text-h4);font-weight:400;color:var(--text-color-primary)">Regular</span>
+                  <span style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary)">400 Regular</span>
+                </div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between">
+                  <span style="font-family:var(--font-sans);font-size:var(--text-h4);font-weight:500;color:var(--text-color-primary)">Medium</span>
+                  <span style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary)">500 Medium</span>
+                </div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between">
+                  <span style="font-family:var(--font-sans);font-size:var(--text-h4);font-weight:600;color:var(--text-color-primary)">Semibold</span>
+                  <span style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary)">600 Semibold</span>
+                </div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between">
+                  <span style="font-family:var(--font-sans);font-size:var(--text-h4);font-weight:700;color:var(--text-color-primary)">Bold</span>
+                  <span style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary)">700 Bold</span>
+                </div>
+              </div>
+              <div style="height:1px;background:var(--border);margin:var(--spacing-4) 0"></div>
+              <div class="tile-header" style="padding:0 0 var(--spacing-3) 0">
+                <p class="tile-label" style="font-size:var(--text-label-sm)">Bebas Neue · Display</p>
+              </div>
+              <div style="display:flex;align-items:baseline;justify-content:space-between">
+                <span style="font-family:var(--font-serif);font-size:var(--text-h3);letter-spacing:.04em;color:var(--text-color-primary)">Display</span>
+                <span style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary)">400 (single)</span>
+              </div>
+              <div style="height:1px;background:var(--border);margin:var(--spacing-4) 0"></div>
+              <div class="tile-header" style="padding:0 0 var(--spacing-3) 0">
+                <p class="tile-label" style="font-size:var(--text-label-sm)">JetBrains Mono · Code</p>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:var(--spacing-2)">
+                <div style="display:flex;align-items:baseline;justify-content:space-between">
+                  <span style="font-family:var(--font-mono);font-size:var(--text-body-lg);font-weight:400;color:var(--text-color-primary)">token</span>
+                  <span style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary)">400</span>
+                </div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between">
+                  <span style="font-family:var(--font-mono);font-size:var(--text-body-lg);font-weight:500;color:var(--text-color-primary)">token</span>
+                  <span style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary)">500</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Text Color Tokens -->
+            <div class="bento-tile" style="grid-column:span 3;padding:var(--spacing-5)">
+              <div class="tile-header" style="padding:0 0 var(--spacing-4) 0">
+                <p class="tile-label">Text Color Tokens</p>
+                <span style="font-size:var(--text-label-sm);color:var(--text-color-secondary)">Semantic text palette</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:var(--spacing-3)">
+                <div style="background:var(--bg-secondary);border-radius:var(--radius-xl);padding:var(--spacing-3) var(--spacing-4)">
+                  <p style="font-size:var(--text-body-lg);font-weight:var(--font-weight-semibold);color:var(--text-color-primary);margin:0 0 var(--spacing-1)">Primary text</p>
+                  <p style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary);margin:0">text-color-primary</p>
+                </div>
+                <div style="background:var(--bg-secondary);border-radius:var(--radius-xl);padding:var(--spacing-3) var(--spacing-4)">
+                  <p style="font-size:var(--text-body-lg);font-weight:var(--font-weight-medium);color:var(--text-color-secondary);margin:0 0 var(--spacing-1)">Secondary text</p>
+                  <p style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary);margin:0">text-color-secondary</p>
+                </div>
+                <div style="background:var(--bg-secondary);border-radius:var(--radius-xl);padding:var(--spacing-3) var(--spacing-4)">
+                  <p style="font-size:var(--text-body-lg);font-weight:var(--font-weight-regular);color:var(--text-color-tertiary,var(--text-color-secondary));opacity:.6;margin:0 0 var(--spacing-1)">Tertiary / muted</p>
+                  <p style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--text-color-secondary);margin:0">text-color-tertiary</p>
+                </div>
+                <div style="background:var(--primary-base);border-radius:var(--radius-xl);padding:var(--spacing-3) var(--spacing-4)">
+                  <p style="font-size:var(--text-body-lg);font-weight:var(--font-weight-semibold);color:var(--text-color-on-accent,#fff);margin:0 0 var(--spacing-1)">On accent</p>
+                  <p style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:rgba(255,255,255,.65);margin:0">text-color-on-accent</p>
+                </div>
+                <div style="background:var(--primary-light);border-radius:var(--radius-xl);padding:var(--spacing-3) var(--spacing-4)">
+                  <p style="font-size:var(--text-body-lg);font-weight:var(--font-weight-medium);color:var(--primary-bold);margin:0 0 var(--spacing-1)">Brand primary</p>
+                  <p style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--primary-base);margin:0">primary-bold</p>
+                </div>
+                <div style="background:var(--error-light);border-radius:var(--radius-xl);padding:var(--spacing-3) var(--spacing-4)">
+                  <p style="font-size:var(--text-body-lg);font-weight:var(--font-weight-medium);color:var(--error-bold);margin:0 0 var(--spacing-1)">Destructive / error</p>
+                  <p style="font-family:var(--font-mono);font-size:var(--text-label-sm);color:var(--error-base);margin:0">error-bold</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          </div><!-- /#content-tab-typography -->
+
+          <!-- ── CONTENT TAB: COMPONENTS ── -->
+          <div id="content-tab-components" style="display:none;flex-direction:column;gap:var(--spacing-6)">
+
+          <!-- ───────────────────────────────────── SECTION: Actions -->
+          <div style="display:flex;flex-direction:column;gap:var(--spacing-3)">
+            <p style="font-size:var(--text-label-sm);font-weight:var(--font-weight-semibold);color:var(--text-color-secondary);letter-spacing:.08em;text-transform:uppercase;margin:0">Actions</p>
+            <div style="display:grid;grid-template-columns:repeat(9,1fr);gap:var(--spacing-4)">
+
+              <div class="bento-tile" style="grid-column:span 5">
+                <div class="tile-header" style="justify-content:space-between;align-items:center">
+                  <p class="tile-label">Buttons</p>
+                  <code style="font-size:10px;color:var(--text-color-secondary);background:var(--bg-secondary);padding:2px 6px;border-radius:4px">.btn .btn-{variant}</code>
+                </div>
+                <div class="tile-body" style="display:flex;flex-direction:column;gap:var(--spacing-3)">
+                  <div style="display:flex;flex-wrap:wrap;gap:var(--spacing-3);align-items:center">
+                    <button class="btn btn-primary"><i class="ph ph-plus"></i> Primary</button>
+                    <button class="btn btn-secondary">Secondary</button>
+                    <button class="btn btn-outline">Outline</button>
+                    <button class="btn btn-ghost"><i class="ph ph-dots-three"></i> Ghost</button>
+                    <button class="btn" style="background:var(--error-base);color:var(--error-base-fg)"><i class="ph ph-trash"></i> Destructive</button>
+                  </div>
+                  <div style="display:flex;flex-wrap:wrap;gap:var(--spacing-3);align-items:center;padding-top:var(--spacing-2);border-top:1px solid var(--border-primary)">
+                    <button class="btn btn-primary" disabled style="opacity:.4;cursor:not-allowed">Disabled</button>
+                    <button class="btn btn-primary" style="opacity:.8;pointer-events:none">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation:spin 1s linear infinite"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                      Loading
+                    </button>
+                    <span style="font-size:var(--text-label-sm);color:var(--text-color-secondary)">States: default · hover · disabled · loading</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bento-tile" style="grid-column:span 4">
+                <div class="tile-header" style="justify-content:space-between;align-items:center">
+                  <p class="tile-label">Toolbar / Icon Buttons</p>
+                  <code style="font-size:10px;color:var(--text-color-secondary);background:var(--bg-secondary);padding:2px 6px;border-radius:4px">.icon-btn</code>
+                </div>
+                <div class="tile-body" style="display:flex;align-items:center;gap:var(--spacing-3);flex-wrap:wrap">
+                  <div style="display:flex;align-items:center;gap:var(--spacing-2);padding:var(--spacing-1);border-radius:var(--radius-full);background:var(--bg-secondary);border:1px solid var(--border-primary)">
+                    <button class="icon-btn" style="width:38px;height:38px;font-size:var(--text-body-lg)"><i class="ph ph-text-aa"></i></button>
+                    <button class="icon-btn" style="width:38px;height:38px;font-size:var(--text-body-lg);background:var(--primary-base);color:var(--primary-base-fg);border-color:transparent"><i class="ph ph-text-bolder"></i></button>
+                    <button class="icon-btn" style="width:38px;height:38px;font-size:var(--text-body-lg)"><i class="ph ph-list-bullets"></i></button>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:var(--spacing-2)">
+                    <button class="icon-btn" style="width:2.75rem;height:2.75rem"><i class="ph ph-bell"></i></button>
+                    <button class="icon-btn" style="width:2.75rem;height:2.75rem"><i class="ph ph-gear"></i></button>
+                    <button class="icon-btn" style="width:44px;height:44px;background:var(--primary-base);color:var(--primary-base-fg);border-color:transparent"><i class="ph ph-plus"></i></button>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:var(--spacing-2)">
+                    <div style="display:flex;align-items:center;gap:var(--spacing-2);padding:var(--spacing-2) var(--spacing-4);border-radius:var(--radius-full);border:1px solid var(--border-primary);background:var(--card);font-size:var(--text-body-md);color:var(--text-color-secondary);cursor:pointer"><i class="ph ph-funnel"></i> Filter</div>
+                    <div style="display:flex;align-items:center;gap:var(--spacing-2);padding:var(--spacing-2) var(--spacing-4);border-radius:var(--radius-full);border:1px solid var(--border-primary);background:var(--card);font-size:var(--text-body-md);color:var(--text-color-secondary);cursor:pointer"><i class="ph ph-download-simple"></i> Export</div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ───────────────────────────────────── SECTION: Form Controls -->
+          <div style="display:flex;flex-direction:column;gap:var(--spacing-3)">
+            <p style="font-size:var(--text-label-sm);font-weight:var(--font-weight-semibold);color:var(--text-color-secondary);letter-spacing:.08em;text-transform:uppercase;margin:0">Form Controls</p>
+            <div style="display:grid;grid-template-columns:repeat(9,1fr);gap:var(--spacing-4)">
+
+              <div class="bento-tile" style="grid-column:span 3">
+                <div class="tile-header" style="justify-content:space-between;align-items:center">
+                  <p class="tile-label">Text Input</p>
+                  <code style="font-size:10px;color:var(--text-color-secondary);background:var(--bg-secondary);padding:2px 6px;border-radius:4px">.field</code>
+                </div>
+                <div class="tile-body" style="display:flex;flex-direction:column;gap:var(--spacing-3)">
+                  <div>
+                    <label style="font-size:var(--text-label-sm);color:var(--text-color-secondary);display:block;margin-bottom:var(--spacing-1)">Default</label>
+                    <input class="field" placeholder="Enter player name…" />
+                  </div>
+                  <div>
+                    <label style="font-size:var(--text-label-sm);color:var(--text-color-secondary);display:block;margin-bottom:var(--spacing-1)">With icon</label>
+                    <label style="position:relative;display:block">
+                      <i class="ph ph-magnifying-glass" style="position:absolute;left:var(--spacing-4);top:50%;transform:translateY(-50%);color:var(--text-color-secondary)"></i>
+                      <input class="field" style="padding-left:var(--spacing-10)" placeholder="Search matches…" />
+                    </label>
+                  </div>
+                  <div>
+                    <label style="font-size:var(--text-label-sm);color:var(--error-bold);display:block;margin-bottom:var(--spacing-1)">Error</label>
+                    <input class="field" style="border-color:var(--error-base);box-shadow:0 0 0 3px var(--error-light)" value="Invalid value" />
+                    <p style="font-size:var(--text-label-sm);color:var(--error-bold);margin:var(--spacing-1) 0 0"><i class="ph ph-warning-circle"></i> This field is required</p>
+                  </div>
+                  <div>
+                    <label style="font-size:var(--text-label-sm);color:var(--text-color-secondary);display:block;margin-bottom:var(--spacing-1)">Disabled</label>
+                    <input class="field" style="opacity:.4;cursor:not-allowed;background:var(--bg-secondary)" disabled value="Not editable" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="bento-tile" style="grid-column:span 3">
+                <div class="tile-header"><p class="tile-label">Select &amp; Textarea</p></div>
+                <div class="tile-body" style="display:flex;flex-direction:column;gap:var(--spacing-3)">
+                  <div>
+                    <label style="font-size:var(--text-label-sm);color:var(--text-color-secondary);display:block;margin-bottom:var(--spacing-1)">Select</label>
+                    <div style="position:relative">
+                      <select class="field" style="appearance:none;padding-right:var(--spacing-10);cursor:pointer">
+                        <option>All Competitions</option>
+                        <option>Premier League</option>
+                        <option>Champions League</option>
+                        <option>FA Cup</option>
+                      </select>
+                      <i class="ph ph-caret-down" style="position:absolute;right:var(--spacing-4);top:50%;transform:translateY(-50%);color:var(--text-color-secondary);pointer-events:none"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <label style="font-size:var(--text-label-sm);color:var(--text-color-secondary);display:block;margin-bottom:var(--spacing-1)">Textarea</label>
+                    <textarea class="field" rows="3" style="border-radius:var(--radius-2xl);resize:vertical" placeholder="Match notes…"></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bento-tile" style="grid-column:span 3">
+                <div class="tile-header"><p class="tile-label">Toggle · Checkbox · Radio</p></div>
+                <div class="tile-body" style="display:flex;flex-direction:column;gap:var(--spacing-4)">
+                  <div style="display:flex;flex-direction:column;gap:var(--spacing-2)">
+                    <p style="font-size:var(--text-label-sm);color:var(--text-color-secondary);margin:0">Toggle</p>
+                    <label style="display:flex;align-items:center;gap:var(--spacing-3);cursor:pointer">
+                      <span style="position:relative;display:inline-block;width:44px;height:24px;flex-shrink:0">
+                        <span style="position:absolute;inset:0;border-radius:var(--radius-full);background:var(--primary-base)"></span>
+                        <span style="position:absolute;left:20px;top:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2)"></span>
+                      </span>
+                      <span style="font-size:var(--text-body-md)">Live updates on</span>
+                    </label>
+                    <label style="display:flex;align-items:center;gap:var(--spacing-3);cursor:pointer">
+                      <span style="position:relative;display:inline-block;width:44px;height:24px;flex-shrink:0">
+                        <span style="position:absolute;inset:0;border-radius:var(--radius-full);background:var(--border-primary)"></span>
+                        <span style="position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2)"></span>
+                      </span>
+                      <span style="font-size:var(--text-body-md);color:var(--text-color-secondary)">Push notifications</span>
+                    </label>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:var(--spacing-2)">
+                    <p style="font-size:var(--text-label-sm);color:var(--text-color-secondary);margin:0">Checkbox</p>
+                    <label style="display:flex;align-items:center;gap:var(--spacing-3);cursor:pointer;font-size:var(--text-body-md)">
+                      <span style="width:18px;height:18px;border-radius:4px;background:var(--primary-base);border:1px solid var(--primary-base);display:grid;place-items:center;flex-shrink:0"><i class="ph ph-check" style="color:var(--primary-base-fg);font-size:12px"></i></span>
+                      Premier League
+                    </label>
+                    <label style="display:flex;align-items:center;gap:var(--spacing-3);cursor:pointer;font-size:var(--text-body-md);color:var(--text-color-secondary)">
+                      <span style="width:18px;height:18px;border-radius:4px;border:1px solid var(--border-primary);flex-shrink:0"></span>
+                      Champions League
+                    </label>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:var(--spacing-2)">
+                    <p style="font-size:var(--text-label-sm);color:var(--text-color-secondary);margin:0">Radio</p>
+                    <label style="display:flex;align-items:center;gap:var(--spacing-3);cursor:pointer;font-size:var(--text-body-md)">
+                      <span style="width:18px;height:18px;border-radius:50%;border:2px solid var(--primary-base);display:grid;place-items:center;flex-shrink:0"><span style="width:8px;height:8px;border-radius:50%;background:var(--primary-base)"></span></span>
+                      Home
+                    </label>
+                    <label style="display:flex;align-items:center;gap:var(--spacing-3);cursor:pointer;font-size:var(--text-body-md);color:var(--text-color-secondary)">
+                      <span style="width:18px;height:18px;border-radius:50%;border:2px solid var(--border-primary);flex-shrink:0"></span>
+                      Away
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ───────────────────────────────────── SECTION: Navigation -->
+          <div style="display:flex;flex-direction:column;gap:var(--spacing-3)">
+            <p style="font-size:var(--text-label-sm);font-weight:var(--font-weight-semibold);color:var(--text-color-secondary);letter-spacing:.08em;text-transform:uppercase;margin:0">Navigation</p>
+            <div style="display:grid;grid-template-columns:repeat(9,1fr);gap:var(--spacing-4)">
+
+              <div class="bento-tile" style="grid-column:span 4">
+                <div class="tile-header" style="justify-content:space-between;align-items:center">
+                  <p class="tile-label">Tab Navigation</p>
+                  <code style="font-size:10px;color:var(--text-color-secondary);background:var(--bg-secondary);padding:2px 6px;border-radius:4px">.pill · .pill-active / .pill-inactive</code>
+                </div>
+                <div class="tile-body" style="display:flex;flex-direction:column;gap:var(--spacing-3)">
+                  <div style="display:flex;flex-wrap:wrap;gap:var(--spacing-2)">
+                    <span class="pill pill-active">Overview</span>
+                    <span class="pill pill-inactive">Squad</span>
+                    <span class="pill pill-inactive">Fixtures</span>
+                    <span class="pill pill-inactive">Stats</span>
+                  </div>
+                  <div class="tab-switch" style="align-self:flex-start">
+                    <button class="tab-btn active" type="button">Attack</button>
+                    <button class="tab-btn" type="button">Defence</button>
+                    <button class="tab-btn" type="button">Set Pieces</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bento-tile" style="grid-column:span 5">
+                <div class="tile-header"><p class="tile-label">Breadcrumb &amp; Pagination</p></div>
+                <div class="tile-body" style="display:flex;flex-direction:column;gap:var(--spacing-4)">
+                  <div style="display:flex;align-items:center;gap:var(--spacing-2);font-size:var(--text-body-sm)">
+                    <span style="color:var(--text-color-secondary)">Club</span>
+                    <i class="ph ph-caret-right" style="color:var(--text-color-secondary);font-size:12px"></i>
+                    <span style="color:var(--text-color-secondary)">Squad</span>
+                    <i class="ph ph-caret-right" style="color:var(--text-color-secondary);font-size:12px"></i>
+                    <span style="color:var(--primary-base);font-weight:var(--font-weight-medium)">Bruno Fernandes</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:var(--spacing-2)">
+                    <button class="icon-btn" style="width:36px;height:36px"><i class="ph ph-caret-left"></i></button>
+                    <button class="icon-btn" style="width:36px;height:36px;background:var(--primary-base);color:var(--primary-base-fg);border-color:transparent">1</button>
+                    <button class="icon-btn" style="width:36px;height:36px">2</button>
+                    <button class="icon-btn" style="width:36px;height:36px">3</button>
+                    <span style="font-size:var(--text-body-sm);color:var(--text-color-secondary)">…</span>
+                    <button class="icon-btn" style="width:36px;height:36px">8</button>
+                    <button class="icon-btn" style="width:36px;height:36px"><i class="ph ph-caret-right"></i></button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ───────────────────────────────────── SECTION: Data Display -->
+          <div style="display:flex;flex-direction:column;gap:var(--spacing-3)">
+            <p style="font-size:var(--text-label-sm);font-weight:var(--font-weight-semibold);color:var(--text-color-secondary);letter-spacing:.08em;text-transform:uppercase;margin:0">Data Display</p>
+            <div style="display:grid;grid-template-columns:repeat(9,1fr);gap:var(--spacing-4)">
+
+              <div class="bento-tile" style="grid-column:span 5">
+                <div class="tile-header" style="justify-content:space-between;align-items:center">
+                  <p class="tile-label">KPI Widgets</p>
+                  <code style="font-size:10px;color:var(--text-color-secondary);background:var(--bg-secondary);padding:2px 6px;border-radius:4px">.kpi-card · .kpi-value</code>
+                </div>
+                <div class="tile-body" style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--spacing-3)">
+                  <div class="kpi-card">
+                    <p style="font-size:var(--text-label-sm);color:var(--text-color-secondary);margin:0 0 var(--spacing-1)">Goals Scored</p>
+                    <div class="kpi-value">58</div>
+                    <div style="display:flex;align-items:center;gap:var(--spacing-2);margin-top:var(--spacing-2)">
+                      <span class="chip" style="background:var(--success-light);color:var(--success-bold);border-color:var(--success-soft)"><i class="ph ph-trend-up"></i> +12.5%</span>
+                    </div>
+                  </div>
+                  <div class="kpi-card">
+                    <p style="font-size:var(--text-label-sm);color:var(--text-color-secondary);margin:0 0 var(--spacing-1)">Clean Sheets</p>
+                    <div class="kpi-value">14</div>
+                    <div style="display:flex;align-items:center;gap:var(--spacing-2);margin-top:var(--spacing-2)">
+                      <span class="chip" style="background:var(--warning-light);color:var(--warning-bold);border-color:var(--warning-soft)"><i class="ph ph-trend-down"></i> -3.2%</span>
+                    </div>
+                  </div>
+                  <div class="kpi-card">
+                    <p style="font-size:var(--text-label-sm);color:var(--text-color-secondary);margin:0 0 var(--spacing-1)">Wins</p>
+                    <div class="kpi-value">22</div>
+                    <div style="display:flex;align-items:center;gap:var(--spacing-2);margin-top:var(--spacing-2)">
+                      <span class="chip" style="background:var(--info-light);color:var(--info-bold);border-color:var(--info-soft)">No change</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bento-tile" style="grid-column:span 4">
+                <div class="tile-header"><p class="tile-label">Analytics Bars</p></div>
+                <div class="tile-body" style="display:flex;align-items:end;gap:var(--spacing-3);height:130px">
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:end;height:100%"><div style="width:100%;border-radius:var(--radius-full);background:var(--chart-1);height:55px"></div><span style="font-size:var(--text-label-sm);color:var(--text-color-secondary);margin-top:var(--spacing-2)">Aug</span></div>
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:end;height:100%"><div style="width:100%;border-radius:var(--radius-full);background:var(--chart-1);height:75px"></div><span style="font-size:var(--text-label-sm);color:var(--text-color-secondary);margin-top:var(--spacing-2)">Sep</span></div>
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:end;height:100%"><div style="width:100%;border-radius:var(--radius-full);background:var(--chart-2);height:107px"></div><span style="font-size:var(--text-label-sm);color:var(--primary-base);font-weight:var(--font-weight-medium);margin-top:var(--spacing-2)">Oct</span></div>
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:end;height:100%"><div style="width:100%;border-radius:var(--radius-full);background:var(--chart-1);height:68px"></div><span style="font-size:var(--text-label-sm);color:var(--text-color-secondary);margin-top:var(--spacing-2)">Nov</span></div>
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:end;height:100%"><div style="width:100%;border-radius:var(--radius-full);background:var(--chart-1);height:91px"></div><span style="font-size:var(--text-label-sm);color:var(--text-color-secondary);margin-top:var(--spacing-2)">Dec</span></div>
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:end;height:100%"><div style="width:100%;border-radius:var(--radius-full);background:var(--chart-3);height:117px"></div><span style="font-size:var(--text-label-sm);color:var(--text-color-secondary);margin-top:var(--spacing-2)">Jan</span></div>
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:end;height:100%"><div style="width:100%;border-radius:var(--radius-full);background:var(--chart-1);height:85px"></div><span style="font-size:var(--text-label-sm);color:var(--text-color-secondary);margin-top:var(--spacing-2)">Feb</span></div>
+                </div>
+              </div>
+
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(9,1fr);gap:var(--spacing-4)">
+
+              <div class="bento-tile" style="grid-column:span 4">
+                <div class="tile-header" style="justify-content:space-between;align-items:center">
+                  <p class="tile-label">Data Table · Match Results</p>
+                  <code style="font-size:10px;color:var(--text-color-secondary);background:var(--bg-secondary);padding:2px 6px;border-radius:4px">--card · --border-primary</code>
+                </div>
+                <div class="tile-body" style="display:flex;flex-direction:column;gap:var(--spacing-2)">
+                  <div style="display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:var(--spacing-3);padding:var(--spacing-3);border-radius:var(--radius-2xl);background:var(--card)"><div style="display:grid;place-items:center;width:40px;height:40px;border-radius:var(--radius-full);background:var(--error-light);color:var(--error-bold);font-weight:var(--font-weight-bold)">LIV</div><div><p style="font-weight:var(--font-weight-medium);margin:0">vs Liverpool</p><p style="font-size:var(--text-body-sm);color:var(--text-color-secondary);margin:0">22 Mar · Old Trafford</p></div><span class="chip" style="background:var(--success-light);color:var(--success-bold);border-color:var(--success-soft)">W 2–1</span></div>
+                  <div style="display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:var(--spacing-3);padding:var(--spacing-3);border-radius:var(--radius-2xl)"><div style="display:grid;place-items:center;width:40px;height:40px;border-radius:var(--radius-full);background:var(--info-light);color:var(--info-bold);font-weight:var(--font-weight-bold)">MCI</div><div><p style="font-weight:var(--font-weight-medium);margin:0">vs Man City</p><p style="font-size:var(--text-body-sm);color:var(--text-color-secondary);margin:0">15 Mar · Etihad</p></div><span class="chip" style="background:var(--warning-light);color:var(--warning-bold);border-color:var(--warning-soft)">D 1–1</span></div>
+                  <div style="display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:var(--spacing-3);padding:var(--spacing-3);border-radius:var(--radius-2xl)"><div style="display:grid;place-items:center;width:40px;height:40px;border-radius:var(--radius-full);background:var(--secondary-light);color:var(--secondary-bold);font-weight:var(--font-weight-bold)">ARS</div><div><p style="font-weight:var(--font-weight-medium);margin:0">vs Arsenal</p><p style="font-size:var(--text-body-sm);color:var(--text-color-secondary);margin:0">8 Mar · Old Trafford</p></div><span class="chip" style="background:var(--error-light);color:var(--error-bold);border-color:var(--error-soft)">L 0–2</span></div>
+                </div>
+              </div>
+
+              <div class="bento-tile" style="grid-column:span 2">
+                <div class="tile-header"><p class="tile-label">Player Card</p></div>
+                <div class="tile-body">
+                  <div class="kpi-card" style="text-align:center">
+                    <div style="display:grid;place-items:center;width:64px;height:64px;border-radius:var(--radius-full);background:var(--primary-light);color:var(--primary-base);font-size:var(--text-h3);font-weight:var(--font-weight-bold);margin:0 auto var(--spacing-3)">BF</div>
+                    <p style="font-weight:var(--font-weight-semibold);font-size:var(--text-body-lg);margin:0">Bruno Fernandes</p>
+                    <p style="font-size:var(--text-body-sm);color:var(--text-color-secondary);margin:var(--spacing-1) 0 0">Attacking Midfielder · #8</p>
+                    <div style="display:flex;justify-content:center;gap:var(--spacing-4);margin-top:var(--spacing-3)"><div><strong style="font-size:var(--text-h6)">12</strong><p style="font-size:var(--text-label-sm);color:var(--text-color-secondary);margin:0">Goals</p></div><div><strong style="font-size:var(--text-h6)">9</strong><p style="font-size:var(--text-label-sm);color:var(--text-color-secondary);margin:0">Assists</p></div></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bento-tile" style="grid-column:span 3">
+                <div class="tile-header" style="justify-content:space-between;align-items:center">
+                  <p class="tile-label">Progress · Season Stats</p>
+                  <code style="font-size:10px;color:var(--text-color-secondary);background:var(--bg-secondary);padding:2px 6px;border-radius:4px">.bar-track · .bar-fill</code>
+                </div>
+                <div class="tile-body" style="display:flex;flex-direction:column;gap:var(--spacing-3)">
+                  <div><div style="display:flex;justify-content:space-between;margin-bottom:var(--spacing-1-5)"><span style="font-size:var(--text-label-md);font-weight:var(--font-weight-medium)">Possession</span><span style="font-size:var(--text-label-md);color:var(--text-color-secondary)">72%</span></div><div class="bar-track"><div class="bar-fill" style="width:72%;background:var(--primary-base)"></div></div></div>
+                  <div><div style="display:flex;justify-content:space-between;margin-bottom:var(--spacing-1-5)"><span style="font-size:var(--text-label-md);font-weight:var(--font-weight-medium)">Pass Accuracy</span><span style="font-size:var(--text-label-md);color:var(--text-color-secondary)">85%</span></div><div class="bar-track"><div class="bar-fill" style="width:85%;background:var(--secondary-base)"></div></div></div>
+                  <div><div style="display:flex;justify-content:space-between;margin-bottom:var(--spacing-1-5)"><span style="font-size:var(--text-label-md);font-weight:var(--font-weight-medium)">Shots on Target</span><span style="font-size:var(--text-label-md);color:var(--text-color-secondary)">52%</span></div><div class="bar-track"><div class="bar-fill" style="width:52%;background:var(--tertiary-base)"></div></div></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ───────────────────────────────────── SECTION: Feedback -->
+          <div style="display:flex;flex-direction:column;gap:var(--spacing-3)">
+            <p style="font-size:var(--text-label-sm);font-weight:var(--font-weight-semibold);color:var(--text-color-secondary);letter-spacing:.08em;text-transform:uppercase;margin:0">Feedback</p>
+            <div style="display:grid;grid-template-columns:repeat(9,1fr);gap:var(--spacing-4)">
+
+              <div class="bento-tile" style="grid-column:span 3">
+                <div class="tile-header" style="justify-content:space-between;align-items:center">
+                  <p class="tile-label">Chips &amp; Badges</p>
+                  <code style="font-size:10px;color:var(--text-color-secondary);background:var(--bg-secondary);padding:2px 6px;border-radius:4px">.chip · --{semantic}-{scale}</code>
+                </div>
+                <div class="tile-body" style="display:flex;flex-direction:column;gap:var(--spacing-3)">
+                  <div style="display:flex;flex-direction:column;gap:var(--spacing-2)">
+                    <p style="font-size:var(--text-label-sm);color:var(--text-color-secondary);margin:0">Status chips</p>
+                    <span class="chip" style="background:var(--primary-light);color:var(--primary-bold);border-color:var(--primary-soft)"><i class="ph ph-broadcast"></i> Live</span>
+                    <span class="chip" style="background:var(--success-light);color:var(--success-bold);border-color:var(--success-soft)"><i class="ph ph-check-circle"></i> Completed</span>
+                    <span class="chip" style="background:var(--warning-light);color:var(--warning-bold);border-color:var(--warning-soft)"><i class="ph ph-clock"></i> Upcoming</span>
+                    <span class="chip" style="background:var(--error-light);color:var(--error-bold);border-color:var(--error-soft)"><i class="ph ph-x-circle"></i> Cancelled</span>
+                    <span class="chip" style="background:var(--info-light);color:var(--info-bold);border-color:var(--info-soft)"><i class="ph ph-info"></i> Postponed</span>
+                    <span class="chip" style="background:var(--bg-secondary);color:var(--text-color-secondary);border-color:var(--border-primary)"><i class="ph ph-minus-circle"></i> Inactive</span>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:var(--spacing-2);padding-top:var(--spacing-2);border-top:1px solid var(--border-primary)">
+                    <p style="font-size:var(--text-label-sm);color:var(--text-color-secondary);margin:0">Count badges</p>
+                    <div style="display:flex;align-items:center;gap:var(--spacing-3)">
+                      <div style="position:relative;display:inline-block">
+                        <button class="icon-btn" style="width:40px;height:40px"><i class="ph ph-bell"></i></button>
+                        <span style="position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;border-radius:var(--radius-full);background:var(--error-base);color:var(--error-base-fg);font-size:10px;font-weight:700;display:grid;place-items:center;padding:0 4px">3</span>
+                      </div>
+                      <div style="position:relative;display:inline-block">
+                        <button class="icon-btn" style="width:40px;height:40px"><i class="ph ph-envelope"></i></button>
+                        <span style="position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;border-radius:var(--radius-full);background:var(--primary-base);color:var(--primary-base-fg);font-size:10px;font-weight:700;display:grid;place-items:center;padding:0 4px">12</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bento-tile" style="grid-column:span 3">
+                <div class="tile-header"><p class="tile-label">Alerts &amp; Toasts</p></div>
+                <div class="tile-body" style="display:flex;flex-direction:column;gap:var(--spacing-3)">
+                  <div style="display:flex;gap:var(--spacing-3);padding:var(--spacing-3) var(--spacing-4);border-radius:var(--radius-lg);background:var(--success-light);border:1px solid var(--success-soft)">
+                    <i class="ph ph-check-circle" style="color:var(--success-bold);font-size:18px;flex-shrink:0;margin-top:1px"></i>
+                    <div><p style="font-weight:var(--font-weight-medium);margin:0;font-size:var(--text-body-sm);color:var(--success-bold)">Match result saved</p><p style="font-size:var(--text-label-sm);color:var(--success-bold);opacity:.8;margin:2px 0 0">United win 2–1 vs Liverpool.</p></div>
+                  </div>
+                  <div style="display:flex;gap:var(--spacing-3);padding:var(--spacing-3) var(--spacing-4);border-radius:var(--radius-lg);background:var(--warning-light);border:1px solid var(--warning-soft)">
+                    <i class="ph ph-warning" style="color:var(--warning-bold);font-size:18px;flex-shrink:0;margin-top:1px"></i>
+                    <div><p style="font-weight:var(--font-weight-medium);margin:0;font-size:var(--text-body-sm);color:var(--warning-bold)">Player unavailable</p><p style="font-size:var(--text-label-sm);color:var(--warning-bold);opacity:.8;margin:2px 0 0">Injury reported before kickoff.</p></div>
+                  </div>
+                  <div style="display:flex;gap:var(--spacing-3);padding:var(--spacing-3) var(--spacing-4);border-radius:var(--radius-lg);background:var(--error-light);border:1px solid var(--error-soft)">
+                    <i class="ph ph-x-circle" style="color:var(--error-bold);font-size:18px;flex-shrink:0;margin-top:1px"></i>
+                    <div><p style="font-weight:var(--font-weight-medium);margin:0;font-size:var(--text-body-sm);color:var(--error-bold)">Sync failed</p><p style="font-size:var(--text-label-sm);color:var(--error-bold);opacity:.8;margin:2px 0 0">Could not fetch live data.</p></div>
+                  </div>
+                  <div style="display:flex;gap:var(--spacing-3);padding:var(--spacing-3) var(--spacing-4);border-radius:var(--radius-lg);background:var(--info-light);border:1px solid var(--info-soft)">
+                    <i class="ph ph-info" style="color:var(--info-bold);font-size:18px;flex-shrink:0;margin-top:1px"></i>
+                    <div><p style="font-weight:var(--font-weight-medium);margin:0;font-size:var(--text-body-sm);color:var(--info-bold)">Season update</p><p style="font-size:var(--text-label-sm);color:var(--info-bold);opacity:.8;margin:2px 0 0">New fixtures added for April.</p></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bento-tile" style="grid-column:span 3">
+                <div class="tile-header"><p class="tile-label">Empty State</p></div>
+                <div class="tile-body" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:var(--spacing-8) var(--spacing-4);text-align:center;gap:var(--spacing-3)">
+                  <div style="width:64px;height:64px;border-radius:var(--radius-2xl);background:var(--bg-secondary);display:grid;place-items:center;color:var(--text-color-secondary);font-size:28px;border:1px solid var(--border-primary)">
+                    <i class="ph ph-calendar-slash"></i>
+                  </div>
+                  <div>
+                    <p style="font-weight:var(--font-weight-semibold);margin:0 0 var(--spacing-1)">No fixtures found</p>
+                    <p style="font-size:var(--text-body-sm);color:var(--text-color-secondary);margin:0">Try adjusting your filters or check back when the schedule is released.</p>
+                  </div>
+                  <button class="btn btn-outline" style="margin-top:var(--spacing-2)"><i class="ph ph-arrow-clockwise"></i> Refresh</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ───────────────────────────────────── SECTION: Foundation -->
+          <div style="display:flex;flex-direction:column;gap:var(--spacing-3)">
+            <p style="font-size:var(--text-label-sm);font-weight:var(--font-weight-semibold);color:var(--text-color-secondary);letter-spacing:.08em;text-transform:uppercase;margin:0">Foundation</p>
+            <div style="display:grid;grid-template-columns:repeat(9,1fr);gap:var(--spacing-4)">
+
+              <div class="bento-tile" style="grid-column:span 3">
+                <div class="tile-header" style="justify-content:space-between;align-items:center">
+                  <p class="tile-label">Iconography</p>
+                  <code style="font-size:10px;color:var(--text-color-secondary);background:var(--bg-secondary);padding:2px 6px;border-radius:4px">Phosphor Icons</code>
+                </div>
+                <div class="tile-body">
+                  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:var(--spacing-2);margin-bottom:var(--spacing-3)">
+                    <div class="icon-cell"><i class="ph ph-shield-check"></i></div><div class="icon-cell"><i class="ph ph-trophy"></i></div><div class="icon-cell"><i class="ph ph-soccer-ball"></i></div><div class="icon-cell"><i class="ph ph-chart-bar"></i></div>
+                  </div>
+                  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:var(--spacing-2)">
+                    <div class="icon-cell"><i class="ph-bold ph-shield-check"></i></div><div class="icon-cell"><i class="ph-bold ph-trophy"></i></div><div class="icon-cell"><i class="ph-bold ph-soccer-ball"></i></div><div class="icon-cell"><i class="ph-bold ph-chart-bar"></i></div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;font-size:var(--text-label-sm);color:var(--text-color-secondary);padding:var(--spacing-2) var(--spacing-2) 0"><span>Outline (default)</span><span>Bold</span></div>
+                </div>
+              </div>
+
+              <div class="bento-tile" style="grid-column:span 2">
+                <div class="tile-header" style="justify-content:space-between;align-items:center">
+                  <p class="tile-label">Radius</p>
+                  <code style="font-size:10px;color:var(--text-color-secondary);background:var(--bg-secondary);padding:2px 6px;border-radius:4px">--radius-{scale}</code>
+                </div>
+                <div class="tile-body" style="display:grid;grid-template-columns:repeat(2,1fr);gap:var(--spacing-2)">
+                  <div><div class="radius-sample" style="border-radius:var(--radius-sm)">SM</div><p style="font-size:var(--text-label-sm);color:var(--text-color-secondary);text-align:center;margin:var(--spacing-1) 0 0">10px</p></div>
+                  <div><div class="radius-sample" style="border-radius:var(--radius-lg)">MD</div><p style="font-size:var(--text-label-sm);color:var(--text-color-secondary);text-align:center;margin:var(--spacing-1) 0 0">16px</p></div>
+                  <div><div class="radius-sample" style="border-radius:var(--radius-2xl)">XL</div><p style="font-size:var(--text-label-sm);color:var(--text-color-secondary);text-align:center;margin:var(--spacing-1) 0 0">24px</p></div>
+                  <div><div class="radius-sample" style="border-radius:var(--radius-full);background:var(--secondary-light);color:var(--secondary-bold)">FULL</div><p style="font-size:var(--text-label-sm);color:var(--text-color-secondary);text-align:center;margin:var(--spacing-1) 0 0">∞</p></div>
+                </div>
+              </div>
+
+              <div class="bento-tile" style="grid-column:span 2">
+                <div class="tile-header" style="justify-content:space-between;align-items:center">
+                  <p class="tile-label">Elevation</p>
+                  <code style="font-size:10px;color:var(--text-color-secondary);background:var(--bg-secondary);padding:2px 6px;border-radius:4px">--shadow-{scale}</code>
+                </div>
+                <div class="tile-body" style="display:grid;grid-template-columns:repeat(2,1fr);gap:var(--spacing-2)">
+                  <div><div class="shadow-sample" style="box-shadow:var(--shadow-xs)">XS</div><p style="font-size:var(--text-label-sm);color:var(--text-color-secondary);text-align:center;margin:var(--spacing-1) 0 0">Card</p></div>
+                  <div><div class="shadow-sample" style="box-shadow:var(--shadow-sm)">SM</div><p style="font-size:var(--text-label-sm);color:var(--text-color-secondary);text-align:center;margin:var(--spacing-1) 0 0">Hover</p></div>
+                  <div><div class="shadow-sample" style="box-shadow:var(--shadow-md)">MD</div><p style="font-size:var(--text-label-sm);color:var(--text-color-secondary);text-align:center;margin:var(--spacing-1) 0 0">Popover</p></div>
+                  <div><div class="shadow-sample" style="box-shadow:var(--shadow-lg)">LG</div><p style="font-size:var(--text-label-sm);color:var(--text-color-secondary);text-align:center;margin:var(--spacing-1) 0 0">Modal</p></div>
+                </div>
+              </div>
+
+              <div class="bento-tile" style="grid-column:span 2">
+                <div class="tile-header" style="justify-content:space-between;align-items:center">
+                  <p class="tile-label">Spacing</p>
+                  <code style="font-size:10px;color:var(--text-color-secondary);background:var(--bg-secondary);padding:2px 6px;border-radius:4px">--spacing-{n}</code>
+                </div>
+                <div class="tile-body" style="display:flex;flex-direction:column;gap:var(--spacing-2)">
+                  <div style="display:flex;align-items:center;gap:var(--spacing-3)"><span style="font-size:var(--text-label-sm);color:var(--text-color-secondary);min-width:28px">4</span><div class="space-bar" style="flex:1;max-width:16px"></div><span style="font-size:var(--text-label-sm);color:var(--text-color-secondary)">4px</span></div>
+                  <div style="display:flex;align-items:center;gap:var(--spacing-3)"><span style="font-size:var(--text-label-sm);color:var(--text-color-secondary);min-width:28px">8</span><div class="space-bar" style="flex:1;max-width:32px"></div><span style="font-size:var(--text-label-sm);color:var(--text-color-secondary)">8px</span></div>
+                  <div style="display:flex;align-items:center;gap:var(--spacing-3)"><span style="font-size:var(--text-label-sm);color:var(--text-color-secondary);min-width:28px">16</span><div class="space-bar" style="flex:1;max-width:64px"></div><span style="font-size:var(--text-label-sm);color:var(--text-color-secondary)">16px</span></div>
+                  <div style="display:flex;align-items:center;gap:var(--spacing-3)"><span style="font-size:var(--text-label-sm);color:var(--text-color-secondary);min-width:28px">24</span><div class="space-bar" style="flex:1;max-width:96px"></div><span style="font-size:var(--text-label-sm);color:var(--text-color-secondary)">24px</span></div>
+                  <div style="display:flex;align-items:center;gap:var(--spacing-3)"><span style="font-size:var(--text-label-sm);color:var(--text-color-secondary);min-width:28px">32</span><div class="space-bar" style="flex:1;max-width:128px"></div><span style="font-size:var(--text-label-sm);color:var(--text-color-secondary)">32px</span></div>
+                  <div style="display:flex;align-items:center;gap:var(--spacing-3)"><span style="font-size:var(--text-label-sm);color:var(--text-color-secondary);min-width:28px">40</span><div class="space-bar" style="flex:1;max-width:160px"></div><span style="font-size:var(--text-label-sm);color:var(--text-color-secondary)">40px</span></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          </div><!-- /#content-tab-components -->
+        </div>
+      </div>
+      </div><!-- /#tab-tokens -->
+
+      <!-- ════════════════════ TAB 2: DASHBOARD PREVIEW ═════════════════════ -->
+      <div id="tab-dashboard" style="display:none">
+        <div class="dashboard-canvas">
+
+          <!-- Dashboard Header -->
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--spacing-4);margin-bottom:var(--spacing-6)">
+            <div>
+              <h2 style="font-size:var(--text-h4);font-weight:var(--font-weight-semibold);line-height:var(--leading-tight);margin:0">Service Analytics</h2>
+              <p style="font-size:var(--text-body-sm);color:var(--text-color-secondary);margin:var(--spacing-1) 0 0">Customer support performance overview</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:var(--spacing-2)">
+              <div class="pill pill-inactive">7 days</div>
+              <div class="pill pill-active">30 days</div>
+              <div class="pill pill-inactive">Quarter</div>
+            </div>
+          </div>
+
+          <!-- AI Summary Card -->
+          <div class="dash-card" style="margin-bottom:var(--spacing-5);display:flex;align-items:flex-start;gap:var(--spacing-4);background:var(--primary-light);border-color:var(--primary-soft)">
+            <div style="display:grid;place-items:center;width:40px;height:40px;border-radius:var(--radius-full);background:var(--primary-base);color:var(--primary-base-fg);flex-shrink:0;margin-top:var(--spacing-1)">
+              <i class="ph ph-sparkle" style="font-size:var(--text-h6)"></i>
+            </div>
+            <div style="flex:1">
+              <div style="display:flex;align-items:center;gap:var(--spacing-2);margin-bottom:var(--spacing-2)">
+                <span style="font-size:var(--text-label-sm);font-weight:var(--font-weight-semibold);color:var(--primary-bold)">AI Summary</span>
+                <span style="font-size:var(--text-label-sm);color:var(--text-color-secondary)">· Generated just now</span>
+              </div>
+              <p style="font-size:var(--text-body-lg);line-height:var(--leading-normal);color:var(--text-color-primary);margin:0">Your team resolved <strong style="font-weight:var(--font-weight-semibold)">92% of tickets</strong> within SLA this week, up from 87%. Response time dropped to <strong style="font-weight:var(--font-weight-semibold)">2.4 min</strong> average. Consider reviewing the 3 escalated cases in Premium tier — they account for 60% of delayed responses.</p>
+            </div>
+          </div>
+
+          <!-- Dashboard Grid -->
+          <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:var(--spacing-4)">
+
+            <!-- ROW 1 -->
+            <!-- 1. Vehicle Service Status — Donut Chart (span 4) -->
+            <div class="dash-card" style="grid-column:span 4">
+              <p class="tile-label" style="margin:0 0 var(--spacing-2)">Vehicle Service Status</p>
+              <div id="chart-donut" style="width:100%;height:220px"></div>
+            </div>
+
+            <!-- 2. Trips by Type — Bar Chart (span 5) -->
+            <div class="dash-card" style="grid-column:span 5;display:flex;flex-direction:column">
+              <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:var(--spacing-2)">
+                <div>
+                  <p class="tile-label" style="margin:0">Trips by Type</p>
+                  <p style="font-size:var(--text-label-sm);color:var(--text-color-secondary);margin:var(--spacing-1) 0 0">Monthly comparison</p>
+                </div>
+              </div>
+              <div id="chart-bar" style="width:100%;height:200px;flex:1"></div>
+              <div style="display:flex;gap:var(--spacing-8);padding-top:var(--spacing-4);border-top:1px solid var(--border-primary)">
+                <div>
+                  <span style="font-size:var(--text-h3);font-weight:var(--font-weight-regular);line-height:var(--leading-tight)">2,847</span>
+                  <p style="font-size:var(--text-label-sm);color:var(--text-color-secondary);margin:var(--spacing-1) 0 0">Comfort trips</p>
+                </div>
+                <div>
+                  <span style="font-size:var(--text-h3);font-weight:var(--font-weight-regular);line-height:var(--leading-tight)">1,623</span>
+                  <p style="font-size:var(--text-label-sm);color:var(--text-color-secondary);margin:var(--spacing-1) 0 0">Premium trips</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. Customer Support Chat — Chat Widget (span 3) -->
+            <div class="dash-card" style="grid-column:span 3;display:flex;flex-direction:column">
+              <p class="tile-label" style="margin:0 0 var(--spacing-4)">Customer Support</p>
+              <div style="display:flex;flex-direction:column;gap:var(--spacing-3);flex:1">
+                <!-- Incoming -->
+                <div style="display:flex;gap:var(--spacing-2);align-items:end">
+                  <div class="chat-avatar" style="background:var(--secondary-light);color:var(--secondary-bold)">CS</div>
+                  <div class="chat-bubble chat-bubble-in">
+                    <p style="margin:0">Hi! How can I help you today?</p>
+                    <span style="font-size:var(--text-label-sm);color:var(--text-color-secondary);margin-top:var(--spacing-1);display:block">10:02 AM</span>
+                  </div>
+                </div>
+                <!-- Outgoing -->
+                <div style="display:flex;gap:var(--spacing-2);align-items:end;justify-content:flex-end">
+                  <div class="chat-bubble chat-bubble-out">
+                    <p style="margin:0">I need to check my recent trip status.</p>
+                    <span style="font-size:var(--text-label-sm);opacity:.7;margin-top:var(--spacing-1);display:block">10:03 AM</span>
+                  </div>
+                  <div class="chat-avatar" style="background:var(--primary-light);color:var(--primary-bold)">JD</div>
+                </div>
+                <!-- Incoming -->
+                <div style="display:flex;gap:var(--spacing-2);align-items:end">
+                  <div class="chat-avatar" style="background:var(--secondary-light);color:var(--secondary-bold)">CS</div>
+                  <div class="chat-bubble chat-bubble-in">
+                    <p style="margin:0">Sure! Your trip #2847 was completed yesterday. Rating: 5 stars.</p>
+                    <span style="font-size:var(--text-label-sm);color:var(--text-color-secondary);margin-top:var(--spacing-1);display:block">10:04 AM</span>
+                  </div>
+                </div>
+              </div>
+              <!-- Chat input -->
+              <div style="display:flex;gap:var(--spacing-2);margin-top:var(--spacing-4);padding-top:var(--spacing-4);border-top:1px solid var(--border-primary)">
+                <input class="field" placeholder="Type a message..." style="flex:1" />
+                <button class="btn btn-primary" style="padding:var(--spacing-3) var(--spacing-4)"><i class="ph ph-paper-plane-right"></i></button>
+              </div>
+            </div>
+
+            <!-- ROW 2 -->
+            <!-- 4. Profile Action Card — (span 4) -->
+            <div class="dash-card" style="grid-column:span 4;display:flex;align-items:center;gap:var(--spacing-4)">
+              <div class="profile-avatar" style="background:var(--primary-light);color:var(--primary-base)">JD</div>
+              <div style="flex:1">
+                <p style="font-weight:var(--font-weight-semibold);font-size:var(--text-body-lg);margin:0">Jane Doe</p>
+                <p style="font-size:var(--text-body-sm);color:var(--text-color-secondary);margin:var(--spacing-1) 0 0">Senior Product Designer</p>
+                <p style="font-size:var(--text-label-sm);color:var(--text-color-secondary);margin:var(--spacing-1) 0 0"><i class="ph ph-map-pin"></i> San Francisco, CA</p>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:var(--spacing-2)">
+                <button class="btn btn-primary" style="padding:var(--spacing-2) var(--spacing-5);font-size:var(--text-label-md)">View Profile</button>
+                <button class="btn btn-outline" style="padding:var(--spacing-2) var(--spacing-5);font-size:var(--text-label-md)">Message</button>
+              </div>
+            </div>
+
+            <!-- 5. Average Response KPI — (span 4) -->
+            <div class="dash-card" style="grid-column:span 4;display:flex;align-items:center;gap:var(--spacing-5)">
+              <div class="metric-icon-box" style="background:var(--primary-light);color:var(--primary-base)">
+                <i class="ph ph-timer"></i>
+              </div>
+              <div>
+                <p class="tile-label" style="margin:0">Average Response</p>
+                <span style="font-size:var(--text-h2);font-weight:var(--font-weight-regular);line-height:var(--leading-tight)">2.4<span style="font-size:var(--text-h5);color:var(--text-color-secondary)"> min</span></span>
+                <p style="font-size:var(--text-label-sm);color:var(--text-color-secondary);margin:var(--spacing-1) 0 0"><i class="ph ph-trend-down" style="color:var(--success-base)"></i> 18% faster than last week</p>
+              </div>
+            </div>
+
+            <!-- 6. Median NPS Card — (span 4) -->
+            <div class="dash-card" style="grid-column:span 4;display:flex;align-items:center;gap:var(--spacing-5)">
+              <div class="metric-icon-box" style="background:var(--tertiary-light);color:var(--tertiary-base)">
+                <i class="ph ph-smiley"></i>
+              </div>
+              <div>
+                <p class="tile-label" style="margin:0">Median NPS</p>
+                <span style="font-size:var(--text-h2);font-weight:var(--font-weight-regular);line-height:var(--leading-tight)">82</span>
+                <div style="display:flex;align-items:center;gap:var(--spacing-2);margin-top:var(--spacing-1)">
+                  <span class="chip" style="background:var(--success-light);color:var(--success-bold);border-color:var(--success-soft)"><i class="ph ph-trend-up"></i> +6 pts</span>
+                  <span style="font-size:var(--text-label-sm);color:var(--text-color-secondary)">vs last month</span>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /dashboard grid -->
+        </div><!-- /dashboard-canvas -->
+      </div><!-- /#tab-dashboard -->
+
+    </section>
+  </main>
+
+  <script>
+    const modeButtons = document.querySelectorAll('[data-mode]');
+    const tabButtons = document.querySelectorAll('[data-tab]');
+    const hexNodes = document.querySelectorAll('[data-token-hex]');
+
+    /* ── CSS var helper ── */
+    function cssVar(name) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    /* ── Font family info tiles ── */
+    function populateFontFamilyTiles() {
+      const pairs = [
+        { nameId: 'ff-sans-name',  stackId: 'ff-sans-stack',  mainVar: '--font-main-sans',  stackVar: '--font-sans'  },
+        { nameId: 'ff-serif-name', stackId: 'ff-serif-stack', mainVar: '--font-main-serif', stackVar: '--font-serif' },
+        { nameId: 'ff-mono-name',  stackId: 'ff-mono-stack',  mainVar: '--font-main-mono',  stackVar: '--font-mono'  },
+      ];
+      pairs.forEach(({ nameId, stackId, mainVar, stackVar }) => {
+        const nameEl  = document.getElementById(nameId);
+        const stackEl = document.getElementById(stackId);
+        if (nameEl)  nameEl.textContent  = cssVar(mainVar).replace(/['"]/g, '');
+        if (stackEl) stackEl.textContent = cssVar(stackVar);
+      });
+    }
+    document.addEventListener('DOMContentLoaded', populateFontFamilyTiles);
+
+    /* ── ECharts instances ── */
+    let chartDonut = null;
+    let chartBar = null;
+
+    function getChartColors() {
+      return {
+        c1: cssVar('--chart-1'),
+        c2: cssVar('--chart-2'),
+        c3: cssVar('--chart-3'),
+        c4: cssVar('--chart-4'),
+        c5: cssVar('--chart-5'),
+        textSecondary: cssVar('--text-color-secondary'),
+        textPrimary: cssVar('--text-color-primary'),
+        border: cssVar('--border-primary'),
+        card: cssVar('--card'),
+      };
+    }
+
+    function initDonut() {
+      const el = document.getElementById('chart-donut');
+      if (!el) return;
+      if (chartDonut) chartDonut.dispose();
+      chartDonut = echarts.init(el, null, { renderer: 'canvas' });
+      const c = getChartColors();
+      chartDonut.setOption({
+        backgroundColor: 'transparent',
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c} ({d}%)',
+          backgroundColor: c.card,
+          borderColor: c.border,
+          textStyle: { color: c.textPrimary, fontSize: 12 },
+        },
+        legend: {
+          bottom: 0,
+          left: 'center',
+          orient: 'horizontal',
+          itemWidth: 10,
+          itemHeight: 10,
+          borderRadius: 99,
+          textStyle: { color: c.textSecondary, fontSize: 12 },
+          data: ['Completed', 'In Progress', 'Pending'],
+        },
+        series: [{
+          type: 'pie',
+          radius: ['48%', '72%'],
+          center: ['50%', '44%'],
+          avoidLabelOverlap: false,
+          label: {
+            show: true,
+            position: 'center',
+            formatter: '61%\nCompleted',
+            color: c.textPrimary,
+            fontSize: 14,
+            fontWeight: 'normal',
+            lineHeight: 22,
+          },
+          emphasis: { label: { show: true } },
+          labelLine: { show: false },
+          data: [
+            { value: 61, name: 'Completed', itemStyle: { color: c.c1 } },
+            { value: 25, name: 'In Progress', itemStyle: { color: c.c2 } },
+            { value: 14, name: 'Pending', itemStyle: { color: c.c5 } },
+          ],
+        }],
+      });
+    }
+
+    function initBar() {
+      const el = document.getElementById('chart-bar');
+      if (!el) return;
+      if (chartBar) chartBar.dispose();
+      chartBar = echarts.init(el, null, { renderer: 'canvas' });
+      const c = getChartColors();
+      chartBar.setOption({
+        backgroundColor: 'transparent',
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: { type: 'shadow' },
+          backgroundColor: c.card,
+          borderColor: c.border,
+          textStyle: { color: c.textPrimary, fontSize: 12 },
+        },
+        legend: {
+          top: 0,
+          right: 0,
+          itemWidth: 10,
+          itemHeight: 10,
+          textStyle: { color: c.textSecondary, fontSize: 12 },
+          data: ['Comfort', 'Premium'],
+        },
+        grid: { left: 0, right: 0, top: 32, bottom: 0, containLabel: true },
+        xAxis: {
+          type: 'category',
+          data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+          axisLine: { show: false },
+          axisTick: { show: false },
+          axisLabel: { color: c.textSecondary, fontSize: 12 },
+        },
+        yAxis: {
+          type: 'value',
+          splitLine: { lineStyle: { color: c.border, type: 'dashed' } },
+          axisLabel: { color: c.textSecondary, fontSize: 11 },
+        },
+        series: [
+          {
+            name: 'Comfort',
+            type: 'bar',
+            barMaxWidth: 20,
+            itemStyle: { color: c.c3, borderRadius: [6, 6, 0, 0] },
+            data: [420, 480, 530, 590, 650, 500],
+          },
+          {
+            name: 'Premium',
+            type: 'bar',
+            barMaxWidth: 20,
+            itemStyle: { color: c.c1, borderRadius: [6, 6, 0, 0] },
+            data: [310, 360, 450, 500, 560, 400],
+          },
+        ],
+      });
+    }
+
+    function renderCharts() {
+      initDonut();
+      initBar();
+    }
+
+    function refreshHexValues() {
+      hexNodes.forEach(node => {
+        const token = node.getAttribute('data-token-hex');
+        node.textContent = cssVar(token);
+      });
+    }
+
+    function setMode(mode) {
+      document.documentElement.classList.toggle('dark', mode === 'dark');
+      localStorage.setItem('{{ BRAND_SLUG }}-guideline-mode', mode);
+      modeButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.mode === mode));
+      refreshHexValues();
+      /* re-render charts so colors update */
+      renderCharts();
+    }
+
+    function setTab(tabId) {
+      document.getElementById('tab-tokens').style.display = tabId === 'tokens' ? '' : 'none';
+      document.getElementById('tab-dashboard').style.display = tabId === 'dashboard' ? '' : 'none';
+      tabButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tabId));
+      localStorage.setItem('{{ BRAND_SLUG }}-guideline-tab', tabId);
+      /* init charts only when dashboard tab is visible */
+      if (tabId === 'dashboard') {
+        requestAnimationFrame(renderCharts);
+      }
+    }
+
+    /* ── Color sub-tabs (Semantic / Base color) ── */
+    const colorTabBtns = document.querySelectorAll('[data-color-tab]');
+    function setColorTab(id) {
+      document.getElementById('color-panel-semantic').style.display = id === 'semantic' ? 'flex' : 'none';
+      document.getElementById('color-panel-base').style.display    = id === 'base'     ? 'flex' : 'none';
+      colorTabBtns.forEach(b => b.classList.toggle('active', b.dataset.colorTab === id));
+    }
+    colorTabBtns.forEach(b => b.addEventListener('click', () => setColorTab(b.dataset.colorTab)));
+    setColorTab('semantic');
+
+    /* ── resolve CSS var → hex for semantic swatches ── */
+    function cssVarToHex(varName) {
+      const raw = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+      const resolved = raw.startsWith('var(') ? cssVarToHex(raw.slice(4, -1).trim()) : raw;
+      const el = document.createElement('div');
+      el.style.cssText = 'display:none;color:' + resolved;
+      document.body.appendChild(el);
+      const rgb = getComputedStyle(el).color;
+      document.body.removeChild(el);
+      const m = rgb.match(/\d+/g);
+      if (!m) return resolved;
+      return '#' + m.slice(0,3).map(n => (+n).toString(16).padStart(2,'0')).join('').toUpperCase();
+    }
+
+    document.querySelectorAll('[data-sem="1"] span[style]').forEach(span => {
+      span.classList.add('sem-swatch');
+      const varName = span.style.background.replace(/^var\((.*)\)$/, '$1').trim();
+      const hex = cssVarToHex(varName);
+      const tip = document.createElement('span');
+      tip.className = 'sem-hex';
+      tip.style.whiteSpace = 'pre';
+      tip.style.lineHeight = '1.4';
+      tip.textContent = hex + '\n' + varName;
+      span.appendChild(tip);
+      span.addEventListener('click', () => {
+        navigator.clipboard.writeText(hex).then(() => {
+          span.classList.add('copied');
+          setTimeout(() => span.classList.remove('copied'), 1200);
+        });
+      });
+    });
+
+    modeButtons.forEach(btn => btn.addEventListener('click', () => setMode(btn.dataset.mode)));
+    tabButtons.forEach(btn => btn.addEventListener('click', () => setTab(btn.dataset.tab)));
+
+    /* ── Inner content tabs: Typography / Components ── */
+    const contentTabBtns = document.querySelectorAll('[data-content-tab]');
+    function setContentTab(name) {
+      contentTabBtns.forEach(b => b.classList.toggle('active', b.dataset.contentTab === name));
+      const typo = document.getElementById('content-tab-typography');
+      const comp = document.getElementById('content-tab-components');
+      if (name === 'typography') {
+        typo.style.display = 'flex'; typo.style.flexDirection = 'column'; typo.style.gap = 'var(--spacing-4)';
+        comp.style.display = 'none';
+      } else {
+        typo.style.display = 'none';
+        comp.style.display = 'flex';
+      }
+    }
+    contentTabBtns.forEach(b => b.addEventListener('click', () => setContentTab(b.dataset.contentTab)));
+    setContentTab('typography');
+
+    window.addEventListener('resize', () => {
+      chartDonut && chartDonut.resize();
+      chartBar && chartBar.resize();
+    });
+
+    setMode(localStorage.getItem('{{ BRAND_SLUG }}-guideline-mode') === 'dark' ? 'dark' : 'light');
+    setTab(localStorage.getItem('{{ BRAND_SLUG }}-guideline-tab') || 'tokens');
+  </script>
+
+  <script>
+    function toggleExportMenu(e) {
+      e.stopPropagation();
+      const menu = document.getElementById('export-menu');
+      menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    }
+    document.addEventListener('click', () => {
+      const menu = document.getElementById('export-menu');
+      if (menu) menu.style.display = 'none';
+    });
+
+    function exportJSON(mode) {
+      document.getElementById('export-menu').style.display = 'none';
+      if (mode === 'semantic') exportSemanticJSON();
+      else exportColorJSON();
+    }
+
+    function exportSemanticJSON() {
+      const s = getComputedStyle(document.documentElement);
+      const get = v => s.getPropertyValue(v).trim();
+      const semantic = name => {
+        const steps = ['light','soft','base','bold','deep'];
+        const out = {};
+        steps.forEach(k => { const v = get(`--${name}-${k}`); if (v) out[k] = v; });
+        return out;
+      };
+      const result = {
+        semantic: {
+          background: { primary: get('--bg-primary'), secondary: get('--bg-secondary') },
+          border:     { primary: get('--border-primary'), secondary: get('--border-secondary') },
+          text: {
+            primary:     get('--text-color-primary'),
+            secondary:   get('--text-color-secondary'),
+            tertiary:    get('--text-color-tertiary'),
+            placeholder: get('--text-color-placeholder'),
+            disabled:    get('--text-color-disabled'),
+            'on-accent': get('--text-color-on-accent'),
+          },
+        },
+        brand: {
+          primary:    semantic('primary'),
+          secondary:  semantic('secondary'),
+          tertiary:   semantic('tertiary'),
+          quaternary: semantic('quaternary'),
+          quinary:    semantic('quinary'),
+          neutral:    semantic('neutral'),
+        },
+        status: {
+          success: semantic('success'),
+          warning: semantic('warning'),
+          error:   semantic('error'),
+          info:    semantic('info'),
+        },
+      };
+      const clean = obj => {
+        if (typeof obj !== 'object' || obj === null) return obj;
+        const out = {};
+        for (const [k, v] of Object.entries(obj)) {
+          const cleaned = typeof v === 'object' ? clean(v) : v;
+          if (cleaned !== '' && cleaned !== null && cleaned !== undefined &&
+              !(typeof cleaned === 'object' && Object.keys(cleaned).length === 0)) {
+            out[k] = cleaned;
+          }
+        }
+        return out;
+      };
+      const blob = new Blob([JSON.stringify(clean(result), null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'color-tokens-semantic.json';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    function exportColorJSON() {
+      const s = getComputedStyle(document.documentElement);
+      const get = v => s.getPropertyValue(v).trim();
+
+      // helper: build scale object {50,100,...,900} for base-* tokens
+      const scale = name => {
+        const steps = [50,100,200,300,400,500,600,700,800,900];
+        const out = {};
+        steps.forEach(n => { const v = get(`--base-${name}-${n}`); if (v) out[n] = v; });
+        return out;
+      };
+
+      // helper: build semantic scale {light,soft,base,bold,deep}
+      const semantic = name => {
+        const steps = ['light','soft','base','bold','deep'];
+        const out = {};
+        steps.forEach(k => { const v = get(`--${name}-${k}`); if (v) out[k] = v; });
+        return out;
+      };
+
+      const result = {
+        base: {
+          neutral:    scale('neutral'),
+          primary:    scale('primary'),
+          secondary:  scale('secondary'),
+          tertiary:   scale('tertiary'),
+          quaternary: scale('quaternary'),
+          quinary:    scale('quinary'),
+          success:    scale('success'),
+          warning:    scale('warning'),
+          error:      scale('error'),
+          info:       scale('info'),
+        },
+        semantic: {
+          background: { primary: get('--bg-primary'), secondary: get('--bg-secondary') },
+          border:     { primary: get('--border-primary'), secondary: get('--border-secondary') },
+          text: {
+            primary:     get('--text-color-primary'),
+            secondary:   get('--text-color-secondary'),
+            tertiary:    get('--text-color-tertiary'),
+            placeholder: get('--text-color-placeholder'),
+            disabled:    get('--text-color-disabled'),
+            'on-accent': get('--text-color-on-accent'),
+          },
+        },
+        brand: {
+          primary:    semantic('primary'),
+          secondary:  semantic('secondary'),
+          tertiary:   semantic('tertiary'),
+          quaternary: semantic('quaternary'),
+          quinary:    semantic('quinary'),
+          neutral:    semantic('neutral'),
+        },
+        status: {
+          success: semantic('success'),
+          warning: semantic('warning'),
+          error:   semantic('error'),
+          info:    semantic('info'),
+        },
+        component: {
+          background:  get('--background'),
+          foreground:  get('--foreground'),
+          card:        { DEFAULT: get('--card'), foreground: get('--card-foreground') },
+          popover:     { DEFAULT: get('--popover'), foreground: get('--popover-foreground') },
+          primary:     { DEFAULT: get('--primary'), foreground: get('--primary-foreground') },
+          secondary:   { DEFAULT: get('--secondary'), foreground: get('--secondary-foreground') },
+          tertiary:    { DEFAULT: get('--tertiary'), foreground: get('--tertiary-foreground') },
+          quaternary:  { DEFAULT: get('--quaternary'), foreground: get('--quaternary-foreground') },
+          quinary:     { DEFAULT: get('--quinary'), foreground: get('--quinary-foreground') },
+          muted:       { DEFAULT: get('--muted'), foreground: get('--muted-foreground') },
+          accent:      { DEFAULT: get('--accent'), foreground: get('--accent-foreground') },
+          destructive: { DEFAULT: get('--destructive'), foreground: get('--destructive-foreground') },
+          border:      get('--border'),
+          input:       get('--input'),
+          ring:        get('--ring'),
+        },
+        sidebar: {
+          DEFAULT:    get('--sidebar'),
+          foreground: get('--sidebar-foreground'),
+          primary:    { DEFAULT: get('--sidebar-primary'), foreground: get('--sidebar-primary-foreground') },
+          accent:     { DEFAULT: get('--sidebar-accent'), foreground: get('--sidebar-accent-foreground') },
+          border:     get('--sidebar-border'),
+          ring:       get('--sidebar-ring'),
+        },
+        chart: {
+          1: get('--chart-1'),
+          2: get('--chart-2'),
+          3: get('--chart-3'),
+          4: get('--chart-4'),
+          5: get('--chart-5'),
+        },
+      };
+
+      // strip empty values recursively
+      const clean = obj => {
+        if (typeof obj !== 'object' || obj === null) return obj;
+        const out = {};
+        for (const [k, v] of Object.entries(obj)) {
+          const cleaned = typeof v === 'object' ? clean(v) : v;
+          if (cleaned !== '' && cleaned !== null && cleaned !== undefined &&
+              !(typeof cleaned === 'object' && Object.keys(cleaned).length === 0)) {
+            out[k] = cleaned;
+          }
+        }
+        return out;
+      };
+
+      const blob = new Blob([JSON.stringify(clean(result), null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'color-tokens-full.json';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+  </script>
+</body>
+</html>

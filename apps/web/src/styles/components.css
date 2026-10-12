@@ -1,0 +1,96 @@
+/* Custom utilities & third-party theming. Component styling lives in the components (Tailwind classes). */
+
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--color-border);
+    border-radius: 9999px;
+  }
+}
+
+/* Hide a native scrollbar but keep the region scrollable (horizontal tab strips, chip rows). */
+@utility scrollbar-none {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ── Perfect Scrollbar (react-perfect-scrollbar) ──
+   Single source of truth for themed scrollbars. Library base CSS is imported once in index.css.
+   Colors come from design tokens so rails follow the active theme (light/dark).
+   `!important` is required to beat the library's own inline-ish defaults. */
+.perfect-scroll-area {
+  position: relative;
+  min-height: 0;
+}
+
+.ps__rail-y,
+.ps__rail-x {
+  background: transparent !important;
+  opacity: 0 !important;
+  transition: opacity 0.2s ease !important;
+}
+
+.ps__rail-y {
+  width: 8px !important;
+  right: 2px !important;
+}
+
+.ps__rail-x {
+  height: 8px !important;
+  bottom: 2px !important;
+}
+
+.ps:hover > .ps__rail-y,
+.ps:hover > .ps__rail-x,
+.ps--focus > .ps__rail-y,
+.ps--focus > .ps__rail-x,
+.ps--scrolling-y > .ps__rail-y,
+.ps--scrolling-x > .ps__rail-x {
+  opacity: 1 !important;
+}
+
+.ps__thumb-y {
+  width: 4px !important;
+  right: 2px !important;
+  border-radius: 9999px;
+  background: color-mix(in oklab, var(--color-muted-foreground) 45%, transparent) !important;
+  transition:
+    width 0.15s ease,
+    background 0.15s ease !important;
+}
+
+.ps__thumb-x {
+  height: 4px !important;
+  bottom: 2px !important;
+  border-radius: 9999px;
+  background: color-mix(in oklab, var(--color-muted-foreground) 45%, transparent) !important;
+  transition:
+    height 0.15s ease,
+    background 0.15s ease !important;
+}
+
+.ps__rail-y:hover > .ps__thumb-y,
+.ps__rail-y.ps--clicking > .ps__thumb-y {
+  width: 6px !important;
+  background: color-mix(in oklab, var(--color-muted-foreground) 70%, transparent) !important;
+}
+
+.ps__rail-x:hover > .ps__thumb-x,
+.ps__rail-x.ps--clicking > .ps__thumb-x {
+  height: 6px !important;
+  background: color-mix(in oklab, var(--color-muted-foreground) 70%, transparent) !important;
+}

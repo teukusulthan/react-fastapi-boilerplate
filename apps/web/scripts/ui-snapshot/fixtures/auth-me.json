@@ -1,0 +1,31 @@
+{
+  "$comment": "UI snapshot fixture. `endpoint` = path after /api/v1/apps; `data` = envelope payload (arrays are served as paginated get-all lists); `anchor` (auth-me) = frozen browser clock.",
+  "endpoint": "/auth/me",
+  "anchor": "2026-10-12T09:30:00.000Z",
+  "data": {
+    "id": "7f3c2a10-5b1e-4c8a-9d2f-1a2b3c4d5e01",
+    "username": "amelia.hart",
+    "fullname": "Amelia Hart",
+    "email": "amelia.hart@northwind.dev",
+    "phone": "+1 415 555 0132",
+    "status": "active",
+    "emailVerified": true,
+    "twoFactorEnabled": true,
+    "role": "admin",
+    "permissionId": "perm-admin",
+    "permission": {
+      "id": "perm-admin",
+      "name": "Administrator",
+      "alias": "admin",
+      "privileges": []
+    },
+    "groupId": "grp-platform",
+    "group": {
+      "id": "grp-platform",
+      "name": "Platform team"
+    },
+    "lastLoginAt": "2026-10-12T07:12:00.000Z",
+    "createdAt": "2025-02-03T10:00:00.000Z",
+    "updatedAt": "2026-09-28T14:20:00.000Z"
+  }
+}

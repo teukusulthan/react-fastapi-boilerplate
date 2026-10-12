@@ -1,0 +1,27 @@
+# Keep the build context small and free of local artefacts/secrets.
+node_modules
+build
+dist
+coverage
+.vite
+*.log
+*.tsbuildinfo
+
+# Local env files (VITE_* values are baked into the bundle). Mode files such as
+# env/.env.production are intentionally kept.
+env/.env
+env/*.local
+.env
+.env.local
+
+# Tooling / docs not needed for the build
+Dockerfile
+.dockerignore
+project.json
+*.md
+.git
+.gitignore
+.vscode
+.idea
+.DS_Store
+.ui-snapshots

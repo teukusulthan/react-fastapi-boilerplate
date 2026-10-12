@@ -1,0 +1,277 @@
+/* ==========================================================================
+   DESIGN TOKENS — single source of truth for every visual value.
+   - Raw scales (`--base-*`) never change between themes.
+   - Semantic tokens (`--background`, `--primary`, …) are what components use; `.dark` remaps them.
+   - Mapped to Tailwind utilities in styles/tailwind.css (`bg-background`, `text-muted-foreground`, …).
+   To re-brand: change `--primary` / `--ring` / `--chart-*` / `--radius` here. Never restyle per component.
+   ========================================================================== */
+
+:root {
+  /* ── Neutral (zinc) ─────────────────────────────────────────────────────── */
+  --base-neutral-0: #ffffff;
+  --base-neutral-50: #fafafa;
+  --base-neutral-100: #f4f4f5;
+  --base-neutral-200: #e4e4e7;
+  --base-neutral-300: #d4d4d8;
+  --base-neutral-400: #a1a1aa;
+  --base-neutral-500: #71717a;
+  --base-neutral-600: #52525b;
+  --base-neutral-700: #3f3f46;
+  --base-neutral-800: #27272a;
+  --base-neutral-850: #1c1c1f;
+  --base-neutral-900: #18181b;
+  --base-neutral-925: #111113;
+  --base-neutral-950: #09090b;
+
+  /* ── Brand primary (ocean blue) — 500 is the light-theme brand color ─────── */
+  --base-primary-50: #eef8fc;
+  --base-primary-100: #d6eef8;
+  --base-primary-200: #addcf1;
+  --base-primary-300: #7cc8ee;
+  --base-primary-400: #3aa9dd;
+  --base-primary-500: #1278a8;
+  --base-primary-600: #0f6a95;
+  --base-primary-700: #0d5a7e;
+  --base-primary-800: #0a4561;
+  --base-primary-900: #072f42;
+  --base-primary-950: #041c28;
+
+  /* ── Data-viz palettes (charts / maps only — never UI chrome) ───────────── */
+  --base-secondary-50: #eaf6f4;
+  --base-secondary-200: #9fd5ca;
+  --base-secondary-500: #2ea38c;
+  --base-secondary-700: #217463;
+  --base-secondary-900: #13443b;
+
+  --base-tertiary-50: #fff8e9;
+  --base-tertiary-200: #ffde98;
+  --base-tertiary-500: #ffb81f;
+  --base-tertiary-700: #b58316;
+  --base-tertiary-900: #6b4d0d;
+
+  --base-quaternary-50: #fff0eb;
+  --base-quaternary-200: #ffb8a1;
+  --base-quaternary-500: #ff6433;
+  --base-quaternary-700: #b54724;
+  --base-quaternary-900: #6b2a15;
+
+  --base-quinary-50: #f4ecf7;
+  --base-quinary-200: #cba9d9;
+  --base-quinary-500: #8e44ad;
+  --base-quinary-700: #65307b;
+  --base-quinary-900: #3c1d49;
+
+  /* ── Semantic: surfaces & text ──────────────────────────────────────────── */
+  --background: var(--base-neutral-0);
+  --foreground: var(--base-neutral-950);
+  --card: var(--base-neutral-0);
+  --card-foreground: var(--base-neutral-950);
+  --popover: var(--base-neutral-0);
+  --popover-foreground: var(--base-neutral-950);
+
+  /* Brand action color. #1278a8 on white text = 4.9:1 (AA). */
+  --primary: var(--base-primary-500);
+  --primary-foreground: var(--base-neutral-0);
+
+  /* shadcn semantics: secondary / muted / accent are NEUTRAL subtle fills. */
+  --secondary: var(--base-neutral-100);
+  --secondary-foreground: var(--base-neutral-900);
+  --muted: var(--base-neutral-100);
+  --muted-foreground: var(--base-neutral-500);
+  --accent: var(--base-neutral-100);
+  --accent-foreground: var(--base-neutral-900);
+
+  --border: var(--base-neutral-200);
+  --input: var(--base-neutral-200);
+  --ring: var(--base-primary-500);
+
+  /* ── Semantic: status (text-safe on white, tint with /10) ───────────────── */
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --success: #15803d;
+  --success-foreground: #ffffff;
+  --warning: #b45309;
+  --warning-foreground: #ffffff;
+  --info: #0369a1;
+  --info-foreground: #ffffff;
+
+  /* ── Sidebar (shell canvas) ─────────────────────────────────────────────── */
+  --sidebar: var(--base-neutral-50);
+  --sidebar-foreground: var(--base-neutral-700);
+  --sidebar-primary: var(--base-primary-500);
+  --sidebar-primary-foreground: var(--base-neutral-0);
+  --sidebar-accent: var(--base-neutral-200);
+  --sidebar-accent-foreground: var(--base-neutral-950);
+  --sidebar-border: var(--base-neutral-200);
+  --sidebar-ring: var(--base-primary-500);
+
+  /* ── Charts — brand-led, distinguishable in both themes ─────────────────── */
+  --chart-1: #1278a8;
+  --chart-2: #2ea38c;
+  --chart-3: #e8a21c;
+  --chart-4: #e5603a;
+  --chart-5: #8e5bc4;
+
+  /* ── Shape & depth ──────────────────────────────────────────────────────── */
+  /* rounded-sm 6px · rounded-md 8px · rounded-lg 10px · rounded-xl 12px · rounded-2xl 16px */
+  --radius: 0.625rem;
+
+  --elevation-2xs: 0 1px 0 0 rgb(9 9 11 / 0.03);
+  --elevation-xs: 0 1px 2px 0 rgb(9 9 11 / 0.04);
+  --elevation-sm: 0 1px 3px 0 rgb(9 9 11 / 0.06), 0 1px 2px -1px rgb(9 9 11 / 0.05);
+  --elevation-md: 0 4px 12px -2px rgb(9 9 11 / 0.08), 0 2px 4px -2px rgb(9 9 11 / 0.04);
+  --elevation-lg: 0 12px 32px -8px rgb(9 9 11 / 0.14), 0 4px 8px -4px rgb(9 9 11 / 0.05);
+  --elevation-xl: 0 24px 48px -12px rgb(9 9 11 / 0.18);
+
+  /* ── Typography ─────────────────────────────────────────────────────────── */
+  --font-family-sans:
+    'Inter Variable', 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  --font-family-mono: ui-monospace, 'SF Mono', SFMono-Regular, 'JetBrains Mono', Menlo, Monaco, Consolas, 'DejaVu Sans Mono', 'Liberation Mono', monospace;
+
+  /* ==========================================================================
+     LEGACY ALIASES — kept so older classes keep resolving (bg-background-primary, text-font-*,
+     border-border-primary, *-light/-soft/-base/-bold/-deep, text-h*, text-body-*). Do NOT use in new code.
+     ========================================================================== */
+  --bg-primary: var(--background);
+  --bg-secondary: var(--muted);
+  --border-primary: var(--border);
+  --border-secondary: var(--base-neutral-300);
+  --text-color-primary: var(--foreground);
+  --text-color-secondary: var(--muted-foreground);
+  --text-color-placeholder: var(--muted-foreground);
+  --text-color-disabled: var(--base-neutral-400);
+  --text-color-on-accent: var(--primary-foreground);
+
+  --primary-light: var(--base-primary-50);
+  --primary-soft: var(--base-primary-200);
+  --primary-base: var(--primary);
+  --primary-bold: var(--base-primary-700);
+  --primary-deep: var(--base-primary-900);
+  --secondary-light: var(--base-secondary-50);
+  --secondary-soft: var(--base-secondary-200);
+  --secondary-base: var(--base-secondary-500);
+  --secondary-bold: var(--base-secondary-700);
+  --secondary-deep: var(--base-secondary-900);
+  --tertiary-light: var(--base-tertiary-50);
+  --tertiary-soft: var(--base-tertiary-200);
+  --tertiary-base: var(--base-tertiary-500);
+  --tertiary-bold: var(--base-tertiary-700);
+  --tertiary-deep: var(--base-tertiary-900);
+  --quaternary-light: var(--base-quaternary-50);
+  --quaternary-soft: var(--base-quaternary-200);
+  --quaternary-base: var(--base-quaternary-500);
+  --quaternary-bold: var(--base-quaternary-700);
+  --quaternary-deep: var(--base-quaternary-900);
+  --quinary-light: var(--base-quinary-50);
+  --quinary-soft: var(--base-quinary-200);
+  --quinary-base: var(--base-quinary-500);
+  --quinary-bold: var(--base-quinary-700);
+  --quinary-deep: var(--base-quinary-900);
+  --neutral-light: var(--base-neutral-50);
+  --neutral-soft: var(--base-neutral-200);
+  --neutral-base: var(--base-neutral-500);
+  --neutral-bold: var(--base-neutral-700);
+  --neutral-deep: var(--base-neutral-900);
+
+  --success-light: color-mix(in oklab, var(--success) 10%, var(--background));
+  --success-soft: color-mix(in oklab, var(--success) 30%, var(--background));
+  --success-base: var(--success);
+  --success-bold: var(--success);
+  --success-deep: var(--success);
+  --error-light: color-mix(in oklab, var(--destructive) 10%, var(--background));
+  --error-soft: color-mix(in oklab, var(--destructive) 30%, var(--background));
+  --error-base: var(--destructive);
+  --error-bold: var(--destructive);
+  --error-deep: var(--destructive);
+  --warning-light: color-mix(in oklab, var(--warning) 10%, var(--background));
+  --warning-soft: color-mix(in oklab, var(--warning) 30%, var(--background));
+  --warning-base: var(--warning);
+  --warning-bold: var(--warning);
+  --warning-deep: var(--warning);
+  --info-light: color-mix(in oklab, var(--info) 10%, var(--background));
+  --info-soft: color-mix(in oklab, var(--info) 30%, var(--background));
+  --info-base: var(--info);
+  --info-bold: var(--info);
+  --info-deep: var(--info);
+
+  --text-display: 3.75rem;
+  --text-h1: 2.75rem;
+  --text-h2: 2.25rem;
+  --text-h3: 1.75rem;
+  --text-h4: 1.5rem;
+  --text-h5: 1.25rem;
+  --text-h6: 1.125rem;
+  --text-body-lg: 1rem;
+  --text-body-md: 0.875rem;
+  --text-body-sm: 0.75rem;
+  --text-label-lg: 1rem;
+  --text-label-md: 0.875rem;
+  --text-label-sm: 0.75rem;
+}
+
+.dark {
+  --background: var(--base-neutral-950);
+  --foreground: var(--base-neutral-50);
+  /* Surfaces are lifted slightly above the canvas so cards read without heavy borders. */
+  --card: var(--base-neutral-925);
+  --card-foreground: var(--base-neutral-50);
+  --popover: var(--base-neutral-900);
+  --popover-foreground: var(--base-neutral-50);
+
+  /* Lighter brand step for dark backgrounds; dark text on it = 7.5:1 (AA). */
+  --primary: var(--base-primary-400);
+  --primary-foreground: var(--base-neutral-950);
+
+  --secondary: var(--base-neutral-800);
+  --secondary-foreground: var(--base-neutral-50);
+  --muted: var(--base-neutral-900);
+  --muted-foreground: var(--base-neutral-400);
+  --accent: var(--base-neutral-800);
+  --accent-foreground: var(--base-neutral-50);
+
+  --border: rgb(255 255 255 / 0.1);
+  --input: rgb(255 255 255 / 0.14);
+  --ring: var(--base-primary-400);
+
+  --destructive: #f87171;
+  --destructive-foreground: #ffffff;
+  --success: #4ade80;
+  --success-foreground: #052e16;
+  --warning: #fbbf24;
+  --warning-foreground: #2a1a03;
+  --info: #38bdf8;
+  --info-foreground: #052033;
+
+  --sidebar: var(--base-neutral-950);
+  --sidebar-foreground: var(--base-neutral-400);
+  --sidebar-primary: var(--base-primary-400);
+  --sidebar-primary-foreground: var(--base-neutral-950);
+  --sidebar-accent: var(--base-neutral-850);
+  --sidebar-accent-foreground: var(--base-neutral-50);
+  --sidebar-border: rgb(255 255 255 / 0.08);
+  --sidebar-ring: var(--base-primary-400);
+
+  --chart-1: #3aa9dd;
+  --chart-2: #3cc3a5;
+  --chart-3: #f2b740;
+  --chart-4: #f27a55;
+  --chart-5: #a97ee0;
+
+  --elevation-2xs: 0 1px 0 0 rgb(0 0 0 / 0.2);
+  --elevation-xs: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --elevation-sm: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+  --elevation-md: 0 4px 12px -2px rgb(0 0 0 / 0.5), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --elevation-lg: 0 12px 32px -8px rgb(0 0 0 / 0.6), 0 4px 8px -4px rgb(0 0 0 / 0.35);
+  --elevation-xl: 0 24px 48px -12px rgb(0 0 0 / 0.7);
+
+  --border-secondary: rgb(255 255 255 / 0.18);
+  --text-color-disabled: var(--base-neutral-600);
+  --primary-light: color-mix(in oklab, var(--primary) 14%, var(--background));
+  --primary-soft: var(--base-primary-800);
+  --primary-bold: var(--base-primary-300);
+  --primary-deep: var(--base-primary-100);
+  --neutral-light: var(--base-neutral-900);
+  --neutral-soft: var(--base-neutral-800);
+  --neutral-bold: var(--base-neutral-300);
+  --neutral-deep: var(--base-neutral-100);
+}

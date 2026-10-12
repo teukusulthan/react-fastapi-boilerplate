@@ -1,0 +1,9 @@
+Subject: Your {app_name} sign-in code
+
+Hello {fullname},
+
+Use this code to finish signing in to {app_name}:
+
+    {code}
+
+The code expires in {ttl_minutes} minutes. If you did not try to sign in, someone may know your password: change it as soon as possible.

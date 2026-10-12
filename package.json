@@ -1,0 +1,36 @@
+{
+  "name": "react-fastapi-boilerplate",
+  "version": "0.0.0",
+  "private": true,
+  "description": "React (Vite) + FastAPI monorepo boilerplate orchestrated with Nx.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.19"
+  },
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "setup:backend": "node scripts/setup.mjs backend",
+    "setup:web": "node scripts/setup.mjs web",
+    "dev": "node scripts/dev.mjs",
+    "dev:backend": "node scripts/dev.mjs backend",
+    "dev:web": "node scripts/dev.mjs web",
+    "lint": "nx run-many -t lint",
+    "format": "nx run-many -t format",
+    "format:check": "nx run-many -t format-check",
+    "test": "nx run-many -t test",
+    "typecheck": "nx run-many -t typecheck",
+    "build": "nx run-many -t build",
+    "ci": "nx run-many -t lint format-check typecheck test build --outputStyle=stream",
+    "seed": "nx run backend:seed",
+    "docker:up": "docker compose up -d --build",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f",
+    "docker:infra": "docker compose up -d mongo redis"
+  },
+  "devDependencies": {
+    "nx": "23.3.0"
+  },
+  "allowScripts": {
+    "nx": false
+  }
+}
