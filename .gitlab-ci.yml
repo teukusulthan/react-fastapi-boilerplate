@@ -123,6 +123,57 @@ web:test:
   script:
     - npm run test:ci
 
+# End-to-end smoke suite (apps/web/e2e, Playwright) against the REAL backend: Mongo + Redis
+# services, seeded bootstrap admin, backend on :8021, web built and served by `vite preview`.
+# scripts/e2e.mjs seeds, starts the backend, waits for /health/ready, runs the suite and stops
+# the backend. The image tag must match @playwright/test in apps/web/package.json.
+web:e2e:
+  stage: test
+  image: mcr.microsoft.com/playwright:v1.63.0-noble
+  needs: []
+  services:
+    - name: mongo:7
+      alias: mongo
+    - name: redis:7
+      alias: redis
+  variables:
+    E2E_MONGO_URI: mongodb://mongo:27017
+    E2E_REDIS_URL: redis://redis:6379/0
+    # Test-only account, created by the seed inside this job's throwaway Mongo.
+    E2E_ADMIN_EMAIL: admin@example.com
+    E2E_ADMIN_PASSWORD: e2e-admin-password
+  cache:
+    - key:
+        files:
+          - apps/web/package-lock.json
+        prefix: web
+      paths:
+        - .cache/npm
+    - key:
+        files:
+          - apps/backend/requirements.txt
+        prefix: backend-e2e
+      paths:
+        - .cache/uv
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq --no-install-recommends python3 python3-venv libmagic1 > /dev/null
+    - python3 -m venv /opt/uv && /opt/uv/bin/pip install --quiet --disable-pip-version-check uv
+    - /opt/uv/bin/uv venv --python python3 apps/backend/.venv
+    - /opt/uv/bin/uv pip install --python apps/backend/.venv/bin/python -r apps/backend/requirements.txt
+    - (cd apps/web && npm ci --prefer-offline)
+  script:
+    - node scripts/e2e.mjs
+  artifacts:
+    when: always
+    name: web-e2e-$CI_COMMIT_SHORT_SHA
+    paths:
+      - apps/web/playwright-report/
+      - apps/web/test-results/
+      - .cache/e2e/backend.log
+    reports:
+      junit: apps/web/test-results/junit.xml
+    expire_in: 1 week
+
 web:build:
   extends: .web
   stage: build
@@ -134,6 +185,20 @@ web:build:
     paths:
       - apps/web/build/
     expire_in: 1 week
+
+# -------------------------------------------------------------------------------- docs
+# Docs consistency (scripts/docs-check): links, repo paths, npm scripts, env vars, code-block
+# imports and the docs/api-spec.md endpoint registry vs the FastAPI app. It needs the backend venv
+# (imports and the route table; no Mongo/Redis) and plain Node (Debian's nodejs is enough).
+docs:check:
+  extends: .backend
+  stage: lint
+  needs: []
+  script:
+    - apt-get install -y -qq --no-install-recommends nodejs > /dev/null
+    - cd "$CI_PROJECT_DIR"
+    - node scripts/docs-check/index.mjs
+    - node --test scripts/docs-check/test/docs-check.test.mjs
 
 # ------------------------------------------------------------------------------ docker
 docker:build:

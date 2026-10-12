@@ -23,7 +23,7 @@ There is no mobile app, agent or MCP server yet. When one is added (`apps/mobile
 | Auth: 2FA (email / TOTP) | `service/auth/two_factor.py` | `TwoFactorForm.tsx` (login step); setup/enable/disable only in `services/auth.service.ts` |
 | Auth: register, forgot/change password, verify email | `service/auth/{registration,password}.py` | Verify-email page only (`pages/auth/VerifyEmailPage.tsx`); the rest only in `services/auth.service.ts` |
 | Auth: Google sign-in | `service/auth/google.py` (mounted when configured) | — |
-| Users (admin CRUD + self profile) | `router/user.py`, `service/user.py` | `features/administrator/user/` (list + search), `pages/administrator/user/UserPage.tsx` |
+| Users (admin CRUD + self profile) | `router/user.py`, `service/user.py` | `features/administrator/user/` (list + search, add-user dialog, row actions), `pages/administrator/user/UserPage.tsx` |
 | Permissions (RBAC) | `router/permission.py`, `service/permission.py` | `services/permission.service.ts` (no page) |
 | Groups | `router/group.py`, `service/group.py` | `services/group.service.ts` (no page) |
 | Roles (reference CRUD module) | `router/role.py`, `service/role.py` | `services/role.service.ts` (no page) |

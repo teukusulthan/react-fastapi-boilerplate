@@ -2,7 +2,11 @@
 
 Copy design token CSS and generate `loader.js` into a mockup output folder (`mockup/{web,mobile}-html/css/`).
 
-Trigger the [`design-system-setup`](../skills/design-system-setup/SKILL.md) skill.
+Trigger the `design-system-setup` skill.
+
+> The `design-system-setup` skill belongs to the scaffold system and is **not bundled** in this repo
+> (`AGENTS.md` §10). Here, use the [`design-apply`](../skills/design-apply/SKILL.md) skill instead; it
+> performs the same CSS-asset setup.
 
 ## Usage
 

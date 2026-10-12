@@ -506,6 +506,6 @@ User Request (gatewayId)
 ---
 
 > **Related skills:**
-> - [`fastapi-data`](../fastapi-data/SKILL.md) — MongoDB CRUD patterns, Services factory, view collections
+> - [`fastapi-data`](../../skills/fastapi-data/SKILL.md) — MongoDB CRUD patterns, Services factory, view collections
 > - [`fastapi-create-map` references/upsert-and-lifecycle.md](../fastapi-create-map/references/upsert-and-lifecycle.md) — Upsert pattern, ID generation, `_id` ↔ `id` normalization
 > - [`fastapi-build-filter-elasticsearch`](../fastapi-build-filter-elasticsearch/SKILL.md) — Elasticsearch filter query building for log queries

@@ -9,7 +9,7 @@
 |-----|----------|------|
 | React + Vite SPA | `web-reactjs` | `apps/web/` |
 
-Template-specific nested rule folders (e.g. `.claude/rules/web/reactjs/`) are **not** used. The durable
+Template-specific nested rule folders (such as a `reactjs/` subfolder here) are **not** used. The durable
 web rules live in `.claude/rules/architecture.md`, `.claude/rules/web/ui-design.md` (visual rules, always
 on) and `apps/web/AI_GUIDE.md`. React skills are flat
 folders: `.claude/skills/reactjs-<topic>/SKILL.md`.

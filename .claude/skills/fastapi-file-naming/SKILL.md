@@ -64,7 +64,7 @@ Real examples to mirror: `dto/group.py`, `service/group.py`, `router/group.py`, 
 - No business logic in `util/` (it must not import `service/` or `router/`).
 - No new top-level directories for ordinary features; no `models/`, `config/`, `exceptions/`, `middleware/`
   packages (their roles live in `dto/`, `core/config.py`, `core/errors.py`, `core/middleware.py`).
-- No circular imports: `router → service → db/core/dto/util`; `dto` may import `core.config` only.
+- No circular imports: `router → service → db | core | dto | util`; `dto` may import `core.config` only.
 
 ## Checklist
 

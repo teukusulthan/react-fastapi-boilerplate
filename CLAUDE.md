@@ -41,7 +41,7 @@
 **Verify (paste real results, never assume):**
 
 ```bash
-npm run ci                                   # repo root: lint + format-check + typecheck + test + build, both apps
+npm run ci                                   # repo root: lint + format-check + typecheck + test + build, both apps, + docs:check
 # backend only (apps/backend)
 .venv/bin/python -m ruff check . && .venv/bin/python -m ruff format --check . && .venv/bin/python -m pytest
 # web only (apps/web)

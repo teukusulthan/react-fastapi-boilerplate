@@ -25,3 +25,5 @@ project.json
 .idea
 .DS_Store
 .ui-snapshots
+playwright-report
+test-results

@@ -34,7 +34,7 @@ Per-module notes: `references/role.md`, `references/permission.md`, `references/
 
 Domain resources (e.g. a `topic`, `workspace` or `dashboard` table from another project) are not
 part of this boilerplate; each one is just another instance of the recipe below. Keep the domain
-logic from skills such as `fastapi-topic`, but build the module on this foundation (entity +
+logic from archived skills such as `.claude/skills-library/fastapi-topic/`, but build the module on this foundation (entity +
 repository + `CrudService`), not on that skill's legacy Mongo helpers.
 
 ## Rules

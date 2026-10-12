@@ -20,7 +20,7 @@ Trigger the [`supabase-init`](../skills/supabase-init/SKILL.md) skill.
 
 ## Action
 
-Open `.claude/skills/supabase-init/SKILL.md` and run the bundled `scripts/init.py`:
+Open `.claude/skills/supabase-init/SKILL.md` and run its bundled `.claude/skills/supabase-init/scripts/init.py`:
 
 ```
 python .claude/skills/supabase-init/scripts/init.py

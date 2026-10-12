@@ -18,3 +18,7 @@
 
 # UI snapshots (npm run ui:snapshot)
 /.ui-snapshots
+
+# Playwright e2e output (npm run test:e2e)
+/playwright-report
+/test-results

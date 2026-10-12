@@ -575,6 +575,6 @@ def add_or_update_process(data, _id, isUpdate=False):
 ---
 
 > **Related skills:**
-> - [`fastapi-data`](../fastapi-data/SKILL.md) — repositories (`db.Repository`), `QuerySpec`/`build_query_spec`, services + DI
+> - [`fastapi-data`](../../skills/fastapi-data/SKILL.md) — repositories (`db.Repository`), `QuerySpec`/`build_query_spec`, services + DI
 > - [`fastapi-create-map` references/upsert-and-lifecycle.md](../fastapi-create-map/references/upsert-and-lifecycle.md) — Upsert pattern, ID generation strategies, `_id` ↔ `id` normalization
 > - [`fastapi-build-filter-elasticsearch`](../fastapi-build-filter-elasticsearch/SKILL.md) — Elasticsearch filter query building (used for per-platform `queries`)

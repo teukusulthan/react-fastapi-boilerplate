@@ -11,8 +11,8 @@ description: Implementation guide for any Mapbox GL JS map analytics interface. 
 
 Read `references/map-rules.md` before writing any map code.
 
-> Domain-specific overrides: `.claude/skills/reactjs-tactical-map/SKILL.md` (only when the task or the
-> active `design/` theme is tactical).
+> Domain-specific overrides (archived, not auto-loaded): `.claude/skills-library/reactjs-tactical-map/SKILL.md`
+> (only when the task or the active `design/` theme is tactical).
 
 ### Map UI chrome — visual contract
 
@@ -46,7 +46,7 @@ colors; UI chrome may not. Light and dark mode come from the tokens.
 | shared map types (`MapStyleKey`, `TMapHoverState`, …) | **not present** | create `src/types/map.d.ts` (types only); runtime guards such as `isMvtSource` go in `src/utils/map.ts` |
 | `src/modules/map-plugin/` | **not present** | create on demand (Pattern A) |
 | `EChartWrapper`, `src/modules/dynamic-widget` | **not present** | see `.claude/skills/reactjs-chart/SKILL.md` / `.claude/skills/reactjs-dynamic-widget/SKILL.md` |
-| Backend `/map/*` tile router, `/widget/get-data` | **not part of this backend** | see the domain skills `.claude/skills/fastapi-render-map/SKILL.md` |
+| Backend `/map/*` tile router, `/widget/get-data` | **not part of this backend** | see the archived domain skill `.claude/skills-library/fastapi-render-map/SKILL.md` |
 
 Paths in this skill follow `.claude/skills/reactjs-architecture/SKILL.md`: map UI pieces of
 a domain live in `src/features/{domain}/{feature}/components/` (not in `src/pages/`).
@@ -1390,7 +1390,7 @@ dataSource: {
 > Layout shell: `.claude/skills/reactjs-app-layout/SKILL.md`
 > Dynamic widgets: `.claude/skills/reactjs-dynamic-widget/SKILL.md`
 > Detailed rules: [references/map-rules.md](references/map-rules.md)
-> Tactical domain override: [../reactjs-tactical-map/SKILL.md](../reactjs-tactical-map/SKILL.md)
+> Tactical domain override (archived): [../../skills-library/reactjs-tactical-map/SKILL.md](../../skills-library/reactjs-tactical-map/SKILL.md)
 
 ---
 
@@ -1847,7 +1847,7 @@ expressions activate automatically on subsequent tile loads when features become
 
 A `map.service.ts` helper `layerTileUrl(layerId)` builds the tile source URL (create
 `src/services/map.service.ts`; the `/map` tile router is not in this backend — see
-`.claude/skills/fastapi-render-map/SKILL.md`). The web reaches the backend through
+`.claude/skills-library/fastapi-render-map/SKILL.md`). The web reaches the backend through
 `env.api.baseUrl` (default `/api/v1/apps`, proxied to the backend with the prefix stripped).
 
 ```ts

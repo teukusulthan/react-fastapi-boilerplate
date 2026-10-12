@@ -1,6 +1,6 @@
 ﻿# Workspace spec PoC (single HTML under `<cwd>/design/`)
 
-This document is **normative** when [`html-ui-slicing`](../SKILL.md) **Step 0** selects **Mode B — Workspace spec PoC**. It replaces the retired standalone **`design-html`** skill: brief/spec-driven static HTML with mock data only, design pack anchored under `<cwd>/design/**`.
+This document is **normative** when [`html-ui-slicing`](../../../commands/html-ui-slicing.md) **Step 0** selects **Mode B — Workspace spec PoC**. It replaces the retired standalone **`design-html`** skill: brief/spec-driven static HTML with mock data only, design pack anchored under `<cwd>/design/**`.
 
 **Do not** read `design/design-system.md` for this mode — discovery uses only the three approved files under `<cwd>/design/` (see [Design System Contract](#design-system-contract)).
 
@@ -10,7 +10,7 @@ Usually runs **after** `spec-builder`, or directly from a brief when the user wa
 
 ## Markup contract (shared with Mode A)
 
-Use the same **`data-ui` + semantic Tailwind** rules as the main [`html-ui-slicing`](../SKILL.md) skill (§ Semantic Component Classes, § Step 4 — Coding Rules). Never ship bare `data-ui` without utilities.
+Use the same **`data-ui` + semantic Tailwind** rules as the [`html-ui-styling`](../../html-ui-styling/SKILL.md) skill (the `html-ui-slicing` skill body is not bundled) (§ Semantic Component Classes, § Step 4 — Coding Rules). Never ship bare `data-ui` without utilities.
 
 ## Input Contract
 
@@ -463,7 +463,7 @@ If forced to choose, prefer:
 
 ### Implementation rules
 
-- Before non-trivial ECharts `option` trees, read **[echarts.md](echarts.md)** (same references folder) for `getComputedStyle`, `resolveColor` / oklch, series order, and resize handling.
+- Before non-trivial ECharts `option` trees, read **[echarts.md](../../html-ui-styling/references/echarts.md)** (in `html-ui-styling`) for `getComputedStyle`, `resolveColor` / oklch, series order, and resize handling.
 - When the user requests chart-only refinement, keep the same chart purpose, metric, and surrounding widget role from the source; improve the treatment, not the underlying feature definition
 - Create chart containers with stable IDs
 - Store ECharts option builders in reusable functions

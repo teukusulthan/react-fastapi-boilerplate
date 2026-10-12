@@ -59,3 +59,11 @@ repos:
         language: system
         files: ^apps/web/.*\.(ts|tsx|js|jsx|mjs|cjs)$
         exclude: ^apps/web/(build|public)/
+      # Whole-repo docs consistency check (~2 s; needs apps/backend/.venv). Runs when docs or the
+      # things they describe change. See scripts/docs-check/README.md.
+      - id: docs-check
+        name: docs consistency (scripts/docs-check)
+        entry: node scripts/docs-check/index.mjs
+        language: system
+        pass_filenames: false
+        files: (\.md$|(^|/)package\.json$|^apps/backend/(\.env\.example|core/config\.py|router/.*\.py)$|^apps/web/(env/\.env\.example|src/config/env\.ts)$|^scripts/docs-check/)

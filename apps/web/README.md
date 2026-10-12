@@ -29,7 +29,7 @@ npm run dev
 ```
 
 The backend must be running on `DEV_PROXY_TARGET` (default `http://localhost:8020`). Sign in with the
-bootstrap admin created by `npm run seed`.
+bootstrap admin created by `npm run seed` (from the repo root).
 
 ## Scripts
 
@@ -43,6 +43,7 @@ bootstrap admin created by `npm run seed`.
 | `npm run format` / `format:check` | Prettier |
 | `npm run test` / `test:ci` | Vitest watch mode / single run (CI) |
 | `npm run ui:snapshot -- --route <path>` | Screenshots of routes (light/dark, desktop/mobile) with a mocked API → `.ui-snapshots/` |
+| `npm run test:e2e` | Playwright e2e smoke suite (`e2e/`) against a **running** backend; builds + previews the app. From the repo root, `npm run test:e2e -- --docker` also starts Mongo/Redis, seeds and runs the backend. See [`e2e/README.md`](e2e/README.md) |
 
 ## Environment
 

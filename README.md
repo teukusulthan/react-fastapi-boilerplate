@@ -51,7 +51,8 @@ emails (OTP codes, verification links) are printed in the backend log.
 | `npm run dev` / `dev:backend` / `dev:web` | Dev servers with prefixed output and clean Ctrl+C |
 | `npm run seed` | Idempotent seed: permissions `admin`/`user` + bootstrap admin |
 | `npm run lint` · `format` · `format:check` · `typecheck` · `test` · `build` | Nx run-many over both apps |
-| `npm run ci` | The full quality gate: lint, format-check, typecheck, test and build for both apps |
+| `npm run ci` | The full quality gate: lint, format-check, typecheck, test and build for both apps, then `npm run docs:check` |
+| `npm run docs:check` | Docs consistency check: links, paths, npm scripts, env vars, code-block imports and the endpoint registry vs the code ([`scripts/docs-check/`](scripts/docs-check/README.md)) |
 | `npm run docker:up` · `docker:down` · `docker:logs` | Full stack in Docker: http://localhost:8080 |
 | `npm run docker:infra` | Only MongoDB + Redis (for host development) |
 | `DB_PROVIDER=supabase docker compose --profile postgres up -d --build` | Full stack on Postgres (the migrations are applied automatically) |
@@ -71,8 +72,8 @@ Per-app commands (pytest options, Postgres integration tests, vitest) are in
 ├── sprint/             sprint planning (backlog/active/archive), managed by the sprint-builder skill
 ├── brief/, mockup/     outputs of the brief / HTML-mockup skills (empty here)
 ├── data/               source mock datasets
-├── scripts/            setup.mjs, dev.mjs, py.mjs, web-tool.mjs, docker/postgres/*
-├── .claude/            rules/, skills/, commands/ for AI agents
+├── scripts/            setup.mjs, dev.mjs, py.mjs, web-tool.mjs, e2e.mjs, docs-check/, docker/postgres/*
+├── .claude/            rules/, skills/, skills-library/ (archived), commands/ for AI agents
 ├── AGENTS.md           master guide for AI agents (and humans)
 ├── CLAUDE.md           Claude Code entry point (imports AGENTS.md)
 ├── docker-compose.yml  mongo, redis, postgres (profile), backend, web
@@ -109,6 +110,9 @@ GitLab CI (`.gitlab-ci.yml`) has these jobs:
 - `backend:lint` (ruff check + format check), `backend:test` (pytest), `backend:test-postgres` (pytest
   `-m integration` against `postgres:16-alpine`);
 - `web:lint` (typecheck, ESLint, Prettier), `web:test` (Vitest), `web:build`;
+- `web:e2e` (Playwright smoke suite against the real backend with Mongo/Redis services,
+  [`apps/web/e2e/`](apps/web/e2e/README.md));
+- `docs:check` (docs consistency check, `scripts/docs-check/`);
 - `docker:build` (default branch and tags; images are pushed when registry credentials exist).
 
 ## Working with AI agents
@@ -116,7 +120,7 @@ GitLab CI (`.gitlab-ci.yml`) has these jobs:
 Start with [`AGENTS.md`](AGENTS.md): the repo map, architecture, recipes (new resource, endpoint,
 setting, page, service), testing, the definition of done, and pitfalls. Claude Code loads
 [`CLAUDE.md`](CLAUDE.md) automatically. Project rules are in [`.claude/rules/`](.claude/rules/), on-demand
-skills in [`.claude/skills/`](.claude/skills/), and slash commands in [`.claude/commands/`](.claude/commands/).
+skills in [`.claude/skills/`](.claude/skills/) (archived domain skills in [`.claude/skills-library/`](.claude/skills-library/README.md)), and slash commands in [`.claude/commands/`](.claude/commands/).
 
 This repository is the **already-scaffolded** web + backend part of a larger agent-driven workflow
 (brief → spec → design → sprint → build). The scaffold tooling itself (the `.ai/` CLI, boilerplate

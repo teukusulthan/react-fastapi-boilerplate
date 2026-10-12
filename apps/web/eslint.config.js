@@ -7,7 +7,7 @@ import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
 export default defineConfig([
-  globalIgnores(['build', 'dist', 'coverage', 'node_modules']),
+  globalIgnores(['build', 'dist', 'coverage', 'node_modules', 'playwright-report', 'test-results']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
@@ -68,6 +68,13 @@ export default defineConfig([
     files: ['vite.config.ts', 'eslint.config.js'],
     languageOptions: {
       globals: globals.node,
+    },
+  },
+  {
+    // Playwright e2e suite (Node test runner + browser page APIs).
+    files: ['e2e/**/*.ts', 'playwright.config.ts'],
+    languageOptions: {
+      globals: { ...globals.node },
     },
   },
   {

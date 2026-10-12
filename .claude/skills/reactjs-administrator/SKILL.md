@@ -26,7 +26,8 @@ list page at `/administrator/{resource}` backed by a backend CRUD module.
 
 Backend services for `user`, `group`, `permission`, `role`, `upload` already exist on the web side
 (`src/services/{user,group,permission,role,upload}.service.ts`, types in `src/types/models.d.ts`). Only the
-**user** list page is built (read-only: search + pagination). Group/permission/role/upload pages are not
+**user** page is built (search + pagination, an "Add user" dialog, and row actions: reset password,
+block/activate, delete). Group/permission/role/upload pages are not
 built yet — create them with this recipe.
 
 **Canonical example (copy this shape):**

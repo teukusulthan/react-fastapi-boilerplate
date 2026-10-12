@@ -14,6 +14,26 @@ Append-only. Newest entries at the top. Updated whenever a frontend task is crea
 > One-line summary of what changed or was delivered.
 -->
 
+### 2026-10-12 · Boilerplate (no sprint) · Task: Docs consistency check + archived domain skills · ✅ Done
+
+**Event:** Files modified
+**Files:** `scripts/docs-check/**`, `package.json`, `.gitlab-ci.yml`, `.pre-commit-config.yaml`, `.claude/skills-library/**`, `AGENTS.md`, `README.md`, `.claude/**`, `apps/web/AI_GUIDE.md`
+> New `npm run docs:check` (also the last step of `npm run ci`, GitLab job `docs:check`, pre-commit hook)
+> fails on doc drift: broken links/paths, unknown npm scripts, env vars, code-block imports, and
+> `docs/api-spec.md` vs the live FastAPI routes. Domain recipes from other projects moved from
+> `.claude/skills/` to `.claude/skills-library/` (not auto-loaded; enable on demand).
+
+### 2026-10-12 · Boilerplate (no sprint) · Task: Playwright e2e smoke suite against the real backend · ✅ Done
+
+**Event:** Files modified
+**Files:** `apps/web/{playwright.config.ts,tsconfig.e2e.json,tsconfig.json,package.json,package-lock.json,eslint.config.js,.gitignore,.prettierignore,.dockerignore}`, `apps/web/e2e/**`, `apps/web/src/components/layouts/AppSidebar.tsx`, `scripts/e2e.mjs`, `package.json`, `.gitlab-ci.yml`
+> Added a Playwright smoke suite (`apps/web/e2e/`, `@playwright/test` 1.63.0): admin sign-in → dashboard
+> → users table shows the admin → sign out, plus the anonymous redirect and the wrong-credentials error.
+> `npm run test:e2e` (apps/web) runs Playwright against a running backend; the root `npm run test:e2e`
+> (`scripts/e2e.mjs`) seeds, starts an isolated backend, runs the suite and tears everything down
+> (`--docker` for throwaway Mongo/Redis). New GitLab job `web:e2e`. The sidebar's links now sit in a
+> `<nav aria-label="Main navigation">` landmark. `npm run typecheck` also checks `e2e/` (`tsconfig.e2e.json`).
+
 ### 2026-10-12 · Boilerplate refactor (no sprint) · Task: web app rebuild against the new backend contract · ✅ Done
 
 **Event:** Files modified

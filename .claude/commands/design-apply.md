@@ -81,7 +81,7 @@ Verify `{SRC}/variable.css` and `{SRC}/tailwind.css` exist. If not, abort and te
 
 If `--target` not provided:
 
-1. Check if any `apps/web*` directory exists (e.g. `apps/web`, `apps/web-dashboard`).
+1. Check if any `apps/web*` directory exists (e.g. `apps/web`, `apps/web-dashboard`). <!-- docs-check: ignore-line -->
    - If found → use the first match as target → **App mode**
 2. If no `apps/web*` found → use `mockup/{platform}-html` as target → **Mockup mode**
 

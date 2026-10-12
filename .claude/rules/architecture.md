@@ -148,8 +148,8 @@ regions. Exceptions and patterns: `.claude/skills/reactjs-responsive/SKILL.md` �
 **❌ NEVER place domain-specific components directly in `src/components/`.**
 Any component that belongs to a business domain (tactical, billing, dashboard, etc.) is a domain
 component: panel content, data displays, domain widgets, status indicators. It must live under
-`src/features/{domain}/{feature}/components/`. Placing it in `src/components/sidebar/`,
-`src/components/analytics/`, etc. is a structure violation.
+`src/features/{domain}/{feature}/components/`. Placing it in a domain folder under `src/components/`
+(`src/components/<sidebar|analytics|…>/`) is a structure violation.
 
 When you create a domain component, consult `.claude/skills/reactjs-features/SKILL.md` to choose the
 correct domain bucket (`features/{domain}/` vs `features/shared/`) before writing any code.

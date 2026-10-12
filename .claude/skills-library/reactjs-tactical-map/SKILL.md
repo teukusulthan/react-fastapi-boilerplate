@@ -1,11 +1,11 @@
 ---
 name: reactjs-tactical-map
-description: Tactical command center map — domain override on top of the generic map skill. Covers tactical-specific layer groups, incident types, sensor stores, and the TacticalMap bridge. Use ONLY for an explicitly tactical/command-center domain. Read `skills/reactjs-map/SKILL.md` first for the base pattern.
+description: Tactical command center map — domain override on top of the generic map skill. Covers tactical-specific layer groups, incident types, sensor stores, and the TacticalMap bridge. Use ONLY for an explicitly tactical/command-center domain. Read `.claude/skills/reactjs-map/SKILL.md` first for the base pattern.
 ---
 
 # Skill — Tactical Map (Domain Override)
 
-> **Visual rules:** [reactjs-ui-design](../reactjs-ui-design/SKILL.md) + `.claude/rules/web/ui-design.md`
+> **Visual rules:** [reactjs-ui-design](../../skills/reactjs-ui-design/SKILL.md) + `.claude/rules/web/ui-design.md`
 > win over any markup here. This skill owns the tactical domain model (layer groups, incident types,
 > sensor stores, the `TacticalMap` bridge). It applies **only** when the task is a tactical /
 > command-center map — never use it as a style reference for ordinary pages.
@@ -222,4 +222,4 @@ Same checklist as `skills/reactjs-map/SKILL.md`, plus:
 - [ ] Reviewed with `npm run ui:snapshot -- --route <path>` (`reactjs-ui-design` §8)
 
 > Detailed rules: [references/tactical-map-rules.md](references/tactical-map-rules.md)
-> Base pattern: [../reactjs-map/SKILL.md](../reactjs-map/SKILL.md)
+> Base pattern: [../reactjs-map/SKILL.md](../../skills/reactjs-map/SKILL.md)

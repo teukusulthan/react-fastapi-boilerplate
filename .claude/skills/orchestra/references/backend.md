@@ -44,7 +44,7 @@ If multiple backends exist, all are in scope.
 | Adding a Python dependency / venv | `fastapi-dependency-constraints`, `fastapi-virtual-environment` |
 | Supabase project / local stack bootstrap | `supabase-init` |
 
-Domain skills (`fastapi-api-gateway`, `fastapi-topic`, `fastapi-render-map`, `fastapi-create-map`, `fastapi-build-filter-elasticsearch`, `fastapi-data-management`) describe features that are **not** in this boilerplate; read their "Adapting to the current foundation" section before copying code.
+Domain recipes from other company projects (API gateway, topic monitoring, map/tile engine, map creation, Elasticsearch filters, multi-DB dispatcher) are archived in `.claude/skills-library/` (see `.claude/skills-library/README.md`) and are **not** auto-loaded. They describe features that are **not** in this boilerplate. Use one only when the task asks for that feature: copy it into `.claude/skills/` and read its "Adapting to the current foundation" section before copying code.
 
 ---
 

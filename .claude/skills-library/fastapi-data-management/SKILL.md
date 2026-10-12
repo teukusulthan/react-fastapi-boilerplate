@@ -515,9 +515,7 @@ DataManagementGetOptionDTO extends DataManagementFindDTO:
 ---
 
 > **Related skills:**
-> - [`fastapi-data`](../fastapi-data/SKILL.md) — repositories (`db.Repository`), `QuerySpec`/`build_query_spec`, services + DI
-> - [`fastapi-database-init`](../fastapi-database-init/SKILL.md) — Connection initialization and management
+> - [`fastapi-data`](../../skills/fastapi-data/SKILL.md) — repositories (`db.Repository`), `QuerySpec`/`build_query_spec`, services + DI
+> - [`fastapi-database-init`](../../skills/fastapi-database-init/SKILL.md) — Connection initialization and management
 > - [`fastapi-create-map`](../fastapi-create-map/SKILL.md) — Upsert pattern, ID generation strategies, createdAt/updatedAt lifecycle
 > - [`fastapi-build-filter-elasticsearch`](../fastapi-build-filter-elasticsearch/SKILL.md) — Elasticsearch filter query building
-> - [`fastapi-build-filter-mongodb`](../fastapi-build-filter-mongodb/SKILL.md) — MongoDB filter query building
-> - [`fastapi-build-filter-sql`](../fastapi-build-filter-sql/SKILL.md) — SQL filter query building

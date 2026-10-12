@@ -349,7 +349,7 @@ npm run typecheck      # tsc for app + node configs
 npm run lint           # eslint, 0 warnings allowed   (npm run lint:fix to autofix)
 npm run format:check   # prettier                     (npm run format to write)
 npm run test           # vitest in watch mode
-npm run test:ci        # vitest run (what CI and `npm run ci` use)
+npm run test:ci        # vitest run (what CI and the root `npm run ci` use)
 npm run build          # production build → build/   (build:staging uses env/.env.staging)
 npm run preview        # serve build/ on :4173 with the same API proxy
 npm run ui:snapshot -- --route <path>   # screenshots (light/dark, desktop/mobile, mocked API) → .ui-snapshots/
@@ -369,6 +369,12 @@ From the repo root: `npm run dev:web`, `npx nx run web:test`, `npm run ci`.
   envelopes.
 - Examples: `services/api-client.test.ts` (refresh/401 behaviour), `routes/guards/guards.test.tsx`,
   `features/shared/auth/components/LoginView.test.tsx`, `config/env.test.ts`.
+- **E2E smoke suite (Playwright)** in `apps/web/e2e/` (config `apps/web/playwright.config.ts`, details in
+  [`e2e/README.md`](e2e/README.md)): sign-in, the app shell, the admin users page and sign-out against
+  the **real** backend. From the repo root, `npm run test:e2e -- --docker` (throwaway Mongo/Redis, seed,
+  backend, Playwright, teardown) or `E2E_MONGO_URI=… E2E_REDIS_URL=… npm run test:e2e` (your own
+  disposable instances). From `apps/web`, `npm run test:e2e` runs only Playwright against an already
+  running backend. It is **not** part of the root `npm run ci`; GitLab runs it in the `web:e2e` job.
 
 ## 9. Pitfalls
 
@@ -379,7 +385,8 @@ From the repo root: `npm run dev:web`, `npx nx run web:test`, `npm run ci`.
 - In `BE_AUTH_PROVIDER=supabase` mode, the web app has no Supabase client and `/auth/refresh` does not
   exist. Treat that mode as API-only until a Supabase JS login is added.
 - Register, forgot-password, change-password and 2FA-settings **pages do not exist yet**. The service
-  functions do (`auth.service.ts`). The user admin page is read-only (list + search).
+  functions do (`auth.service.ts`). The user admin page (`/administrator/user`) lists and searches
+  users, has an "Add user" dialog, and row actions (reset password, block/activate, delete).
 - `index.html` placeholders are `%VITE_*%`, filled by `vite.config.ts`; the defaults are in
   `HTML_ENV_DEFAULTS`.
 
@@ -403,7 +410,7 @@ From the repo root: `npm run dev:web`, `npx nx run web:test`, `npm run ci`.
 | Figma/mockup → React, tokens/re-brand, theme switch, quality gate | `.claude/skills/reactjs-slicing-ui/SKILL.md`, `.claude/skills/reactjs-design-system/SKILL.md`, `.claude/skills/reactjs-switch-theme/SKILL.md`, `.claude/skills/reactjs-anti-slop/SKILL.md` |
 | Responsive, scroll regions | `.claude/skills/reactjs-responsive/SKILL.md` |
 | Icons | `.claude/skills/reactjs-icon/SKILL.md` |
-| Charts / maps | `.claude/skills/reactjs-chart/SKILL.md`, `.claude/skills/reactjs-map/SKILL.md`, `.claude/skills/reactjs-tactical-map/SKILL.md` |
+| Charts / maps | `.claude/skills/reactjs-chart/SKILL.md`, `.claude/skills/reactjs-map/SKILL.md` (tactical override archived in `.claude/skills-library/reactjs-tactical-map/SKILL.md`) |
 | Filters / dashboard widgets | `.claude/skills/reactjs-dynamic-filter/SKILL.md`, `.claude/skills/reactjs-dynamic-widget/SKILL.md` |
 | Env vars | `.claude/skills/reactjs-manage-env/SKILL.md` |
 | index.html meta / SEO | `.claude/skills/reactjs-seo-html/SKILL.md` |

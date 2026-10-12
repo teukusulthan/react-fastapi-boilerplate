@@ -27,19 +27,21 @@ export default function AppSidebar() {
         <AppBrand />
       </SidebarHeader>
       <SidebarContent>
-        <PerfectScrollArea className="h-full" contentClassName="flex flex-col gap-1 pt-1 pb-4">
-          {sections.map((section) => (
-            <SidebarGroup key={section.id}>
-              <SidebarGroupLabel>{section.label}</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {section.items.map((item) => (
-                    <SidebarNavItem key={item.id} item={item} />
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          ))}
+        <PerfectScrollArea className="h-full" contentClassName="pt-1 pb-4">
+          <nav aria-label="Main navigation" className="flex flex-col gap-1">
+            {sections.map((section) => (
+              <SidebarGroup key={section.id}>
+                <SidebarGroupLabel>{section.label}</SidebarGroupLabel>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    {section.items.map((item) => (
+                      <SidebarNavItem key={item.id} item={item} />
+                    ))}
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
+            ))}
+          </nav>
         </PerfectScrollArea>
       </SidebarContent>
     </Sidebar>

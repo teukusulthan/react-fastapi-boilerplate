@@ -35,11 +35,11 @@ Do not write files until you know where they belong (§4) and which existing mod
 | `sprint/` | `01-sprint-planning.md`, `backlog/`, `active/`, `archive/` (managed by the `sprint-builder` skill) |
 | `brief/`, `mockup/` | Outputs of the brief and HTML-mockup skills (empty in the bare boilerplate) |
 | `data/` | Source mock datasets (`data/mock/*.json`) |
-| `scripts/` | Cross-platform Node helpers: `setup.mjs`, `dev.mjs`, `py.mjs` (runs the backend venv Python), `web-tool.mjs`, `docker/postgres/*` |
-| `.claude/` | `rules/` (always-on rules), `skills/` (on-demand know-how), `commands/` (slash commands), `settings.json` |
+| `scripts/` | Cross-platform Node helpers: `setup.mjs`, `dev.mjs`, `py.mjs` (runs the backend venv Python), `web-tool.mjs`, `e2e.mjs`, `docs-check/` (docs consistency checker), `docker/postgres/*` |
+| `.claude/` | `rules/` (always-on rules), `skills/` (on-demand know-how), `skills-library/` (archived domain skills from other projects, not auto-loaded), `commands/` (slash commands), `settings.json` |
 | `package.json`, `nx.json` | Root scripts and Nx targets (projects `backend` and `web` via `apps/*/project.json`) |
 | `docker-compose.yml` | mongo, redis, optional postgres (profile `postgres`), backend, web (nginx on **8080**) |
-| `.gitlab-ci.yml` | Jobs `backend:lint`, `backend:test`, `backend:test-postgres`, `web:lint`, `web:test`, `web:build`, `docker:build` |
+| `.gitlab-ci.yml` | Jobs `backend:lint`, `backend:test`, `backend:test-postgres`, `web:lint`, `web:test`, `web:e2e`, `web:build`, `docs:check`, `docker:build` |
 | `.pre-commit-config.yaml` | Hygiene hooks, ruff (backend), prettier + eslint (web) |
 | `.mcp.json` | MCP servers: github (`GITHUB_TOKEN`), filesystem, design-token-generator (`DESIGN_TOKEN_MCP_URL`) |
 
@@ -62,7 +62,8 @@ npm run dev                 # backend http://localhost:8020 (/docs) + web http:/
 
 | Task | Command (repo root) |
 |---|---|
-| Full quality gate (what CI enforces) | `npm run ci` (= `nx run-many -t lint format-check typecheck test build`) |
+| Full quality gate (what CI enforces) | `npm run ci` (= `nx run-many -t lint format-check typecheck test build`, then `npm run docs:check`) |
+| Docs consistency check (§7) | `npm run docs:check` (self-tests: `npm run docs:check:test`) |
 | One app only | `npm run dev:backend`, `npm run dev:web`, `npx nx run backend:test`, `npx nx run web:build` |
 | Lint / format / tests / types / build | `npm run lint`, `npm run format` (`format:check`), `npm test`, `npm run typecheck`, `npm run build` |
 | Docker full stack | `npm run docker:up` → http://localhost:8080 (`docker:down`, `docker:logs`) |
@@ -258,6 +259,7 @@ clients must change). Run `npm run ci`.
 | Isolation | `conftest.py` scrubs `BE_*` env, ignores `.env`, uses **mongomock** behind the real `MongoRepository` and **fakeredis**; no services needed | axios mock adapter (`src/test/axios-mock.ts`), `renderWithProviders` (`src/test/render.tsx`) |
 | Key fixtures and helpers | `make_settings`, `make_app`, `client`, `app_routers` (override to mount routers), `user_factory`, `admin_headers`, `user_headers`, `internal_headers`, `login(user)` | `createMockAdapter`, `ok()`, `fail()`, `createTestQueryClient` |
 | Real Postgres | `TEST_POSTGRES_DSN=postgresql://… pytest -m integration` (module tests also run on Postgres; migrations applied automatically). CI job `backend:test-postgres`. | — |
+| End to end | — | Playwright smoke suite `apps/web/e2e/` against the real backend: `npm run test:e2e -- --docker` (repo root; throwaway Mongo/Redis, seed, backend, Playwright, teardown) or `cd apps/web && npm run test:e2e` with a running backend. CI job `web:e2e`. Not part of `npm run ci`. See `apps/web/e2e/README.md`. |
 | Must cover | happy path, 404, 409, 422 (DTO and whitelist), RBAC (401/403), no secret leakage | services (paths, payloads, unwrapping), hooks and guards logic, components with logic |
 
 ## 7. Definition of done
@@ -266,8 +268,8 @@ A task is done only when all of these hold:
 
 - [ ] The code follows the layer and placement rules (§4, the AI guides).
 - [ ] Tests were added or updated, and these pass (paste the real result):
-  - `npm run ci` from the repo root (lint, format-check, typecheck, test and build for both apps), or
-    the narrower equivalents:
+  - `npm run ci` from the repo root (lint, format-check, typecheck, test and build for both apps, then
+    the docs check), or the narrower equivalents:
   - backend (`apps/backend`): `.venv/bin/python -m ruff check . && .venv/bin/python -m ruff format --check . && .venv/bin/python -m pytest`
   - web (`apps/web`): `npm run typecheck && npm run lint && npm run format:check && npm run test:ci && npm run build`
 - [ ] **Web UI work:** built per `.claude/rules/web/ui-design.md` (shadcn primitives, `components/common`
@@ -280,6 +282,30 @@ A task is done only when all of these hold:
 - [ ] `changelog/<stack>.md` has an entry (newest first).
 - [ ] If the work came from a sprint task file, that file's TODOs, `**Status:**` and the sprint index
   are updated (Sprint Closure Enforcement in `.claude/rules/architecture.md`).
+- [ ] `npm run docs:check` passes (it is part of `npm run ci`).
+
+### Docs check
+
+`npm run docs:check` ([`scripts/docs-check/`](scripts/docs-check/README.md), about 2 s, no Mongo or Redis)
+fails when the docs drift from the code. It scans `CLAUDE.md`, `AGENTS.md`, `README.md`,
+`.claude/{rules,skills,commands}/**`, `docs/**` and the app guides and READMEs, and checks that:
+
+- relative links and backticked repo paths (`apps/…`, `.claude/…`, `docs/…`, `scripts/…`, web `src/…`,
+  backend `core/…`, `db/…`, `service/…`, …) exist;
+- every `npm run <script>` exists in the right `package.json` (root or `apps/web`);
+- every `BE_*` / `VITE_*` name is a real setting (`.env.example`, `core/config.py`, `src/config/env.ts`);
+- backend `from core|db|dto|service|router|util|scripts … import X` lines in code blocks import, and
+  `@/…` imports in TS code blocks resolve to an exported name;
+- the `docs/api-spec.md` registry and the FastAPI app have the same routes (and other API docs only
+  name real routes).
+
+Errors read `file:line: [check] message`. When a doc intentionally names something that does not exist
+(a recipe's new file, a counter-example), mark it rather than weakening the check: a line containing
+"create it at", "(create)", "create on demand" or "not present yet", or
+`<!-- docs-check: ignore-line -->`, `<!-- docs-check: ignore-next-line -->`,
+`<!-- docs-check: ignore-start -->` … `<!-- docs-check: ignore-end -->`. Recurring cases (the `note`
+recipe, "create on demand" modules) live in `scripts/docs-check/config.mjs`. Archived skills in
+`.claude/skills-library/` are not checked.
 
 ## 8. Pitfalls and gotchas
 
@@ -299,13 +325,13 @@ A task is done only when all of these hold:
 | Watch mode | `npm run test` in `apps/web` is watch mode; scripts and agents use `npm run test:ci` (root `npm test` already does). |
 | Strict router registry | A router that fails to import aborts `create_app()`. Use `BE_ENABLED_ROUTERS=health,auth` to isolate the problem. |
 | Production guards | `BE_ENVIRONMENT=production` refuses the placeholder `BE_JWT_SECRET`, `BE_COOKIE_SECURE=false`, `BE_RELOAD=true` and `BE_EMAIL_BACKEND=console`. `npm run dev` sets `BE_RELOAD=true`, so do not run it with a production `.env`. |
-| Missing web pages | Register, forgot-password, change-password and 2FA settings have services (`auth.service.ts`) but no pages yet. The admin user page is read-only. |
+| Missing web pages | Register, forgot-password, change-password and 2FA settings have services (`auth.service.ts`) but no pages yet. The admin user page has an "Add user" dialog and row actions (reset password, block/activate, delete). |
 
 ## 9. Not included (and where it would come from)
 
 - **No agent-management plane.** The backend does **not** ship an `agent_mgmt` router or any
   `/agent-mgmt/*` endpoints. The `agent-builder` skill assumes a backend with that router (its Step 0e),
-  and its examples use `apps/be/` and `BE_INTERNAL_API_TOKEN`. In this repo the backend is
+  and its examples use `apps/be/` and `BE_INTERNAL_API_TOKEN`. In this repo the backend is <!-- docs-check: ignore-line -->
   `apps/backend/` and the header token is `BE_INTERNAL_TOKEN`. If a project needs a workforce of agents,
   the sprint plan's first sprint (`00-workforce-scaffold`, `sprint-builder` skill) must first add that
   router to the backend as a new module (recipe 5.1, with `InternalDep`/`AdminUserDep` auth and Postgres
@@ -338,14 +364,16 @@ skills.
 
 ### Skill index
 
-All skills live in `.claude/skills/<name>/SKILL.md`. Load **only** what the task needs.
+Active skills live in `.claude/skills/<name>/SKILL.md`. Load **only** what the task needs. Domain recipes from
+other company projects are archived in `.claude/skills-library/` (not auto-loaded; see its `README.md`).
 
 | Task | Skill |
 |---|---|
 | **Any UI task** — create/build/design a page, screen, component, dashboard, form, table, dialog or settings page; restyle; "make it look better / less boring"; "buatkan ui", "buatkan halaman", "bikin tampilan" | [`reactjs-ui-design`](.claude/skills/reactjs-ui-design/SKILL.md) **first** (+ `.claude/rules/web/ui-design.md`), then the placement/data skills (`reactjs-architecture`, `reactjs-features`, `reactjs-data-display`, `reactjs-form`, `reactjs-administrator`, …) |
 | Any coding task (classify and route) | [`orchestra`](.claude/skills/orchestra/SKILL.md) |
 | Backend conventions (API, data, auth, config, async, logging, tests, uploads, naming, deps) | `fastapi-api-design`, `fastapi-data`, `fastapi-crud-collection`, `fastapi-auth`, `fastapi-config`, `fastapi-async-performance`, `fastapi-logging`, `fastapi-unit-test`, `fastapi-file-upload`, `fastapi-file-naming`, `fastapi-dependency-constraints`, `fastapi-virtual-environment` (index: `apps/backend/AI_GUIDE.md` §9) |
-| Backend domain patterns from other projects (use only when the task asks for them) | `fastapi-api-gateway`, `fastapi-build-filter-elasticsearch`, `fastapi-create-map`, `fastapi-render-map`, `fastapi-topic`, `fastapi-data-management`, `fastapi-database-init`, `fastapi-mongo` |
+| Database provider internals (provider abstraction, adding a provider, Mongo specifics) | `fastapi-database-init`, `fastapi-mongo` |
+| Domain recipes from other company projects (API gateway, Elasticsearch filters, map/tile engine, topic monitoring, multi-DB dispatcher, tactical map) | **Archived** in [`.claude/skills-library/`](.claude/skills-library/README.md) (not auto-loaded). Enable one only when the task needs it: `cp -r .claude/skills-library/<name> .claude/skills/` |
 | Web conventions (architecture, features, services, state, forms, guards, layout, menus, charts, maps…) | `reactjs-*` (index: `apps/web/AI_GUIDE.md` §10); visual rules always from `reactjs-ui-design` |
 | TDD loop for features and bug fixes | [`tdd-workflow`](.claude/skills/tdd-workflow/SKILL.md) |
 | HTML mockup pages (only when "HTML mockup"/"static HTML" is explicit; "build a UI/page" in this repo means the React app in `apps/web`) | [`html-ui-styling`](.claude/skills/html-ui-styling/SKILL.md) |

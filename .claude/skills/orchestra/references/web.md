@@ -39,7 +39,7 @@ Handles all frontend web tasks in `apps/web/` (React 18 + Vite 7). Other `apps/w
 | Forms (react-hook-form + zod 4) | `reactjs-form` |
 | Admin CRUD list page under `/administrator/*` | `reactjs-ui-design` §5.3 + `reactjs-administrator` (+ `reactjs-data-display` → `src/modules/data-table/`, `reactjs-dynamic-filter`) |
 | Charts (ECharts) | `reactjs-chart` |
-| Maps (Mapbox) | `reactjs-map`, `reactjs-tactical-map` |
+| Maps (Mapbox) | `reactjs-map` (tactical/command-center override archived in `.claude/skills-library/reactjs-tactical-map/`) |
 | Icons | `reactjs-icon` |
 | Env vars (`VITE_*`) | `reactjs-manage-env` |
 | `index.html` meta / SEO | `reactjs-seo-html`, `meta-seo` |

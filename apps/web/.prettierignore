@@ -7,3 +7,5 @@ public
 # Markdown docs are maintained separately
 *.md
 .ui-snapshots
+playwright-report
+test-results
