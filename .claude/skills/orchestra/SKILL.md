@@ -14,7 +14,7 @@ description: Master task router and orchestration guide for all development work
 
 - Monorepo tooling: root `package.json` scripts orchestrated by Nx (`nx.json`, `apps/*/project.json`).
 - There is **no** mobile app, agent app (`apps/agents/`) or MCP app (`apps/mcp/`) in this boilerplate. The mobile / agent / MCP routes below only apply once such an app has been created (see `agent-builder`, `mcp-builder`).
-- Project-level guides: `AGENTS.md` (root), `apps/backend/AI_GUIDE.md`, `apps/web/AI_GUIDE.md`, API contract in `docs/api-spec.md` + `docs/api/*.md`, schema in `docs/database-schema.md`, rules in `.claude/rules/` (`architecture.md`, `project-scope.md`, `web/orchestra.md`, `backend/orchestra.md`).
+- Project-level guides: `AGENTS.md` (root), `apps/backend/AI_GUIDE.md`, `apps/web/AI_GUIDE.md`, API contract in `docs/api-spec.md` + `docs/api/*.md`, schema in `docs/database-schema.md`, rules in `.claude/rules/` (`architecture.md`, `engineering-standards.md` (best approach + best practices, applies to every task), `project-scope.md`, `web/orchestra.md`, `web/ui-design.md`, `backend/orchestra.md`).
 
 ---
 

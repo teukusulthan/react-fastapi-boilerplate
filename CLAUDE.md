@@ -37,6 +37,9 @@
     Copy the `role` module for new CRUD resources.
 12. UI work: follow `.claude/rules/web/ui-design.md` and load the `reactjs-ui-design` skill first; shadcn
     first; review with `npm run ui:snapshot`.
+13. Best approach, best practice: follow `.claude/rules/engineering-standards.md` — understand first, fix
+    root causes, compare approaches for non-trivial work, no shortcuts, verify, and report the choice
+    and its trade-off honestly.
 
 **Verify (paste real results, never assume):**
 

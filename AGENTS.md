@@ -8,7 +8,9 @@ mention it.
 **Read order for any coding task**
 
 1. This file. The essentials are also in `CLAUDE.md`.
-2. [`.claude/rules/architecture.md`](.claude/rules/architecture.md): the stack and its enforcement rules.
+2. [`.claude/rules/architecture.md`](.claude/rules/architecture.md): the stack and its enforcement rules,
+   and [`.claude/rules/engineering-standards.md`](.claude/rules/engineering-standards.md): how to choose the
+   best approach and the best practices every change must meet.
 3. The AI guide of the app you touch: [`apps/backend/AI_GUIDE.md`](apps/backend/AI_GUIDE.md) and/or
    [`apps/web/AI_GUIDE.md`](apps/web/AI_GUIDE.md). These hold the conventions, recipes with code, and
    testing details.
@@ -159,6 +161,11 @@ backend: CORS → RequestContext (X-Request-ID) → [global rate limit] → [pay
     `npx shadcn@latest add`), page patterns from `src/components/common/`, lists via
     `src/modules/data-table/`, semantic tokens only, modern-minimal and slightly rounded. Look at the
     result with `npm run ui:snapshot` before reporting done.
+13. **Best approach, best practice.** Follow
+    [`.claude/rules/engineering-standards.md`](.claude/rules/engineering-standards.md): understand the code
+    and its existing pattern first, fix root causes, compare approaches for non-trivial work and pick by
+    correctness → security → integrity → consistency → simplicity → performance, take no shortcuts, and
+    report the chosen approach and its trade-off.
 
 ## 5. Recipes
 
@@ -266,7 +273,9 @@ clients must change). Run `npm run ci`.
 
 A task is done only when all of these hold:
 
-- [ ] The code follows the layer and placement rules (§4, the AI guides).
+- [ ] The code follows the layer and placement rules (§4, the AI guides) and the engineering standards
+  (`.claude/rules/engineering-standards.md`): root cause fixed, best approach chosen and stated, no
+  shortcuts.
 - [ ] Tests were added or updated, and these pass (paste the real result):
   - `npm run ci` from the repo root (lint, format-check, typecheck, test and build for both apps, then
     the docs check), or the narrower equivalents:
